@@ -61,7 +61,6 @@ class View
     {
         if (is_array($name)) {
             $this->data = array_merge($this->data, $name);
-            return $this;
         } else {
             $this->data[$name] = $value;
         }
@@ -88,6 +87,19 @@ class View
             unset($options['type']);
         }
         $this->engine = new $class($options);
+        return $this;
+    }
+
+    /**
+     * 配置模板引擎
+     * @access private
+     * @param string|array  $name 参数名
+     * @param mixed         $value 参数值
+     * @return void
+     */
+    public function config($name, $value = null)
+    {
+        $this->engine->config($name, $value);
         return $this;
     }
 

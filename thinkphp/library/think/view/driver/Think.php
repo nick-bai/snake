@@ -13,6 +13,7 @@ namespace think\view\driver;
 
 use think\App;
 use think\exception\TemplateNotFoundException;
+use think\Loader;
 use think\Log;
 use think\Request;
 use think\Template;
@@ -39,6 +40,7 @@ class Think
         if (empty($this->config['view_path'])) {
             $this->config['view_path'] = App::$modulePath . 'view' . DS;
         }
+
         $this->template = new Template($this->config);
     }
 
@@ -113,7 +115,7 @@ class Think
 
         // 分析模板文件规则
         $request    = Request::instance();
-        $controller = $request->controller();
+        $controller = Loader::parseName($request->controller());
         if ($controller && 0 !== strpos($template, '/')) {
             $depr     = $this->config['view_depr'];
             $template = str_replace(['/', ':'], $depr, $template);
@@ -125,6 +127,26 @@ class Think
             }
         }
         return $path . ltrim($template, '/') . '.' . ltrim($this->config['view_suffix'], '.');
+    }
+
+    /**
+     * 配置或者获取模板引擎参数
+     * @access private
+     * @param string|array  $name 参数名
+     * @param mixed         $value 参数值
+     * @return mixed
+     */
+    public function config($name, $value = null)
+    {
+        if (is_array($name)) {
+            $this->template->config($name);
+            $this->config = array_merge($this->config, $name);
+        } elseif (is_null($value)) {
+            return $this->template->config($name);
+        } else {
+            $this->template->$name = $value;
+            $this->config[$name]   = $value;
+        }
     }
 
     public function __call($method, $params)

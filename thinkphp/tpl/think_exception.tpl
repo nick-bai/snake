@@ -86,7 +86,7 @@
         body {
             color: #333;
             font: 16px Verdana, "Helvetica Neue", helvetica, Arial, 'Microsoft YaHei', sans-serif;
-            margin: 0px;
+            margin: 0;
             padding: 0 20px 20px;
         }
         h1{
@@ -226,6 +226,8 @@
             width: 100%;
             margin: 12px 0;
             box-sizing: border-box;
+            table-layout:fixed;
+            word-wrap:break-word;            
         }
         .exception-var table caption{
             text-align: left;
@@ -246,10 +248,10 @@
         .exception-var table td{
             padding: 0 6px;
             vertical-align: top;
-            word-break: break-word;
+            word-break: break-all;
         }
         .exception-var table td:first-child{
-            width: 12px;
+            width: 28%;
             font-weight: bold;
             white-space: nowrap;
         }
@@ -292,7 +294,7 @@
                 <div>
                     <h2>[<?php echo $code; ?>] <?php echo sprintf('%s in %s', parse_class($name), parse_file($file, $line)); ?></h2>
                 </div>
-                <div><h1><?php echo htmlentities($message); ?></h1></div>
+                <div><h1><?php echo nl2br(htmlentities($message)); ?></h1></div>
             </div>
         
     </div>

@@ -159,9 +159,10 @@ class Debug
      * @param mixed         $var 变量
      * @param boolean       $echo 是否输出 默认为true 如果为false 则返回输出字符串
      * @param string        $label 标签 默认为空
+     * @param integer       $flags htmlspecialchars flags
      * @return void|string
      */
-    public static function dump($var, $echo = true, $label = null)
+    public static function dump($var, $echo = true, $label = null, $flags = ENT_SUBSTITUTE)
     {
         $label = (null === $label) ? '' : rtrim($label) . ':';
         ob_start();
@@ -172,7 +173,7 @@ class Debug
             $output = PHP_EOL . $label . $output . PHP_EOL;
         } else {
             if (!extension_loaded('xdebug')) {
-                $output = htmlspecialchars($output, ENT_QUOTES);
+                $output = htmlspecialchars($output, $flags);
             }
             $output = '<pre>' . $label . $output . '</pre>';
         }
@@ -184,14 +185,12 @@ class Debug
         }
     }
 
-    public static function inject(Response $response)
+    public static function inject(Response $response, &$content)
     {
-        $config      = Config::get('trace');
-        $type        = isset($config['type']) ? $config['type'] : 'Html';
-        $request     = Request::instance();
-        $accept      = $request->header('accept');
-        $contentType = $response->getHeader('Content-Type');
-        $class       = false !== strpos($type, '\\') ? $type : '\\think\\debug\\' . ucwords($type);
+        $config  = Config::get('trace');
+        $type    = isset($config['type']) ? $config['type'] : 'Html';
+        $request = Request::instance();
+        $class   = false !== strpos($type, '\\') ? $type : '\\think\\debug\\' . ucwords($type);
         unset($config['type']);
         if (class_exists($class)) {
             $trace = new $class($config);
@@ -205,14 +204,12 @@ class Debug
             $output = $trace->output($response, Log::getLog());
             if (is_string($output)) {
                 // trace调试信息注入
-                $content = $response->getContent();
-                $pos     = strripos($content, '</body>');
+                $pos = strripos($content, '</body>');
                 if (false !== $pos) {
                     $content = substr($content, 0, $pos) . $output . substr($content, $pos);
                 } else {
                     $content = $content . $output;
                 }
-                $response->content($content);
             }
         }
     }

@@ -11,6 +11,11 @@
 
 namespace think;
 
+use think\Cache;
+use think\Config;
+use think\Debug;
+use think\Env;
+use think\Request;
 use think\response\Json as JsonResponse;
 use think\response\Jsonp as JsonpResponse;
 use think\response\Redirect as RedirectResponse;
@@ -93,12 +98,27 @@ class Response
         // 处理输出数据
         $data = $this->getContent();
 
+        // Trace调试注入
+        if (Env::get('app_trace', Config::get('app_trace'))) {
+            Debug::inject($this, $data);
+        }
+
         if (!headers_sent() && !empty($this->header)) {
             // 发送状态码
             http_response_code($this->code);
             // 发送头部信息
             foreach ($this->header as $name => $val) {
                 header($name . ':' . $val);
+            }
+        }
+        if (200 == $this->code) {
+            $cache = Request::instance()->getCache();
+            if ($cache) {
+                header('Cache-Control: max-age=' . $cache[1] . ',must-revalidate');
+                header('Last-Modified:' . gmdate('D, d M Y H:i:s') . ' GMT');
+                header('Expires:' . gmdate('D, d M Y H:i:s', $_SERVER['REQUEST_TIME'] + $cache[1]) . ' GMT');
+                $header['Content-Type'] = $this->header['Content-Type'];
+                Cache::set($cache[0], [$data, $header], $cache[1]);
             }
         }
         echo $data;
@@ -108,6 +128,8 @@ class Response
             fastcgi_finish_request();
         }
 
+        // 监听response_end
+        Hook::listen('response_end', $this);
     }
 
     /**
@@ -170,14 +192,14 @@ class Response
     public function content($content)
     {
         if (null !== $content && !is_string($content) && !is_numeric($content) && !is_callable([
-                $content,
-                '__toString',
-            ])
+            $content,
+            '__toString',
+        ])
         ) {
             throw new \InvalidArgumentException(sprintf('variable type error： %s', gettype($content)));
         }
 
-        $this->content = (string)$content;
+        $this->content = (string) $content;
 
         return $this;
     }
@@ -248,7 +270,7 @@ class Response
         $this->header['Content-Type'] = $contentType . '; charset=' . $charset;
         return $this;
     }
-    
+
     /**
      * 获取头部信息
      * @param string $name 头部名称
@@ -274,18 +296,18 @@ class Response
      */
     public function getContent()
     {
-        if ($this->content == null) {
+        if (null == $this->content) {
             $content = $this->output($this->data);
 
             if (null !== $content && !is_string($content) && !is_numeric($content) && !is_callable([
-                    $content,
-                    '__toString',
-                ])
+                $content,
+                '__toString',
+            ])
             ) {
                 throw new \InvalidArgumentException(sprintf('variable type error： %s', gettype($content)));
             }
 
-            $this->content = (string)$content;
+            $this->content = (string) $content;
         }
         return $this->content;
     }

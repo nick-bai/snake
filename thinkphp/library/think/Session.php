@@ -17,6 +17,7 @@ use think\exception\ClassNotFoundException;
 class Session
 {
     protected static $prefix = '';
+    protected static $init   = null;
 
     /**
      * 设置或者获取session作用域（前缀）
@@ -98,6 +99,23 @@ class Session
         }
         if ($isDoStart) {
             session_start();
+            self::$init = true;
+        } else {
+            self::$init = false;
+        }
+    }
+
+    /**
+     * session自动启动或者初始化
+     * @return void
+     */
+    public static function boot()
+    {
+        if (is_null(self::$init)) {
+            self::init();
+        } elseif (false === self::$init) {
+            session_start();
+            self::$init = true;
         }
     }
 
@@ -110,7 +128,8 @@ class Session
      */
     public static function set($name, $value = '', $prefix = null)
     {
-        !isset($_SESSION) && self::init();
+        empty(self::$init) && self::boot();
+
         $prefix = !is_null($prefix) ? $prefix : self::$prefix;
         if (strpos($name, '.')) {
             // 二维数组赋值
@@ -135,7 +154,7 @@ class Session
      */
     public static function get($name = '', $prefix = null)
     {
-        !isset($_SESSION) && self::init();
+        empty(self::$init) && self::boot();
         $prefix = !is_null($prefix) ? $prefix : self::$prefix;
         if ('' == $name) {
             // 获取全部的session
@@ -160,6 +179,23 @@ class Session
     }
 
     /**
+     * session获取并删除
+     * @param string        $name session名称
+     * @param string|null   $prefix 作用域（前缀）
+     * @return mixed
+     */
+    public static function pull($name, $prefix = null)
+    {
+        $result = self::get($name, $prefix);
+        if ($result) {
+            self::delete($name, $prefix);
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * 删除session数据
      * @param string        $name session名称
      * @param string|null   $prefix 作用域（前缀）
@@ -167,7 +203,7 @@ class Session
      */
     public static function delete($name, $prefix = null)
     {
-        !isset($_SESSION) && self::init();
+        empty(self::$init) && self::boot();
         $prefix = !is_null($prefix) ? $prefix : self::$prefix;
         if (strpos($name, '.')) {
             list($name1, $name2) = explode('.', $name);
@@ -192,7 +228,7 @@ class Session
      */
     public static function clear($prefix = null)
     {
-        !isset($_SESSION) && self::init();
+        empty(self::$init) && self::boot();
         $prefix = !is_null($prefix) ? $prefix : self::$prefix;
         if ($prefix) {
             unset($_SESSION[$prefix]);
@@ -209,7 +245,7 @@ class Session
      */
     public static function has($name, $prefix = null)
     {
-        !isset($_SESSION) && self::init();
+        empty(self::$init) && self::boot();
         $prefix = !is_null($prefix) ? $prefix : self::$prefix;
         if (strpos($name, '.')) {
             // 支持数组
@@ -227,6 +263,7 @@ class Session
     public static function start()
     {
         session_start();
+        self::$init = true;
     }
 
     /**
@@ -240,6 +277,7 @@ class Session
         }
         session_unset();
         session_destroy();
+        self::$init = null;
     }
 
     /**
@@ -260,5 +298,6 @@ class Session
     {
         // 暂停session
         session_write_close();
+        self::$init = false;
     }
 }

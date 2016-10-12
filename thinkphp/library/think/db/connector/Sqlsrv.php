@@ -21,7 +21,7 @@ class Sqlsrv extends Connection
 {
     // PDO连接参数
     protected $params = [
-        PDO::ATTR_CASE              => PDO::CASE_LOWER,
+        PDO::ATTR_CASE              => PDO::CASE_NATURAL,
         PDO::ATTR_ERRMODE           => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_STRINGIFY_FETCHES => false,
     ];
@@ -58,7 +58,11 @@ class Sqlsrv extends Connection
         AND t.table_schema  = c.table_schema
         AND t.table_name    = c.table_name
         WHERE   t.table_name = '$tableName'";
-        $pdo    = $this->linkID->query($sql);
+        // 调试开始
+        $this->debug(true);
+        $pdo = $this->linkID->query($sql);
+        // 调试结束
+        $this->debug(false, $sql);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
         if ($result) {
@@ -74,6 +78,16 @@ class Sqlsrv extends Connection
                 ];
             }
         }
+        $sql = "SELECT column_name FROM information_schema.key_column_usage WHERE table_name='$tableName'";
+        // 调试开始
+        $this->debug(true);
+        $pdo = $this->linkID->query($sql);
+        // 调试结束
+        $this->debug(false, $sql);
+        $result = $pdo->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            $info[$result['column_name']]['primary'] = true;
+        }
         return $this->fieldCase($info);
     }
 
@@ -85,11 +99,16 @@ class Sqlsrv extends Connection
      */
     public function getTables($dbName = '')
     {
+        $this->initConnect(true);
         $sql = "SELECT TABLE_NAME
             FROM INFORMATION_SCHEMA.TABLES
             WHERE TABLE_TYPE = 'BASE TABLE'
             ";
-        $pdo    = $this->linkID->query($sql);
+        // 调试开始
+        $this->debug(true);
+        $pdo = $this->linkID->query($sql);
+        // 调试结束
+        $this->debug(false, $sql);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
         foreach ($result as $key => $val) {

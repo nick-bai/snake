@@ -11,12 +11,11 @@
 
 namespace think\cache\driver;
 
-use think\Cache;
+use think\cache\Driver;
 use think\Exception;
 
-class Memcache
+class Memcache extends Driver
 {
-    protected $handler = null;
     protected $options = [
         'host'       => '127.0.0.1',
         'port'       => 11211,
@@ -57,14 +56,28 @@ class Memcache
     }
 
     /**
+     * 判断缓存
+     * @access public
+     * @param string $name 缓存变量名
+     * @return bool
+     */
+    public function has($name)
+    {
+        $key = $this->getCacheKey($name);
+        return $this->handler->get($key) ? true : false;
+    }
+
+    /**
      * 读取缓存
      * @access public
      * @param string $name 缓存变量名
+     * @param mixed  $default 默认值
      * @return mixed
      */
-    public function get($name)
+    public function get($name, $default = false)
     {
-        return $this->handler->get($this->options['prefix'] . $name);
+        $result = $this->handler->get($this->getCacheKey($name));
+        return false !== $result ? $result : $default;
     }
 
     /**
@@ -80,11 +93,47 @@ class Memcache
         if (is_null($expire)) {
             $expire = $this->options['expire'];
         }
-        $name = $this->options['prefix'] . $name;
-        if ($this->handler->set($name, $value, 0, $expire)) {
+        if ($this->tag && !$this->has($name)) {
+            $first = true;
+        }
+        $key = $this->getCacheKey($name);
+        if ($this->handler->set($key, $value, 0, $expire)) {
+            isset($first) && $this->setTagItem($key);
             return true;
         }
         return false;
+    }
+
+    /**
+     * 自增缓存（针对数值缓存）
+     * @access public
+     * @param string    $name 缓存变量名
+     * @param int       $step 步长
+     * @return false|int
+     */
+    public function inc($name, $step = 1)
+    {
+        $key = $this->getCacheKey($name);
+        return $this->handler->increment($key, $step);
+    }
+
+    /**
+     * 自减缓存（针对数值缓存）
+     * @access public
+     * @param string    $name 缓存变量名
+     * @param int       $step 步长
+     * @return false|int
+     */
+    public function dec($name, $step = 1)
+    {
+        $key   = $this->getCacheKey($name);
+        $value = $this->handler->get($key) - $step;
+        $res   = $this->handler->set($key, $value);
+        if (!$res) {
+            return false;
+        } else {
+            return $value;
+        }
     }
 
     /**
@@ -95,19 +144,29 @@ class Memcache
      */
     public function rm($name, $ttl = false)
     {
-        $name = $this->options['prefix'] . $name;
+        $key = $this->getCacheKey($name);
         return false === $ttl ?
-        $this->handler->delete($name) :
-        $this->handler->delete($name, $ttl);
+        $this->handler->delete($key) :
+        $this->handler->delete($key, $ttl);
     }
 
     /**
      * 清除缓存
      * @access public
+     * @param string $tag 标签名
      * @return bool
      */
-    public function clear()
+    public function clear($tag = null)
     {
+        if ($tag) {
+            // 指定标签清除
+            $keys = $this->getTagItem($tag);
+            foreach ($keys as $key) {
+                $this->handler->delete($key);
+            }
+            $this->rm('tag_' . md5($tag));
+            return true;
+        }
         return $this->handler->flush();
     }
 }

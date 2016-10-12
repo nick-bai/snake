@@ -11,8 +11,10 @@
 
 namespace think;
 
-use think\Exception;
+use think\File;
+use think\Lang;
 use think\Request;
+use think\Session;
 
 class Validate
 {
@@ -35,51 +37,54 @@ class Validate
 
     // 验证规则默认提示信息
     protected static $typeMsg = [
-        'require'    => ':attribute不能为空',
-        'number'     => ':attribute必须是数字',
-        'float'      => ':attribute必须是浮点数',
-        'boolean'    => ':attribute必须是布尔值',
-        'email'      => ':attribute格式不符',
-        'array'      => ':attribute必须是数组',
-        'accepted'   => ':attribute必须是yes、on或者1',
-        'date'       => ':attribute格式不符合',
-        'file'       => ':attribute不是有效的上传文件',
-        'alpha'      => ':attribute只能是字母',
-        'alphaNum'   => ':attribute只能是字母和数字',
-        'alphaDash'  => ':attribute只能是字母、数字和下划线_及破折号-',
-        'activeUrl'  => ':attribute不是有效的域名或者IP',
-        'chs'        => ':attribute只能是汉字',
-        'chsAlpha'   => ':attribute只能是汉字、字母',
-        'chsAlphaNum'=> ':attribute只能是汉字、字母和数字',
-        'chsDash'    => ':attribute只能是汉字、字母、数字和下划线_及破折号-',
-        'url'        => ':attribute不是有效的URL地址',
-        'ip'         => ':attribute不是有效的IP地址',
-        'dateFormat' => ':attribute必须使用日期格式 :rule',
-        'in'         => ':attribute必须在 :rule 范围内',
-        'notIn'      => ':attribute不能在 :rule 范围内',
-        'between'    => ':attribute只能在 :1 - :2 之间',
-        'notBetween' => ':attribute不能在 :1 - :2 之间',
-        'length'     => ':attribute长度不符合要求 :rule',
-        'max'        => ':attribute长度不能超过 :rule',
-        'min'        => ':attribute长度不能小于 :rule',
-        'after'      => ':attribute日期不能小于 :rule',
-        'before'     => ':attribute日期不能超过 :rule',
-        'expire'     => '不在有效期内 :rule',
-        'allowIp'    => '不允许的IP访问',
-        'denyIp'     => '禁止的IP访问',
-        'confirm'    => ':attribute和字段 :rule 不一致',
-        'egt'        => ':attribute必须大于等于 :rule',
-        'gt'         => ':attribute必须大于 :rule',
-        'elt'        => ':attribute必须小于等于 :rule',
-        'lt'         => ':attribute必须小于 :rule',
-        'eq'         => ':attribute必须等于 :rule',
-        'unique'     => ':attribute已存在',
-        'regex'      => ':attribute不符合指定规则',
-        'method'     => '无效的请求类型',
-        'token'      => '令牌数据无效',
-        'fileSize'   => '上传文件大小不符',
-        'fileExt'    => '上传文件后缀不符',
-        'fileMime'   => '上传文件类型不符',
+        'require'     => ':attribute不能为空',
+        'number'      => ':attribute必须是数字',
+        'float'       => ':attribute必须是浮点数',
+        'boolean'     => ':attribute必须是布尔值',
+        'email'       => ':attribute格式不符',
+        'array'       => ':attribute必须是数组',
+        'accepted'    => ':attribute必须是yes、on或者1',
+        'date'        => ':attribute格式不符合',
+        'file'        => ':attribute不是有效的上传文件',
+        'image'       => ':attribute不是有效的图像文件',
+        'alpha'       => ':attribute只能是字母',
+        'alphaNum'    => ':attribute只能是字母和数字',
+        'alphaDash'   => ':attribute只能是字母、数字和下划线_及破折号-',
+        'activeUrl'   => ':attribute不是有效的域名或者IP',
+        'chs'         => ':attribute只能是汉字',
+        'chsAlpha'    => ':attribute只能是汉字、字母',
+        'chsAlphaNum' => ':attribute只能是汉字、字母和数字',
+        'chsDash'     => ':attribute只能是汉字、字母、数字和下划线_及破折号-',
+        'url'         => ':attribute不是有效的URL地址',
+        'ip'          => ':attribute不是有效的IP地址',
+        'dateFormat'  => ':attribute必须使用日期格式 :rule',
+        'in'          => ':attribute必须在 :rule 范围内',
+        'notIn'       => ':attribute不能在 :rule 范围内',
+        'between'     => ':attribute只能在 :1 - :2 之间',
+        'notBetween'  => ':attribute不能在 :1 - :2 之间',
+        'length'      => ':attribute长度不符合要求 :rule',
+        'max'         => ':attribute长度不能超过 :rule',
+        'min'         => ':attribute长度不能小于 :rule',
+        'after'       => ':attribute日期不能小于 :rule',
+        'before'      => ':attribute日期不能超过 :rule',
+        'expire'      => '不在有效期内 :rule',
+        'allowIp'     => '不允许的IP访问',
+        'denyIp'      => '禁止的IP访问',
+        'confirm'     => ':attribute和字段 :rule 不一致',
+        'different'   => ':attribute和字段 :rule 不能相同',
+        'egt'         => ':attribute必须大于等于 :rule',
+        'gt'          => ':attribute必须大于 :rule',
+        'elt'         => ':attribute必须小于等于 :rule',
+        'lt'          => ':attribute必须小于 :rule',
+        'eq'          => ':attribute必须等于 :rule',
+        'unique'      => ':attribute已存在',
+        'regex'       => ':attribute不符合指定规则',
+        'method'      => '无效的请求类型',
+        'token'       => '令牌数据无效',
+        'fileSize'    => '上传文件大小不符',
+        'fileExt'     => '上传文件后缀不符',
+        'fileMime'    => '上传文件类型不符',
+
     ];
 
     // 当前验证场景
@@ -372,6 +377,9 @@ class Validate
                     // 验证失败 返回错误信息
                     if (isset($msg[$i])) {
                         $message = $msg[$i];
+                        if (is_string($message) && strpos($message, '{%')) {
+                            $message = Lang::get(substr($message, 2, -1));
+                        }
                     } else {
                         $message = $this->getRuleMsg($field, $title, $info, $rule);
                     }
@@ -387,33 +395,6 @@ class Validate
     }
 
     /**
-     * 验证表单令牌（需要配置令牌生成行为）
-     * @access protected
-     * @param mixed     $value  字段值
-     * @param mixed     $rule  验证规则
-     * @param array     $data  数据
-     * @return bool
-     */
-    protected function token($value, $rule, $data)
-    {
-        if (!isset($data[$rule]) || !isset($_SESSION[$rule])) {
-            // 令牌数据无效
-            return false;
-        }
-
-        // 令牌验证
-        list($key, $value) = explode('_', $data[$rule]);
-        if (isset($_SESSION[$rule][$key]) && $value && $_SESSION[$rule][$key] === $value) {
-            // 防止重复提交
-            unset($_SESSION[$rule][$key]); // 验证完成销毁session
-            return true;
-        }
-        // 开启TOKEN重置
-        unset($_SESSION[$rule][$key]);
-        return false;
-    }
-
-    /**
      * 验证是否和某个字段的值一致
      * @access protected
      * @param mixed     $value  字段值
@@ -424,6 +405,19 @@ class Validate
     protected function confirm($value, $rule, $data)
     {
         return $this->getDataValue($data, $rule) == $value;
+    }
+
+    /**
+     * 验证是否和某个字段的值是否不同
+     * @access protected
+     * @param mixed $value 字段值
+     * @param mixed $rule  验证规则
+     * @param array $data  数据
+     * @return bool
+     */
+    protected function different($value, $rule, $data)
+    {
+        return $this->getDataValue($data, $rule) != $value;
     }
 
     /**
@@ -491,9 +485,10 @@ class Validate
      * @access protected
      * @param mixed     $value  字段值
      * @param string    $rule  验证规则
+     * @param array     $data  验证数据
      * @return bool
      */
-    protected function is($value, $rule)
+    protected function is($value, $rule, $data = [])
     {
         switch ($rule) {
             case 'require':
@@ -553,8 +548,10 @@ class Validate
                 $result = $this->filter($value, FILTER_VALIDATE_FLOAT);
                 break;
             case 'number':
+                $result = is_numeric($value);
+                break;
             case 'integer':
-                // 是否为整形
+                // 是否为整型
                 $result = $this->filter($value, FILTER_VALIDATE_INT);
                 break;
             case 'email':
@@ -563,15 +560,20 @@ class Validate
                 break;
             case 'boolean':
                 // 是否为布尔值
-                $result = $this->filter($value, FILTER_VALIDATE_BOOLEAN);
+                $result = in_array($value, [0, 1, true, false]);
                 break;
             case 'array':
                 // 是否为数组
                 $result = is_array($value);
                 break;
             case 'file':
-                $file   = Request::instance()->file($value);
-                $result = !empty($file);
+                $result = $value instanceof File;
+                break;
+            case 'image':
+                $result = $value instanceof File && in_array($this->getImageType($value->getRealPath()), [1, 2, 3, 6]);
+                break;
+            case 'token':
+                $result = $this->token($value, '__token__', $data);
                 break;
             default:
                 if (isset(self::$type[$rule])) {
@@ -583,6 +585,17 @@ class Validate
                 }
         }
         return $result;
+    }
+
+    // 判断图像类型
+    protected function getImageType($image)
+    {
+        if (function_exists('exif_imagetype')) {
+            return exif_imagetype($image);
+        } else {
+            $info = getimagesize($image);
+            return $info[2];
+        }
     }
 
     /**
@@ -615,14 +628,13 @@ class Validate
     /**
      * 验证上传文件后缀
      * @access protected
-     * @param mixed     $value  字段值
+     * @param mixed     $file  上传文件
      * @param mixed     $rule  验证规则
      * @return bool
      */
-    protected function fileExt($value, $rule)
+    protected function fileExt($file, $rule)
     {
-        $file = Request::instance()->file($value);
-        if (empty($file)) {
+        if (!($file instanceof File)) {
             return false;
         }
         if (is_string($rule)) {
@@ -630,27 +642,26 @@ class Validate
         }
         if (is_array($file)) {
             foreach ($file as $item) {
-                if (!in_array(strtolower($item->getExtension()), $rule)) {
+                if (!$item->checkExt($rule)) {
                     return false;
                 }
             }
             return true;
         } else {
-            return in_array(strtolower($file->getExtension()), $rule);
+            return $file->checkExt($rule);
         }
     }
 
     /**
      * 验证上传文件类型
      * @access protected
-     * @param mixed     $value  字段值
+     * @param mixed     $file  上传文件
      * @param mixed     $rule  验证规则
      * @return bool
      */
-    protected function fileMime($value, $rule)
+    protected function fileMime($file, $rule)
     {
-        $file = Request::instance()->file($value);
-        if (empty($file)) {
+        if (!($file instanceof File)) {
             return false;
         }
         if (is_string($rule)) {
@@ -658,42 +669,65 @@ class Validate
         }
         if (is_array($file)) {
             foreach ($file as $item) {
-                if (!in_array(strtolower($item->getMime()), $rule)) {
+                if (!$item->checkMime($rule)) {
                     return false;
                 }
             }
             return true;
         } else {
-            return in_array(strtolower($file->getMime()), $rule);
+            return $file->checkMime($rule);
         }
     }
 
     /**
      * 验证上传文件大小
      * @access protected
-     * @param mixed     $value  字段值
+     * @param mixed     $file  上传文件
      * @param mixed     $rule  验证规则
      * @return bool
      */
-    protected function fileSize($value, $rule)
+    protected function fileSize($file, $rule)
     {
-        $file = Request::instance()->file($value);
-        if (empty($file)) {
+        if (!($file instanceof File)) {
             return false;
-        }
-        if (is_string($rule)) {
-            $rule = explode(',', $rule);
         }
         if (is_array($file)) {
             foreach ($file as $item) {
-                if ($item->getSize() > $rule) {
+                if (!$item->checkSize($rule)) {
                     return false;
                 }
             }
             return true;
         } else {
-            return $file->getSize() <= $rule;
+            return $file->checkSize($rule);
         }
+    }
+
+    /**
+     * 验证图片的宽高及类型
+     * @access protected
+     * @param mixed     $file  上传文件
+     * @param mixed     $rule  验证规则
+     * @return bool
+     */
+    protected function image($file, $rule)
+    {
+        if (!($file instanceof File)) {
+            return false;
+        }
+        $rule                        = explode(',', $rule);
+        list($width, $height, $type) = getimagesize($file->getRealPath());
+        if (isset($rule[2])) {
+            $imageType = strtolower($rule[2]);
+            if ('jpeg' == $imageType) {
+                $imageType = 'jpg';
+            }
+            if (image_type_to_extension($type, false) != $imageType) {
+                return false;
+            }
+        }
+        list($w, $h) = $rule;
+        return $w == $width && $h == $height;
     }
 
     /**
@@ -915,7 +949,14 @@ class Validate
      */
     protected function length($value, $rule)
     {
-        $length = strlen((string) $value); // 当前数据长度
+        if (is_array($value)) {
+            $length = count($value);
+        } elseif ($value instanceof File) {
+            $length = $value->getSize();
+        } else {
+            $length = mb_strlen((string) $value);
+        }
+
         if (strpos($rule, ',')) {
             // 长度区间
             list($min, $max) = explode(',', $rule);
@@ -935,7 +976,13 @@ class Validate
      */
     protected function max($value, $rule)
     {
-        $length = strlen((string) $value);
+        if (is_array($value)) {
+            $length = count($value);
+        } elseif ($value instanceof File) {
+            $length = $value->getSize();
+        } else {
+            $length = mb_strlen((string) $value);
+        }
         return $length <= $rule;
     }
 
@@ -948,7 +995,13 @@ class Validate
      */
     protected function min($value, $rule)
     {
-        $length = strlen((string) $value);
+        if (is_array($value)) {
+            $length = count($value);
+        } elseif ($value instanceof File) {
+            $length = $value->getSize();
+        } else {
+            $length = mb_strlen((string) $value);
+        }
         return $length >= $rule;
     }
 
@@ -1042,6 +1095,33 @@ class Validate
         return 1 === preg_match($rule, (string) $value);
     }
 
+    /**
+     * 验证表单令牌
+     * @access protected
+     * @param mixed     $value  字段值
+     * @param mixed     $rule  验证规则
+     * @param array     $data  数据
+     * @return bool
+     */
+    protected function token($value, $rule, $data)
+    {
+        $rule = !empty($rule) ? $rule : '__token__';
+        if (!isset($data[$rule]) || !Session::has($rule)) {
+            // 令牌数据无效
+            return false;
+        }
+
+        // 令牌验证
+        if (isset($data[$rule]) && Session::get($rule) === $data[$rule]) {
+            // 防止重复提交
+            Session::delete($rule); // 验证完成销毁session
+            return true;
+        }
+        // 开启TOKEN重置
+        Session::delete($rule);
+        return false;
+    }
+
     // 获取错误信息
     public function getError()
     {
@@ -1087,7 +1167,11 @@ class Validate
         } else {
             $msg = $title . '规则错误';
         }
-        // TODO 多语言支持
+
+        if (is_string($msg) && strpos($msg, '{%')) {
+            $msg = Lang::get(substr($msg, 2, -1));
+        }
+
         if (is_string($msg) && false !== strpos($msg, ':')) {
             // 变量替换
             if (strpos($rule, ',')) {

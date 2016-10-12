@@ -9,7 +9,7 @@
 // | Author: yunwuxin <448901948@qq.com>
 // +----------------------------------------------------------------------
 
-namespace think\console\helper\question;
+namespace think\console\output;
 
 class Question
 {
@@ -72,7 +72,7 @@ class Question
             throw new \LogicException('A hidden question cannot use the autocompleter.');
         }
 
-        $this->hidden = (bool)$hidden;
+        $this->hidden = (bool) $hidden;
 
         return $this;
     }
@@ -93,7 +93,7 @@ class Question
      */
     public function setHiddenFallback($fallback)
     {
-        $this->hiddenFallback = (bool)$fallback;
+        $this->hiddenFallback = (bool) $fallback;
 
         return $this;
     }
@@ -195,7 +195,7 @@ class Question
     }
 
     /**
-     * 获取相应回调
+     * 获取响应回调
      * The normalizer can ba a callable (a string), a closure or a class implementing __invoke.
      * @return string|\Closure
      */
@@ -206,6 +206,6 @@ class Question
 
     protected function isAssoc($array)
     {
-        return (bool)count(array_filter(array_keys($array), 'is_string'));
+        return (bool) count(array_filter(array_keys($array), 'is_string'));
     }
 }

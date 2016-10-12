@@ -1,13 +1,12 @@
-ThinkPHP 5.0 RC4
+ThinkPHP 5.0
 ===============
 
-[![Build Status](https://img.shields.io/travis/top-think/framework.svg)](https://travis-ci.org/top-think/framework)
-[![Coverage Status](https://img.shields.io/codecov/c/github/top-think/framework.svg)](https://codecov.io/github/top-think/framework)
-[![Downloads](https://img.shields.io/github/downloads/top-think/framework/total.svg)](https://github.com/top-think/framework/releases)
-[![Releases](https://img.shields.io/github/release/top-think/framework.svg)](https://github.com/top-think/framework/releases/latest)
-[![Releases Downloads](https://img.shields.io/github/downloads/top-think/framework/latest/total.svg)](https://github.com/top-think/framework/releases/latest)
-[![Packagist Status](https://img.shields.io/packagist/v/top-think/framework.svg)](https://packagist.org/packages/topthink/framework)
-[![Packagist Downloads](https://img.shields.io/packagist/dt/top-think/framework.svg)](https://packagist.org/packages/topthink/framework)
+[![Build Status](https://travis-ci.org/top-think/framework.svg?branch=master)](https://travis-ci.org/top-think/framework)
+[![codecov.io](http://codecov.io/github/top-think/framework/coverage.svg?branch=master)](http://codecov.io/github/github/top-think/framework?branch=master)
+[![Total Downloads](https://poser.pugx.org/topthink/framework/downloads)](https://packagist.org/packages/topthink/framework)
+[![Latest Stable Version](https://poser.pugx.org/topthink/framework/v/stable)](https://packagist.org/packages/topthink/framework)
+[![Latest Unstable Version](https://poser.pugx.org/topthink/framework/v/unstable)](https://packagist.org/packages/topthink/framework)
+[![License](https://poser.pugx.org/topthink/framework/license)](https://packagist.org/packages/topthink/framework)
 
 ThinkPHP5在保持快速开发和大道至简的核心理念不变的同时，PHP版本要求提升到5.4，对已有的CBD模式做了更深的强化，优化核心，减少依赖，基于全新的架构思想和命名空间实现，是ThinkPHP突破原有框架思路的颠覆之作，其主要特性包括：
 
@@ -27,7 +26,7 @@ ThinkPHP5在保持快速开发和大道至简的核心理念不变的同时，PH
  + 方便的自动生成定义
  + 真正惰性加载
  + 分布式环境支持
- + 更多的社交类库
+ + 支持Composer
 
 > ThinkPHP5的运行环境要求PHP5.4以上。
 
@@ -53,6 +52,7 @@ www  WEB部署目录（或者子目录）
 │  ├─common.php         公共函数文件
 │  ├─config.php         公共配置文件
 │  ├─route.php          路由配置文件
+│  ├─tags.php           应用行为扩展定义文件
 │  └─database.php       数据库配置文件
 │
 ├─public                WEB目录（对外访问目录）
