@@ -11,7 +11,7 @@
 namespace app\admin\controller;
 
 
-use app\admin\Model\UserModel;
+use app\admin\model\UserModel;
 use app\admin\model\UserType;
 
 class User extends Base
