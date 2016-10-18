@@ -46,7 +46,10 @@ class User extends Base
                 ];
 
                 $selectResult[$key]['operate'] = showOperate($operate);
-
+                
+                if( 1 == $vo['id'] ){
+                	$selectResult[$key]['operate'] = '';
+                }
             }
 
             $return['total'] = $user->getAllUsers($where);  //总数据
