@@ -18,7 +18,7 @@ class Data extends Base
 
         $tables = db()->query('show tables');
         foreach($tables as $key=>$vo){
-            $sql = "select count(0) as alls from ".$vo['Tables_in_snake'];
+            $sql = "select count(0) as alls from " . $vo['Tables_in_' . config('database')];
             $tables[$key]['alls'] = db()->query($sql)['0']['alls'];
 
             $operate = [
