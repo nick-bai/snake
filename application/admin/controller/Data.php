@@ -17,16 +17,16 @@ class Data extends Base
     {
         $tables = db()->query('show tables');
         foreach($tables as $key=>$vo){
-            $sql = "select count(0) as alls from " . $vo['Tables_in_' . config('database')];
+            $sql = "select count(0) as alls from " . $vo['Tables_in_' . config('database')['database']];
             $tables[$key]['alls'] = db()->query($sql)['0']['alls'];
 
             $operate = [
-                '备份' => "javascript:importData('". $vo['Tables_in_' . config('database')]."', ".$tables[$key]['alls'].")",
-                '还原' => "javascript:backData('" . $vo['Tables_in_' . config('database')] . "')"
+                '备份' => "javascript:importData('". $vo['Tables_in_' . config('database')['database']]."', ".$tables[$key]['alls'].")",
+                '还原' => "javascript:backData('" . $vo['Tables_in_' . config('database')['database']] . "')"
             ];
             $tables[$key]['operate'] = showOperate($operate);
-            if(file_exists(config('back_path') . $vo['Tables_in_' . config('database')] . ".sql")){
-                $tables[$key]['ctime'] = date('Y-m-d H:i:s', filemtime(config('back_path') . $vo['Tables_in_' . config('database')] . ".sql"));
+            if(file_exists(config('back_path') . $vo['Tables_in_' . config('database')['database']] . ".sql")){
+                $tables[$key]['ctime'] = date('Y-m-d H:i:s', filemtime(config('back_path') . $vo['Tables_in_' . config('database')['database']] . ".sql"));
             }else{
                 $tables[$key]['ctime'] = '无';
             }
