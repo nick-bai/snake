@@ -10,71 +10,77 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
+use app\admin\model\RoleModel;
+use app\admin\model\UserModel;
 use app\admin\model\UserType;
 use think\Controller;
 use org\Verify;
 
 class Login extends Controller
 {
-    //登录页面
+    // 登录页面
     public function index()
     {
         return $this->fetch('/login');
     }
 
-    //登录操作
+    // 登录操作
     public function doLogin()
     {
-        $username = input("param.username");
+        $userName = input("param.user_name");
         $password = input("param.password");
         $code = input("param.code");
 
-        $result = $this->validate(compact('username', 'password', "code"), 'AdminValidate');
+        $result = $this->validate(compact('userName', 'password', "code"), 'AdminValidate');
         if(true !== $result){
-            return json(['code' => -5, 'data' => '', 'msg' => $result]);
+            return json(msg(-1, '', $result));
         }
 
         $verify = new Verify();
         if (!$verify->check($code)) {
-            return json(['code' => -4, 'data' => '', 'msg' => '验证码错误']);
+            return json(msg(-2, '', '验证码错误'));
         }
 
-        $hasUser = db('user')->where('username', $username)->find();
+        $userModel = new UserModel();
+        $hasUser = $userModel->findUserByName($userName);
         if(empty($hasUser)){
-            return json(['code' => -1, 'data' => '', 'msg' => '管理员不存在']);
+            return json(msg(-3, '', '管理员不存在'));
         }
 
         if(md5($password) != $hasUser['password']){
-            return json(['code' => -2, 'data' => '', 'msg' => '密码错误']);
+            return json(msg(-4, '', '密码错误'));
         }
 
         if(1 != $hasUser['status']){
-            return json(['code' => -6, 'data' => '', 'msg' => '该账号被禁用']);
+            return json(msg(-5, '', '该账号被禁用'));
         }
 
-        //获取该管理员的角色信息
-        $user = new UserType();
-        $info = $user->getRoleInfo($hasUser['typeid']);
+        // 获取该管理员的角色信息
+        $roleModel = new RoleModel();
+        $info = $roleModel->getRoleInfo($hasUser['role_id']);
 
-        session('username', $username);
+        session('username', $userName);
         session('id', $hasUser['id']);
-        session('role', $info['rolename']);  //角色名
-        session('rule', $info['rule']);  //角色节点
-        session('action', $info['action']);  //角色权限
+        session('role', $info['role_name']);  // 角色名
+        session('rule', $info['rule']);  // 角色节点
+        session('action', $info['action']);  // 角色权限
 
-        //更新管理员状态
+        // 更新管理员状态
         $param = [
-            'loginnum' => $hasUser['loginnum'] + 1,
+            'login_times' => $hasUser['login_times'] + 1,
             'last_login_ip' => request()->ip(),
             'last_login_time' => time()
         ];
+        $res = $userModel->updateStatus($param, $hasUser['id']);
+        if(1 != $res['code']){
+            return json(msg(-6, '', $res['msg']));
+        }
 
-        db('user')->where('id', $hasUser['id'])->update($param);
-
-        return json(['code' => 1, 'data' => url('index/index'), 'msg' => '登录成功']);
+        // ['code' => 1, 'data' => url('index/index'), 'msg' => '登录成功']
+        return json(msg(1, url('index/index'), '登录成功'));
     }
 
-    //验证码
+    // 验证码
     public function checkVerify()
     {
         $verify = new Verify();
@@ -86,14 +92,14 @@ class Login extends Controller
         return $verify->entry();
     }
 
-    //退出操作
+    // 退出操作
     public function loginOut()
     {
         session('username', null);
         session('id', null);
-        session('role', null);  //角色名
-        session('rule', null);  //角色节点
-        session('action', null);  //角色权限
+        session('role', null);  // 角色名
+        session('rule', null);  // 角色节点
+        session('action', null);  // 角色权限
 
         $this->redirect(url('index'));
     }

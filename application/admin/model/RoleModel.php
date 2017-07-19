@@ -12,9 +12,10 @@ namespace app\admin\model;
 
 use think\Model;
 
-class UserType extends Model
+class RoleModel extends Model
 {
-    protected  $table = 'snake_role';
+    // 确定链接表名
+    protected $table = 'snake_role';
 
     /**
      * 根据搜索条件获取角色列表信息
@@ -48,14 +49,14 @@ class UserType extends Model
             $result =  $this->validate('RoleValidate')->save($param);
             if(false === $result){
                 // 验证失败 输出错误信息
-                return ['code' => -1, 'data' => '', 'msg' => $this->getError()];
+                return msg(-1, '', $this->getError());
             }else{
 
-                return ['code' => 1, 'data' => '', 'msg' => '添加角色成功'];
+                return msg(1, url('role/index'), '添加角色成功');
             }
-        }catch( PDOException $e){
+        }catch(PDOException $e){
 
-            return ['code' => -2, 'data' => '', 'msg' => $e->getMessage()];
+            return msg(-2, '', $e->getMessage());
         }
     }
 
@@ -67,17 +68,17 @@ class UserType extends Model
     {
         try{
 
-            $result =  $this->validate('RoleValidate')->save($param, ['id' => $param['id']]);
+            $result = $this->validate('RoleValidate')->save($param, ['id' => $param['id']]);
 
             if(false === $result){
                 // 验证失败 输出错误信息
-                return ['code' => 0, 'data' => '', 'msg' => $this->getError()];
+                return msg(-1, '', $this->getError());
             }else{
 
-                return ['code' => 1, 'data' => '', 'msg' => '编辑角色成功'];
+                return msg(1, url('role/index'), '编辑角色成功');
             }
-        }catch( PDOException $e){
-            return ['code' => 0, 'data' => '', 'msg' => $e->getMessage()];
+        }catch(PDOException $e){
+            return msg(-2, '', $e->getMessage());
         }
     }
 
@@ -99,20 +100,20 @@ class UserType extends Model
         try{
 
             $this->where('id', $id)->delete();
-            return ['code' => 1, 'data' => '', 'msg' => '删除角色成功'];
+            return msg(1, '', '删除角色成功');
 
-        }catch( PDOException $e){
-            return ['code' => 0, 'data' => '', 'msg' => $e->getMessage()];
+        }catch(PDOException $e){
+            return msg(-1, '', $e->getMessage());
         }
     }
 
-    //获取所有的角色信息
+    // 获取所有的角色信息
     public function getRole()
     {
         return $this->select();
     }
 
-    //获取角色的权限节点
+    // 获取角色的权限节点
     public function getRuleById($id)
     {
         $res = $this->field('rule')->where('id', $id)->find();
@@ -128,10 +129,10 @@ class UserType extends Model
     {
         try{
             $this->save($param, ['id' => $param['id']]);
-            return ['code' => 1, 'data' => '', 'msg' => '分配权限成功'];
+            return msg(1, '', '分配权限成功');
 
-        }catch( PDOException $e){
-            return ['code' => 0, 'data' => '', 'msg' => $e->getMessage()];
+        }catch(PDOException $e){
+            return msg(-1, '', $e->getMessage());
         }
     }
 
@@ -141,14 +142,19 @@ class UserType extends Model
      */
     public function getRoleInfo($id){
 
-        $result = db('role')->where('id', $id)->find();
+        $result = $this->where('id', $id)->find()->toArray();
         if(empty($result['rule'])){
             $where = '';
         }else{
-            $where = 'id in('.$result['rule'].')';
+            $where = 'id in(' . $result['rule'] . ')';
         }
-        $res = db('node')->field('control_name,action_name')->where($where)->select();
+
+        // 查询权限节点
+        $nodeModel = new NodeModel();
+        $res = $nodeModel->getActions($where);
+
         foreach($res as $key=>$vo){
+
             if('#' != $vo['action_name']){
                 $result['action'][] = $vo['control_name'] . '/' . $vo['action_name'];
             }

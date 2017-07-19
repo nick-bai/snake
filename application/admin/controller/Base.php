@@ -10,7 +10,6 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
-use app\admin\model\Node;
 use think\Controller;
 
 class Base extends Controller
@@ -19,27 +18,28 @@ class Base extends Controller
     {
         if(empty(session('username'))){
 
-            $this->redirect(url('login/index'));
-        }
-
-        //检测权限
-        $control = lcfirst( request()->controller() );
-        $action = lcfirst( request()->action() );
-
-        //跳过登录系列的检测以及主页权限
-        if(!in_array($control, ['login', 'index'])){
-
-            if(!in_array($control . '/' . $action, session('action'))){
-                $this->error('没有权限');
+            $loginUrl = url('login/index');
+            if(request()->isAjax()){
+                return msg(111, $loginUrl, '登录超时');
             }
+
+            $this->redirect($loginUrl);
         }
 
-        //获取权限菜单
-        $node = new Node();
+        // 检测权限
+        $control = lcfirst(request()->controller());
+        $action = lcfirst(request()->action());
+
+        if(empty(authCheck($control . '/' . $action))){
+            if(request()->isAjax()){
+                return msg(403, '', '您没有权限');
+            }
+
+            $this->error('403 您没有权限');
+        }
 
         $this->assign([
             'username' => session('username'),
-            'menu' => $node->getMenu(session('rule')),
             'rolename' => session('role')
         ]);
 

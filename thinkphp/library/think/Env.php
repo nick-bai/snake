@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -23,6 +23,11 @@ class Env
     {
         $result = getenv(ENV_PREFIX . strtoupper(str_replace('.', '_', $name)));
         if (false !== $result) {
+            if ('false' === $result) {
+                $result = false;
+            } elseif ('true' === $result) {
+                $result = true;
+            }
             return $result;
         } else {
             return $default;

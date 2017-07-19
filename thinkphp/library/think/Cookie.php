@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -100,6 +100,22 @@ class Cookie
     }
 
     /**
+     * 永久保存Cookie数据
+     * @param string $name  cookie名称
+     * @param mixed  $value cookie值
+     * @param mixed  $option 可选参数 可能会是 null|integer|string
+     * @return void
+     */
+    public static function forever($name, $value = '', $option = null)
+    {
+        if (is_null($option) || is_numeric($option)) {
+            $option = [];
+        }
+        $option['expire'] = 315360000;
+        self::set($name, $value, $option);
+    }
+
+    /**
      * 判断Cookie数据
      * @param string        $name cookie名称
      * @param string|null   $prefix cookie前缀
@@ -119,22 +135,35 @@ class Cookie
      * @param string|null   $prefix cookie前缀
      * @return mixed
      */
-    public static function get($name, $prefix = null)
+    public static function get($name = '', $prefix = null)
     {
         !isset(self::$init) && self::init();
         $prefix = !is_null($prefix) ? $prefix : self::$config['prefix'];
-        $name   = $prefix . $name;
-        if (isset($_COOKIE[$name])) {
-            $value = $_COOKIE[$name];
+        $key    = $prefix . $name;
+
+        if ('' == $name) {
+            // 获取全部
+            if ($prefix) {
+                $value = [];
+                foreach ($_COOKIE as $k => $val) {
+                    if (0 === strpos($k, $prefix)) {
+                        $value[$k] = $val;
+                    }
+                }
+            } else {
+                $value = $_COOKIE;
+            }
+        } elseif (isset($_COOKIE[$key])) {
+            $value = $_COOKIE[$key];
             if (0 === strpos($value, 'think:')) {
                 $value = substr($value, 6);
                 $value = json_decode($value, true);
                 array_walk_recursive($value, 'self::jsonFormatProtect', 'decode');
             }
-            return $value;
         } else {
-            return null;
+            $value = null;
         }
+        return $value;
     }
 
     /**

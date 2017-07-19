@@ -12,7 +12,7 @@ namespace app\admin\controller;
 
 class Data extends Base
 {
-    //备份首页列表
+    // 备份首页列表
     public function index()
     {
         $tables = db()->query('show tables');
@@ -20,13 +20,12 @@ class Data extends Base
             $sql = "select count(0) as alls from " . $vo['Tables_in_' . config('database')['database']];
             $tables[$key]['alls'] = db()->query($sql)['0']['alls'];
 
-            $operate = [
-                '备份' => "javascript:importData('". $vo['Tables_in_' . config('database')['database']]."', ".$tables[$key]['alls'].")",
-                '还原' => "javascript:backData('" . $vo['Tables_in_' . config('database')['database']] . "')"
-            ];
-            $tables[$key]['operate'] = showOperate($operate);
+            $table = $vo['Tables_in_' . config('database')['database']];
+            $tables[$key]['operate'] = showOperate($this->makeButton($table));
+
             if(file_exists(config('back_path') . $vo['Tables_in_' . config('database')['database']] . ".sql")){
-                $tables[$key]['ctime'] = date('Y-m-d H:i:s', filemtime(config('back_path') . $vo['Tables_in_' . config('database')['database']] . ".sql"));
+                $tables[$key]['ctime'] = date('Y-m-d H:i:s', filemtime(config('back_path') . $vo['Tables_in_' .
+                    config('database')['database']] . ".sql"));
             }else{
                 $tables[$key]['ctime'] = '无';
             }
@@ -39,7 +38,7 @@ class Data extends Base
         return $this->fetch();
     }
 
-    //备份数据
+    // 备份数据
     public function importData()
     {
         set_time_limit(0);
@@ -72,7 +71,7 @@ class Data extends Base
         return json(['code' => 1, 'data' => '', 'msg' => 'success']);
     }
 
-    //还原数据
+    // 还原数据
     public function backData()
     {
         set_time_limit(0);
@@ -87,6 +86,29 @@ class Data extends Base
             db()->query($sql);
         }
         return json(['code' => 1, 'data' => '', 'msg' => 'success']);
+    }
+
+    /**
+     * 拼装操作按钮
+     * @param $table
+     * @return array
+     */
+    private function makeButton($table)
+    {
+        return [
+            '备份' => [
+                'auth' => 'data/importdata',
+                'href' => "javascript:importData('" .$table ."')",
+                'btnStyle' => 'primary',
+                'icon' => 'fa fa-tasks'
+            ],
+            '还原' => [
+                'auth' => 'data/backdata',
+                'href' => "javascript:backData('" .$table ."')",
+                'btnStyle' => 'info',
+                'icon' => 'fa fa-retweet'
+            ]
+        ];
     }
 
 }

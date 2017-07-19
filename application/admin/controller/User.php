@@ -11,8 +11,8 @@
 namespace app\admin\controller;
 
 
+use app\admin\model\RoleModel;
 use app\admin\model\UserModel;
-use app\admin\model\UserType;
 
 class User extends Base
 {
@@ -27,29 +27,25 @@ class User extends Base
             $offset = ($param['pageNumber'] - 1) * $limit;
 
             $where = [];
-            if (isset($param['searchText']) && !empty($param['searchText'])) {
-                $where['username'] = ['like', '%' . $param['searchText'] . '%'];
+            if (!empty($param['searchText'])) {
+                $where['user_name'] = ['like', '%' . $param['searchText'] . '%'];
             }
             $user = new UserModel();
             $selectResult = $user->getUsersByWhere($where, $offset, $limit);
 
             $status = config('user_status');
 
+            // 拼装参数
             foreach($selectResult as $key=>$vo){
 
                 $selectResult[$key]['last_login_time'] = date('Y-m-d H:i:s', $vo['last_login_time']);
                 $selectResult[$key]['status'] = $status[$vo['status']];
 
-                $operate = [
-                    '编辑' => url('user/userEdit', ['id' => $vo['id']]),
-                    '删除' => "javascript:userDel('".$vo['id']."')"
-                ];
-
-                $selectResult[$key]['operate'] = showOperate($operate);
-                
                 if( 1 == $vo['id'] ){
-                	$selectResult[$key]['operate'] = '';
+                    $selectResult[$key]['operate'] = '';
+                    continue;
                 }
+                $selectResult[$key]['operate'] = showOperate($this->makeButton($vo['id']));
             }
 
             $return['total'] = $user->getAllUsers($where);  //总数据
@@ -61,22 +57,21 @@ class User extends Base
         return $this->fetch();
     }
 
-    //添加用户
+    // 添加用户
     public function userAdd()
     {
         if(request()->isPost()){
 
             $param = input('param.');
-            $param = parseParams($param['data']);
 
             $param['password'] = md5($param['password']);
             $user = new UserModel();
             $flag = $user->insertUser($param);
 
-            return json(['code' => $flag['code'], 'data' => $flag['data'], 'msg' => $flag['msg']]);
+            return json(msg($flag['code'], $flag['data'], $flag['msg']));
         }
 
-        $role = new UserType();
+        $role = new RoleModel();
         $this->assign([
             'role' => $role->getRole(),
             'status' => config('user_status')
@@ -85,7 +80,7 @@ class User extends Base
         return $this->fetch();
     }
 
-    //编辑角色
+    // 编辑用户
     public function userEdit()
     {
         $user = new UserModel();
@@ -93,7 +88,7 @@ class User extends Base
         if(request()->isPost()){
 
             $param = input('post.');
-            $param = parseParams($param['data']);
+
             if(empty($param['password'])){
                 unset($param['password']);
             }else{
@@ -101,11 +96,12 @@ class User extends Base
             }
             $flag = $user->editUser($param);
 
-            return json(['code' => $flag['code'], 'data' => $flag['data'], 'msg' => $flag['msg']]);
+            return json(msg($flag['code'], $flag['data'], $flag['msg']));
         }
 
         $id = input('param.id');
-        $role = new UserType();
+        $role = new RoleModel();
+
         $this->assign([
             'user' => $user->getOneUser($id),
             'status' => config('user_status'),
@@ -114,13 +110,36 @@ class User extends Base
         return $this->fetch();
     }
 
-    //删除角色
+    // 删除用户
     public function userDel()
     {
         $id = input('param.id');
 
         $role = new UserModel();
         $flag = $role->delUser($id);
-        return json(['code' => $flag['code'], 'data' => $flag['data'], 'msg' => $flag['msg']]);
+        return json(msg($flag['code'], $flag['data'], $flag['msg']));
+    }
+
+    /**
+     * 拼装操作按钮
+     * @param $id
+     * @return array
+     */
+    private function makeButton($id)
+    {
+        return [
+            '编辑' => [
+                'auth' => 'user/useredit',
+                'href' => url('user/userEdit', ['id' => $id]),
+                'btnStyle' => 'primary',
+                'icon' => 'fa fa-paste'
+            ],
+            '删除' => [
+                'auth' => 'user/userdel',
+                'href' => "javascript:userDel(" .$id .")",
+                'btnStyle' => 'danger',
+                'icon' => 'fa fa-trash-o'
+            ]
+        ];
     }
 }

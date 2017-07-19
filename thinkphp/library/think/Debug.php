@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -11,11 +11,7 @@
 
 namespace think;
 
-use think\Config;
 use think\exception\ClassNotFoundException;
-use think\Log;
-use think\Request;
-use think\Response;
 use think\response\Redirect;
 
 class Debug
@@ -42,7 +38,7 @@ class Debug
     }
 
     /**
-     * 统计某个区间的时间（微秒）使用情况
+     * 统计某个区间的时间（微秒）使用情况 返回值以秒为单位
      * @param string            $start 开始标签
      * @param string            $end 结束标签
      * @param integer|string    $dec 小数位
@@ -57,7 +53,7 @@ class Debug
     }
 
     /**
-     * 统计从开始到统计时的时间（微秒）使用情况
+     * 统计从开始到统计时的时间（微秒）使用情况 返回值以秒为单位
      * @param integer|string $dec 小数位
      * @return integer
      */
@@ -178,8 +174,8 @@ class Debug
             $output = '<pre>' . $label . $output . '</pre>';
         }
         if ($echo) {
-            echo ($output);
-            return null;
+            echo($output);
+            return;
         } else {
             return $output;
         }

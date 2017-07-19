@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -11,7 +11,7 @@
 
 namespace think;
 
-use think\App;
+use think\cache\Driver;
 
 class Cache
 {
@@ -31,7 +31,7 @@ class Cache
      * @access public
      * @param array         $options  配置数组
      * @param bool|string   $name 缓存连接标识 true 强制重新连接
-     * @return \think\cache\Driver
+     * @return Driver
      */
     public static function connect(array $options = [], $name = false)
     {
@@ -51,42 +51,43 @@ class Cache
                 self::$instance[$name] = new $class($options);
             }
         }
-        self::$handler = self::$instance[$name];
-        return self::$handler;
+        return self::$instance[$name];
     }
 
     /**
      * 自动初始化缓存
      * @access public
      * @param array         $options  配置数组
-     * @return void
+     * @return Driver
      */
     public static function init(array $options = [])
     {
         if (is_null(self::$handler)) {
             // 自动初始化缓存
             if (!empty($options)) {
-                self::connect($options);
+                $connect = self::connect($options);
             } elseif ('complex' == Config::get('cache.type')) {
-                self::connect(Config::get('cache.default'));
+                $connect = self::connect(Config::get('cache.default'));
             } else {
-                self::connect(Config::get('cache'));
+                $connect = self::connect(Config::get('cache'));
             }
+            self::$handler = $connect;
         }
+        return self::$handler;
     }
 
     /**
      * 切换缓存类型 需要配置 cache.type 为 complex
      * @access public
      * @param string $name 缓存标识
-     * @return \think\cache\Driver
+     * @return Driver
      */
-    public static function store($name)
+    public static function store($name = '')
     {
-        if ('complex' == Config::get('cache.type')) {
-            self::connect(Config::get('cache.' . $name), strtolower($name));
+        if ('' !== $name && 'complex' == Config::get('cache.type')) {
+            return self::connect(Config::get('cache.' . $name), strtolower($name));
         }
-        return self::$handler;
+        return self::init();
     }
 
     /**
@@ -97,9 +98,8 @@ class Cache
      */
     public static function has($name)
     {
-        self::init();
         self::$readTimes++;
-        return self::$handler->has($name);
+        return self::init()->has($name);
     }
 
     /**
@@ -111,9 +111,8 @@ class Cache
      */
     public static function get($name, $default = false)
     {
-        self::init();
         self::$readTimes++;
-        return self::$handler->get($name, $default);
+        return self::init()->get($name, $default);
     }
 
     /**
@@ -126,9 +125,8 @@ class Cache
      */
     public static function set($name, $value, $expire = null)
     {
-        self::init();
         self::$writeTimes++;
-        return self::$handler->set($name, $value, $expire);
+        return self::init()->set($name, $value, $expire);
     }
 
     /**
@@ -140,9 +138,8 @@ class Cache
      */
     public static function inc($name, $step = 1)
     {
-        self::init();
         self::$writeTimes++;
-        return self::$handler->inc($name, $step);
+        return self::init()->inc($name, $step);
     }
 
     /**
@@ -154,9 +151,8 @@ class Cache
      */
     public static function dec($name, $step = 1)
     {
-        self::init();
         self::$writeTimes++;
-        return self::$handler->dec($name, $step);
+        return self::init()->dec($name, $step);
     }
 
     /**
@@ -167,9 +163,8 @@ class Cache
      */
     public static function rm($name)
     {
-        self::init();
         self::$writeTimes++;
-        return self::$handler->rm($name);
+        return self::init()->rm($name);
     }
 
     /**
@@ -180,9 +175,35 @@ class Cache
      */
     public static function clear($tag = null)
     {
-        self::init();
         self::$writeTimes++;
-        return self::$handler->clear($tag);
+        return self::init()->clear($tag);
+    }
+
+    /**
+     * 读取缓存并删除
+     * @access public
+     * @param string $name 缓存变量名
+     * @return mixed
+     */
+    public static function pull($name)
+    {
+        self::$readTimes++;
+        self::$writeTimes++;
+        return self::init()->pull($name);
+    }
+
+    /**
+     * 如果不存在则写入缓存
+     * @access public
+     * @param string    $name 缓存变量名
+     * @param mixed     $value  存储数据
+     * @param int       $expire  有效时间 0为永久
+     * @return mixed
+     */
+    public static function remember($name, $value, $expire = null)
+    {
+        self::$readTimes++;
+        return self::init()->remember($name, $value, $expire);
     }
 
     /**
@@ -191,12 +212,11 @@ class Cache
      * @param string        $name 标签名
      * @param string|array  $keys 缓存标识
      * @param bool          $overlay 是否覆盖
-     * @return \think\cache\Driver
+     * @return Driver
      */
     public static function tag($name, $keys = null, $overlay = false)
     {
-        self::init();
-        return self::$handler->tag($name, $keys, $overlay);
+        return self::init()->tag($name, $keys, $overlay);
     }
 
 }

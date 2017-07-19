@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一元夺宝</title>
+    <title>管理员列表</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
@@ -21,14 +21,18 @@
         </div>
         <div class="ibox-content">
             <div class="form-group clearfix col-sm-1">
-                <a href="./userAdd"><button class="btn btn-outline btn-primary" type="button">添加用户</button></a>
+                {if authCheck('user/useradd') }
+                <a href="{:url('user/userAdd')}">
+                    <button class="btn btn-outline btn-primary" type="button">添加管理员</button>
+                </a>
+                {/if}
             </div>
             <!--搜索框开始-->
             <form id='commentForm' role="form" method="post" class="form-inline pull-right">
                 <div class="content clearfix m-b">
                     <div class="form-group">
                         <label>管理员名称：</label>
-                        <input type="text" class="form-control" id="username" name="username">
+                        <input type="text" class="form-control" id="username" name="user_name">
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary" type="button" style="margin-top:5px" id="search"><strong>搜 索</strong>
@@ -41,9 +45,10 @@
                 <div class="example">
                     <table id="cusTable">
                         <thead>
-                        <th data-field="username">管理员名称</th>
-                        <th data-field="rolename">管理员角色</th>
-                        <th data-field="loginnum">登录次数</th>
+                        <th data-field="id">管理员ID</th>
+                        <th data-field="user_name">管理员名称</th>
+                        <th data-field="role_name">管理员角色</th>
+                        <th data-field="login_times">登录次数</th>
                         <th data-field="last_login_ip">上次登录ip</th>
                         <th data-field="last_login_time">上次登录时间</th>
                         <th data-field="real_name">真是姓名</th>
@@ -83,8 +88,10 @@
             pageNumber:1, //当前第几页
             pageList: [5, 10, 15, 20, 25],  //记录数可选列表
             sidePagination: "server", //表示服务端请求
-            //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
-            //设置为limit可以获取limit, offset, search, sort, order
+            paginationFirstText: "首页",
+            paginationPreText: "上一页",
+            paginationNextText: "下一页",
+            paginationLastText: "尾页",
             queryParamsType : "undefined",
             queryParams: function queryParams(params) {   //设置查询参数
                 var param = {
@@ -94,7 +101,10 @@
                 };
                 return param;
             },
-            onLoadSuccess: function(){  //加载成功时执行
+            onLoadSuccess: function(res){  //加载成功时执行
+                if(111 == res.code){
+                    window.location.reload();
+                }
                 layer.msg("加载成功", {time : 1000});
             },
             onLoadError: function(){  //加载失败时执行
@@ -114,12 +124,15 @@
     function userDel(id){
         layer.confirm('确认删除此管理员?', {icon: 3, title:'提示'}, function(index){
             //do something
-            $.getJSON('./userDel', {'id' : id}, function(res){
-                if(res.code == 1){
-                    layer.alert('删除成功');
-                    initTable();
+            $.getJSON("{:url('user/userDel')}", {'id' : id}, function(res){
+                if(1 == res.code){
+                    layer.alert(res.msg, {title: '友情提示', icon: 1, closeBtn: 0}, function(){
+                        initTable();
+                    });
+                }else if(111 == res.code){
+                    window.location.reload();
                 }else{
-                    layer.alert('删除失败');
+                    layer.alert(res.msg, {title: '友情提示', icon: 2});
                 }
             });
 

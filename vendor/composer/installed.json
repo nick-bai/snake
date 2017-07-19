@@ -1,17 +1,17 @@
 [
     {
         "name": "topthink/think-installer",
-        "version": "v1.0.10",
-        "version_normalized": "1.0.10.0",
+        "version": "v1.0.12",
+        "version_normalized": "1.0.12.0",
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/think-installer.git",
-            "reference": "ae50760ebd7c687c7a8573db2cfa94a41e5100e3"
+            "reference": "1be326e68f63de4e95977ed50f46ae75f017556d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://packagist.phpcomposer.com/files/top-think/think-installer/ae50760ebd7c687c7a8573db2cfa94a41e5100e3.zip",
-            "reference": "ae50760ebd7c687c7a8573db2cfa94a41e5100e3",
+            "url": "https://files.phpcomposer.com/files/top-think/think-installer/1be326e68f63de4e95977ed50f46ae75f017556d.zip",
+            "reference": "1be326e68f63de4e95977ed50f46ae75f017556d",
             "shasum": ""
         },
         "require": {
@@ -20,7 +20,7 @@
         "require-dev": {
             "composer/composer": "1.0.*@dev"
         },
-        "time": "2016-09-23 04:04:44",
+        "time": "2017-05-27T06:58:09+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "think\\composer\\Plugin"
@@ -49,12 +49,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/framework.git",
-            "reference": "aa0028cef6dc67eaef968fb04beb5610ea1ff94a"
+            "reference": "8a52dd232fcac998d393d05b1246e0f54bdc9dcb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://packagist.phpcomposer.com/files/top-think/framework/aa0028cef6dc67eaef968fb04beb5610ea1ff94a.zip",
-            "reference": "aa0028cef6dc67eaef968fb04beb5610ea1ff94a",
+            "url": "https://files.phpcomposer.com/files/top-think/framework/8a52dd232fcac998d393d05b1246e0f54bdc9dcb.zip",
+            "reference": "8a52dd232fcac998d393d05b1246e0f54bdc9dcb",
             "shasum": ""
         },
         "require": {
@@ -67,10 +67,9 @@
             "phpdocumentor/reflection-docblock": "^2.0",
             "phploc/phploc": "2.*",
             "phpunit/phpunit": "4.8.*",
-            "sebastian/phpcpd": "2.*",
-            "squizlabs/php_codesniffer": "2.*"
+            "sebastian/phpcpd": "2.*"
         },
-        "time": "2016-10-12 10:06:49",
+        "time": "2017-07-18T08:19:42+00:00",
         "type": "think-framework",
         "installation-source": "dist",
         "autoload": {

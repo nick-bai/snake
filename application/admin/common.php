@@ -8,19 +8,14 @@ function showOperate($operate = [])
     if(empty($operate)){
         return '';
     }
-    $option = <<<EOT
-<div class="btn-group">
-    <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-        操作 <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-EOT;
 
+    $option = '';
     foreach($operate as $key=>$vo){
-
-        $option .= '<li><a href="'.$vo.'">'.$key.'</a></li>';
+        if(authCheck($vo['auth'])){
+            $option .= ' <a href="' . $vo['href'] . '"><button type="button" class="btn btn-' . $vo['btnStyle'] . ' btn-sm">'.
+                '<i class="' . $vo['icon'] . '"></i> ' . $key . '</button></a>';
+        }
     }
-    $option .= '</ul></div>';
 
     return $option;
 }
@@ -62,12 +57,13 @@ function subTree($param, $pid = 0)
  */
 function prepareMenu($param)
 {
+    $param = objToArray($param);
     $parent = []; //父类
     $child = [];  //子类
 
     foreach($param as $key=>$vo){
 
-        if($vo['typeid'] == 0){
+        if(0 == $vo['type_id']){
             $vo['href'] = '#';
             $parent[] = $vo;
         }else{
@@ -79,7 +75,7 @@ function prepareMenu($param)
     foreach($parent as $key=>$vo){
         foreach($child as $k=>$v){
 
-            if($v['typeid'] == $vo['id']){
+            if($v['type_id'] == $vo['id']){
                 $parent[$key]['child'][] = $v;
             }
         }
@@ -127,6 +123,83 @@ function analysisSql($file)
     fclose ( $f );
 
     return $sqls;
+}
+
+/**
+ * 统一返回信息
+ * @param $code
+ * @param $data
+ * @param $msge
+ */
+function msg($code, $data, $msg)
+{
+    return compact('code', 'data', 'msg');
+}
+
+/**
+ * 对象转换成数组
+ * @param $obj
+ */
+function objToArray($obj)
+{
+    return json_decode(json_encode($obj), true);
+}
+
+/**
+ * 权限检测
+ * @param $rule
+ */
+function authCheck($rule)
+{
+    $control = explode('/', $rule)['0'];
+    if(in_array($control, ['login', 'index'])){
+        return true;
+    }
+
+    if(in_array($rule, session('action'))){
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * 整理出tree数据 ---  layui tree
+ * @param $pInfo
+ * @param $spread
+ */
+function getTree($pInfo, $spread = true)
+{
+
+    $res = [];
+    $tree = [];
+    //整理数组
+    foreach($pInfo as $key=>$vo){
+
+        if($spread){
+            $vo['spread'] = true;  //默认展开
+        }
+        $res[$vo['id']] = $vo;
+        $res[$vo['id']]['children'] = [];
+    }
+    unset($pInfo);
+
+    //查找子孙
+    foreach($res as $key=>$vo){
+        if(0 != $vo['pid']){
+            $res[$vo['pid']]['children'][] = &$res[$key];
+        }
+    }
+
+    //过滤杂质
+    foreach( $res as $key=>$vo ){
+        if(0 == $vo['pid']){
+            $tree[] = $vo;
+        }
+    }
+    unset( $res );
+
+    return $tree;
 }
 
 

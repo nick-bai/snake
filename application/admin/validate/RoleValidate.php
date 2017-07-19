@@ -15,7 +15,7 @@ use think\Validate;
 class RoleValidate extends Validate
 {
     protected $rule = [
-        ['rolename', 'unique:role', '角色已经存在']
+        ['role_name', 'unique:role', '角色已经存在']
     ];
 
 }

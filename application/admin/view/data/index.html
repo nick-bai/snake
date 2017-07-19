@@ -19,23 +19,6 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5>数据表列表</h5>
-                <div class="ibox-tools">
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a>
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="table_basic.html#">
-                        <i class="fa fa-wrench"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="table_basic.html#">选项1</a>
-                        </li>
-                        <li><a href="table_basic.html#">选项2</a>
-                        </li>
-                    </ul>
-                    <a class="close-link">
-                        <i class="fa fa-times"></i>
-                    </a>
-                </div>
             </div>
             <div class="ibox-content">
 
@@ -102,7 +85,7 @@
             skin: 'layui-layer-demo', //加上边框
             content: $('#wait')
         });
-        $.getJSON('./importData', {'table' : table}, function(res){
+        $.getJSON("{:url('data/importData')}", {'table' : table}, function(res){
             layer.close(index);
             layer.alert('备份成功！', {icon: 1}, function(){
                 window.location.reload();
@@ -118,7 +101,7 @@
             skin: 'layui-layer-demo', //加上边框
             content: $('#wait')
         });
-        $.getJSON('./backData', {'table' : table}, function(res){
+        $.getJSON("{:url('data/backData')}", {'table' : table}, function(res){
             layer.close(index);
             if(res.code == 1){
                 layer.alert('还原成功！', {icon: 1}, function(){

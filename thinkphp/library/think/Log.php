@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -32,13 +32,14 @@ class Log
     const SQL    = 'sql';
     const NOTICE = 'notice';
     const ALERT  = 'alert';
+    const DEBUG  = 'debug';
 
     // 日志信息
     protected static $log = [];
     // 配置参数
     protected static $config = [];
     // 日志类型
-    protected static $type = ['log', 'error', 'info', 'sql', 'notice', 'alert'];
+    protected static $type = ['log', 'error', 'info', 'sql', 'notice', 'alert', 'debug'];
     // 日志写入驱动
     protected static $driver;
 
@@ -83,6 +84,10 @@ class Log
     public static function record($msg, $type = 'log')
     {
         self::$log[$type][] = $msg;
+        if (IS_CLI) {
+            // 命令行下面日志写入改进
+            self::save();
+        }
     }
 
     /**
@@ -96,7 +101,7 @@ class Log
 
     /**
      * 当前日志记录的授权key
-     * @param string  $key  授权key
+     * @param string $key 授权key
      * @return void
      */
     public static function key($key)
@@ -106,7 +111,7 @@ class Log
 
     /**
      * 检查日志写入权限
-     * @param array  $config  当前日志配置参数
+     * @param array $config 当前日志配置参数
      * @return bool
      */
     public static function check($config)
@@ -136,6 +141,9 @@ class Log
             if (empty(self::$config['level'])) {
                 // 获取全部日志
                 $log = self::$log;
+                if (!App::$debug && isset($log['debug'])) {
+                    unset($log['debug']);
+                }
             } else {
                 // 记录允许级别
                 $log = [];
@@ -150,7 +158,7 @@ class Log
             if ($result) {
                 self::$log = [];
             }
-
+            Hook::listen('log_write_done', $log);
             return $result;
         }
         return true;
@@ -158,13 +166,14 @@ class Log
 
     /**
      * 实时写入日志信息 并支持行为
-     * @param mixed  $msg  调试信息
-     * @param string $type 信息类型
+     * @param mixed  $msg   调试信息
+     * @param string $type  信息类型
      * @param bool   $force 是否强制写入
      * @return bool
      */
     public static function write($msg, $type = 'log', $force = false)
     {
+        $log = self::$log;
         // 封装日志信息
         if (true === $force || empty(self::$config['level'])) {
             $log[$type][] = $msg;
@@ -180,7 +189,11 @@ class Log
             self::init(Config::get('log'));
         }
         // 写入日志
-        return self::$driver->save($log);
+        $result = self::$driver->save($log);
+        if ($result) {
+            self::$log = [];
+        }
+        return $result;
     }
 
     /**

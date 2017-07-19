@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -12,7 +12,6 @@
 namespace think\cache\driver;
 
 use think\cache\Driver;
-use think\Exception;
 
 class Memcache extends Driver
 {
@@ -26,7 +25,7 @@ class Memcache extends Driver
     ];
 
     /**
-     * 架构函数
+     * 构造函数
      * @param array $options 缓存参数
      * @access public
      * @throws \BadFunctionCallException
@@ -114,7 +113,10 @@ class Memcache extends Driver
     public function inc($name, $step = 1)
     {
         $key = $this->getCacheKey($name);
-        return $this->handler->increment($key, $step);
+        if ($this->handler->get($key)) {
+            return $this->handler->increment($key, $step);
+        }
+        return $this->handler->set($key, $step);
     }
 
     /**

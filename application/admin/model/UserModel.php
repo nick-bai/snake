@@ -14,6 +14,7 @@ use think\Model;
 
 class UserModel extends Model
 {
+    // 确定链接表名
     protected $table = 'snake_user';
 
     /**
@@ -24,8 +25,8 @@ class UserModel extends Model
      */
     public function getUsersByWhere($where, $offset, $limit)
     {
-        return $this->field('snake_user.*,rolename')
-            ->join('snake_role', 'snake_user.typeid = snake_role.id')
+        return $this->field($this->table . '.*,role_name')
+            ->join('snake_role', $this->table . '.role_id = ' . 'snake_role.id')
             ->where($where)->limit($offset, $limit)->order('id desc')->select();
     }
 
@@ -49,14 +50,14 @@ class UserModel extends Model
             $result =  $this->validate('UserValidate')->save($param);
             if(false === $result){
                 // 验证失败 输出错误信息
-                return ['code' => -1, 'data' => '', 'msg' => $this->getError()];
+                return msg(-1, '', $this->getError());
             }else{
 
-                return ['code' => 1, 'data' => '', 'msg' => '添加用户成功'];
+                return msg(1, url('user/index'), '添加用户成功');
             }
-        }catch( PDOException $e){
+        }catch(PDOException $e){
 
-            return ['code' => -2, 'data' => '', 'msg' => $e->getMessage()];
+            return msg(-2, '', $e->getMessage());
         }
     }
 
@@ -72,13 +73,13 @@ class UserModel extends Model
 
             if(false === $result){
                 // 验证失败 输出错误信息
-                return ['code' => 0, 'data' => '', 'msg' => $this->getError()];
+                return msg(-1, '', $this->getError());
             }else{
 
-                return ['code' => 1, 'data' => '', 'msg' => '编辑用户成功'];
+                return msg(1, url('user/index'), '编辑用户成功');
             }
-        }catch( PDOException $e){
-            return ['code' => 0, 'data' => '', 'msg' => $e->getMessage()];
+        }catch(PDOException $e){
+            return msg(-2, '', $e->getMessage());
         }
     }
 
@@ -100,10 +101,35 @@ class UserModel extends Model
         try{
 
             $this->where('id', $id)->delete();
-            return ['code' => 1, 'data' => '', 'msg' => '删除管理员成功'];
+            return msg(1, '', '删除管理员成功');
 
         }catch( PDOException $e){
-            return ['code' => 0, 'data' => '', 'msg' => $e->getMessage()];
+            return msg(-1, '', $e->getMessage());
+        }
+    }
+
+    /**
+     * 根据用户名获取管理员信息
+     * @param $name
+     */
+    public function findUserByName($name)
+    {
+        return $this->where('user_name', $name)->find();
+    }
+
+    /**
+     * 更新管理员状态
+     * @param array $param
+     */
+    public function updateStatus($param = [], $uid)
+    {
+        try{
+
+            $this->where('id', $uid)->update($param);
+            return msg(1, '', 'ok');
+        }catch (\Exception $e){
+
+            return msg(-1, '', $e->getMessage());
         }
     }
 }

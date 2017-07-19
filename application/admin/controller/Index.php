@@ -9,11 +9,18 @@
 // | Author: NickBai <1902822973@qq.com>
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
+use app\admin\model\NodeModel;
 
 class Index extends Base
 {
     public function index()
     {
+        // 获取权限菜单
+        $node = new NodeModel();
+        $this->assign([
+            'menu' => $node->getMenu(session('rule'))
+        ]);
+
         return $this->fetch('/index');
     }
 

@@ -11,11 +11,13 @@
 namespace app\admin\controller;
 
 use app\admin\model\Node;
+use app\admin\model\NodeModel;
+use app\admin\model\RoleModel;
 use app\admin\model\UserType;
 
 class Role extends Base
 {
-    //角色列表
+    // 角色列表
     public function index()
     {
         if(request()->isAjax()){
@@ -26,29 +28,25 @@ class Role extends Base
             $offset = ($param['pageNumber'] - 1) * $limit;
 
             $where = [];
-            if (isset($param['searchText']) && !empty($param['searchText'])) {
-                $where['rolename'] = ['like', '%' . $param['searchText'] . '%'];
+            if (!empty($param['searchText'])) {
+                $where['role_name'] = ['like', '%' . $param['searchText'] . '%'];
             }
-            $user = new UserType();
+
+            $user = new RoleModel();
             $selectResult = $user->getRoleByWhere($where, $offset, $limit);
 
             foreach($selectResult as $key=>$vo){
-
+                // 不允许操作超级管理员
                 if(1 == $vo['id']){
                     $selectResult[$key]['operate'] = '';
                     continue;
                 }
 
-                $operate = [
-                    '编辑' => url('role/roleEdit', ['id' => $vo['id']]),
-                    '删除' => "javascript:roleDel('".$vo['id']."')",
-                    '分配权限' => "javascript:giveQx('".$vo['id']."')"
-                ];
-                $selectResult[$key]['operate'] = showOperate($operate);
+                $selectResult[$key]['operate'] = showOperate($this->makeButton($vo['id']));
 
             }
 
-            $return['total'] = $user->getAllRole($where);  //总数据
+            $return['total'] = $user->getAllRole($where);  // 总数据
             $return['rows'] = $selectResult;
 
             return json($return);
@@ -57,36 +55,33 @@ class Role extends Base
         return $this->fetch();
     }
 
-    //添加角色
+    // 添加角色
     public function roleAdd()
     {
         if(request()->isPost()){
 
             $param = input('param.');
-            $param = parseParams($param['data']);
 
-            $role = new UserType();
+            $role = new RoleModel();
             $flag = $role->insertRole($param);
 
-            return json(['code' => $flag['code'], 'data' => $flag['data'], 'msg' => $flag['msg']]);
+            return json(msg($flag['code'], $flag['data'], $flag['msg']));
         }
 
         return $this->fetch();
     }
 
-    //编辑角色
+    // 编辑角色
     public function roleEdit()
     {
-        $role = new UserType();
+        $role = new RoleModel();
 
         if(request()->isPost()){
 
             $param = input('post.');
-            $param = parseParams($param['data']);
-
             $flag = $role->editRole($param);
 
-            return json(['code' => $flag['code'], 'data' => $flag['data'], 'msg' => $flag['msg']]);
+            return json(msg($flag['code'], $flag['data'], $flag['msg']));
         }
 
         $id = input('param.id');
@@ -96,37 +91,67 @@ class Role extends Base
         return $this->fetch();
     }
 
-    //删除角色
+    // 删除角色
     public function roleDel()
     {
         $id = input('param.id');
 
-        $role = new UserType();
+        $role = new RoleModel();
         $flag = $role->delRole($id);
-        return json(['code' => $flag['code'], 'data' => $flag['data'], 'msg' => $flag['msg']]);
+        return json(msg($flag['code'], $flag['data'], $flag['msg']));
     }
 
-    //分配权限
+    // 分配权限
     public function giveAccess()
     {
         $param = input('param.');
-        $node = new Node();
-        //获取现在的权限
+        $node = new NodeModel();
+        // 获取现在的权限
         if('get' == $param['type']){
 
             $nodeStr = $node->getNodeInfo($param['id']);
-            return json(['code' => 1, 'data' => $nodeStr, 'msg' => 'success']);
+            return json(msg(1, $nodeStr, 'success'));
         }
-        //分配新权限
+
+        // 分配新权限
         if('give' == $param['type']){
 
             $doparam = [
                 'id' => $param['id'],
                 'rule' => $param['rule']
             ];
-            $user = new UserType();
+            $user = new RoleModel();
             $flag = $user->editAccess($doparam);
-            return json(['code' => $flag['code'], 'data' => $flag['data'], 'msg' => $flag['msg']]);
+            return json(msg($flag['code'], $flag['data'], $flag['msg']));
         }
+    }
+
+    /**
+     * 拼装操作按钮
+     * @param $id
+     * @return array
+     */
+    private function makeButton($id)
+    {
+        return [
+            '编辑' => [
+                'auth' => 'role/roleedit',
+                'href' => url('role/roleEdit', ['id' => $id]),
+                'btnStyle' => 'primary',
+                'icon' => 'fa fa-paste'
+            ],
+            '删除' => [
+                'auth' => 'role/roledel',
+                'href' => "javascript:roleDel(" .$id .")",
+                'btnStyle' => 'danger',
+                'icon' => 'fa fa-trash-o'
+            ],
+            '分配权限' => [
+                'auth' => 'role/giveaccess',
+                'href' => "javascript:giveQx(" .$id .")",
+                'btnStyle' => 'info',
+                'icon' => 'fa fa-institution'
+            ],
+        ];
     }
 }

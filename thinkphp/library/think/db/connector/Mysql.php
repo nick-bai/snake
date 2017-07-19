@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -20,6 +20,8 @@ use think\Log;
  */
 class Mysql extends Connection
 {
+
+    protected $builder = '\\think\\db\\builder\\Mysql';
 
     /**
      * 解析pdo连接的dsn信息
@@ -49,17 +51,15 @@ class Mysql extends Connection
      */
     public function getFields($tableName)
     {
-        $this->initConnect(true);
         list($tableName) = explode(' ', $tableName);
-        if (strpos($tableName, '.')) {
-            $tableName = str_replace('.', '`.`', $tableName);
+        if (false === strpos($tableName, '`')) {
+            if (strpos($tableName, '.')) {
+                $tableName = str_replace('.', '`.`', $tableName);
+            }
+            $tableName = '`' . $tableName . '`';
         }
-        $sql = 'SHOW COLUMNS FROM `' . $tableName . '`';
-        // 调试开始
-        $this->debug(true);
-        $pdo = $this->linkID->query($sql);
-        // 调试结束
-        $this->debug(false, $sql);
+        $sql    = 'SHOW COLUMNS FROM ' . $tableName;
+        $pdo    = $this->query($sql, [], false, true);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
         if ($result) {
@@ -86,13 +86,8 @@ class Mysql extends Connection
      */
     public function getTables($dbName = '')
     {
-        $this->initConnect(true);
-        $sql = !empty($dbName) ? 'SHOW TABLES FROM ' . $dbName : 'SHOW TABLES ';
-        // 调试开始
-        $this->debug(true);
-        $pdo = $this->linkID->query($sql);
-        // 调试结束
-        $this->debug(false, $sql);
+        $sql    = !empty($dbName) ? 'SHOW TABLES FROM ' . $dbName : 'SHOW TABLES ';
+        $pdo    = $this->query($sql, [], false, true);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
         foreach ($result as $key => $val) {
@@ -124,4 +119,5 @@ class Mysql extends Connection
     {
         return true;
     }
+
 }

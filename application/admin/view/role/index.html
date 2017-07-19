@@ -21,7 +21,9 @@
         </div>
         <div class="ibox-content">
             <div class="form-group clearfix col-sm-1">
-                <a href="./roleAdd"><button class="btn btn-outline btn-primary" type="button">添加角色</button></a>
+                {if authCheck('role/roleadd')}
+                <a href="{:url('role/roleAdd')}"><button class="btn btn-outline btn-primary" type="button">添加角色</button></a>
+                {/if}
             </div>
             <!--搜索框开始-->
             <form id='commentForm' role="form" method="post" class="form-inline pull-right">
@@ -43,7 +45,7 @@
                     <table id="cusTable">
                         <thead>
                         <th data-field="id">角色ID</th>
-                        <th data-field="rolename">角色名称</th>
+                        <th data-field="role_name">角色名称</th>
                         <th data-field="operate">操作</th>
                         </thead>
                     </table>
@@ -93,15 +95,17 @@
         //初始化表格,动态从服务器加载数据
         $("#cusTable").bootstrapTable({
             method: "get",  //使用get请求到服务器获取数据
-            url: "./index", //获取数据的地址
+            url: "{:url('role/index')}", //获取数据的地址
             striped: true,  //表格显示条纹
             pagination: true, //启动分页
             pageSize: 10,  //每页显示的记录数
             pageNumber:1, //当前第几页
             pageList: [5, 10, 15, 20, 25],  //记录数可选列表
             sidePagination: "server", //表示服务端请求
-            //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
-            //设置为limit可以获取limit, offset, search, sort, order
+            paginationFirstText: "首页",
+            paginationPreText: "上一页",
+            paginationNextText: "下一页",
+            paginationLastText: "尾页",
             queryParamsType : "undefined",
             queryParams: function queryParams(params) {   //设置查询参数
                 var param = {
@@ -111,7 +115,10 @@
                 };
                 return param;
             },
-            onLoadSuccess: function(){  //加载成功时执行
+            onLoadSuccess: function(res){  //加载成功时执行
+                if(111 == res.code){
+                    window.location.reload();
+                }
                 layer.msg("加载成功", {time : 1000});
             },
             onLoadError: function(){  //加载失败时执行
@@ -132,13 +139,15 @@
     function roleDel(id){
         layer.confirm('确认删除此角色?', {icon: 3, title:'提示'}, function(index){
             //do something
-            $.getJSON('./roleDel', {'id' : id}, function(res){
-                if(res.code == 1){
-                    layer.alert('删除成功', function(){
+            $.getJSON("{:url('role/roleDel')}", {'id' : id}, function(res){
+                if(1 == res.code){
+                    layer.alert(res.msg, {title: '友情提示', icon: 1, closeBtn: 0}, function(){
                         initTable();
                     });
+                }else if(111 == res.code){
+                    window.location.reload();
                 }else{
-                    layer.alert('删除失败');
+                    layer.alert(res.msg, {title: '友情提示', icon: 2});
                 }
             });
 
@@ -154,23 +163,19 @@
         //加载层
         index2 = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
 
-        //获取权限信息
-        $.getJSON('./giveAccess', {'type' : 'get', 'id' : id}, function(res){
+        // 获取权限信息
+        $.getJSON("{:url('role/giveAccess')}", {'type' : 'get', 'id' : id}, function(res){
             layer.close(index2);
-            if(res.code == 1){
+            if(1 == res.code){
                 zNodes = JSON.parse(res.data);  //将字符串转换成obj
 
                 //页面层
                 index = layer.open({
                     type: 1,
-                    area:['350px', '600px'],
+                    area:['350px', '400px'],
                     title:'权限分配',
                     skin: 'layui-layer-demo', //加上边框
                     content: $('#role')
-                });
-                //设置位置
-                layer.style(index, {
-                    top: '150px'
                 });
 
                 //设置zetree
@@ -189,8 +194,10 @@
                 var zTree = $.fn.zTree.getZTreeObj("treeType");
                 zTree.expandAll(true);
 
+            }else if(111 == res.code){
+                window.location.reload();
             }else{
-                layer.alert(res.msg);
+                layer.alert(res.msg, {title: '友情提示', icon: 2});
             }
 
         });
@@ -208,14 +215,16 @@
         });
         var id = $("#nodeid").val();
         //写入库
-        $.post('./giveAccess', {'type' : 'give', 'id' : id, 'rule' : NodeString}, function(res){
+        $.post("{:url('role/giveAccess')}", {'type' : 'give', 'id' : id, 'rule' : NodeString}, function(res){
             layer.close(index);
-            if(res.code == 1){
-                layer.alert(res.msg, function(){
+            if(1 == res.code){
+                layer.alert(res.msg, {title: '友情提示', icon: 1, closeBtn: 0}, function(){
                     initTable();
                 });
+            }else if(111 == res.code){
+                window.location.reload();
             }else{
-                layer.alert(res.msg);
+                layer.alert(res.msg, {title: '友情提示', icon: 2});
             }
 
         }, 'json')
