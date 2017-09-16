@@ -1,7 +1,7 @@
 /*!
  * UEditor
  * version: ueditor
- * build: Thu May 26 2016 14:15:13 GMT+0800 (CST)
+ * build: Wed Aug 10 2016 11:06:02 GMT+0800 (CST)
  */
 
 (function(){
@@ -24483,7 +24483,7 @@ UE.plugin.register('simpleupload', function (){
 
             wrapper.innerHTML = '<form id="edui_form_' + timestrap + '" target="edui_iframe_' + timestrap + '" method="POST" enctype="multipart/form-data" action="' + me.getOpt('serverUrl') + '" ' +
             'style="' + btnStyle + '">' +
-            '<input id="edui_input_' + timestrap + '" type="file" accept="image/*" name="' + me.options.imageFieldName + '" ' +
+            '<input id="edui_input_' + timestrap + '" type="file" accept="image/gif,image/jpeg,image/png,image/jpg,image/bmp" name="' + me.options.imageFieldName + '" ' +
             'style="' + btnStyle + '">' +
             '</form>' +
             '<iframe id="edui_iframe_' + timestrap + '" name="edui_iframe_' + timestrap + '" style="display:none;width:0;height:0;border:0;margin:0;padding:0;position:absolute;"></iframe>';

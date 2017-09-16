@@ -32,7 +32,7 @@ class Node extends Base
     // 添加节点
     public function nodeAdd()
     {
-        $param = input('param.');
+        $param = input('post.');
 
         $node = new NodeModel();
         $flag = $node->insertNode($param);
@@ -43,7 +43,7 @@ class Node extends Base
     // 编辑节点
     public function nodeEdit()
     {
-        $param = input('param.');
+        $param = input('post.');
 
         $node = new NodeModel();
         $flag = $node->editNode($param);

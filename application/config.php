@@ -23,7 +23,6 @@ return [
     ],
 
     'app_debug' => true,
-    'default_filter' => ['strip_tags', 'htmlspecialchars'],
 
     // +----------------------------------------------------------------------
     // | 缓存设置

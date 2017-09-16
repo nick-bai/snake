@@ -60,72 +60,11 @@ class Uploader
         } else if($type == "base64") {
             $this->upBase64();
         } else {
-            //$this->upFile();
-            $this->upFileForOss();
+            $this->upFile();
         }
 
         $this->stateMap['ERROR_TYPE_NOT_ALLOWED'] = iconv('unicode', 'utf-8', $this->stateMap['ERROR_TYPE_NOT_ALLOWED']);
     }
-
-
-    /**
-     * 上传文件到阿里云oss
-     * @return mixed
-     */
-    private function upFileForOss()
-    {
-        $file = $this->file = $_FILES[$this->fileField];
-        if (!$file) {
-            $this->stateInfo = $this->getStateInfo("ERROR_FILE_NOT_FOUND");
-            return;
-        }
-        if ($this->file['error']) {
-            $this->stateInfo = $this->getStateInfo($file['error']);
-            return;
-        } else if (!file_exists($file['tmp_name'])) {
-            $this->stateInfo = $this->getStateInfo("ERROR_TMP_FILE_NOT_FOUND");
-            return;
-        } else if (!is_uploaded_file($file['tmp_name'])) {
-            $this->stateInfo = $this->getStateInfo("ERROR_TMPFILE");
-            return;
-        }
-
-        $this->oriName = $file['name'];
-        $this->fileSize = $file['size'];
-        $this->fileType = $this->getFileExt();
-        $this->fullName = $this->getFullName();
-        $this->filePath = $this->getFilePath();
-        $this->fileName = $this->getFileName();
-
-        //重写fullName变量---for oss
-        $this->fullName = 'http://static.52gg.com/v1.0/shop/upload/article/' . $this->fileName;
-        $ossName = 'v1.0/shop/upload/article/' . $this->fileName;
-        //检查文件大小是否超出限制
-        if (!$this->checkSize()) {
-            $this->stateInfo = $this->getStateInfo("ERROR_SIZE_EXCEED");
-            return;
-        }
-
-        //检查是否不允许的文件格式
-        if (!$this->checkType()) {
-            $this->stateInfo = $this->getStateInfo("ERROR_TYPE_NOT_ALLOWED");
-            return;
-        }
-
-        //2016-07-15改为阿里云oss存储
-        require_once $_SERVER['DOCUMENT_ROOT'].'/../vendor/vendor/aliyuncs/oss-sdk-php/samples/Common.php';
-        $obj = new \Common();
-
-        $bucket = $obj->getBucketName();
-        $ossClient = $obj->getOssClient();
-        if (is_null($ossClient))
-            return '客户端实例化失败';
-
-        $ossClient->uploadFile($bucket, $ossName, $file["tmp_name"]);
-        $this->stateInfo = $this->stateMap[0];
-
-    }
-
 
     /**
      * 上传文件的主处理方法
