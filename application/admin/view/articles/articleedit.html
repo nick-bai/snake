@@ -136,7 +136,7 @@
             //执行实例
             var uploadInst = upload.render({
                 elem: '#test1' //绑定元素
-                ,url: '/admin/articles/uploadImg/' //上传接口
+                ,url: "{:url('articles/uploadImg')}" //上传接口
                 ,done: function(res){
                     //上传完毕回调
                     $("#thumbnail").val(res.data.src);
