@@ -3,17 +3,36 @@ Navicat MySQL Data Transfer
 
 Source Server         : localhost
 Source Server Version : 50553
-Source Host           : localhost:3306
+Source Host           : 127.0.0.1:3306
 Source Database       : snake
 
 Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-07-19 10:42:08
+Date: 2017-09-16 17:41:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for snake_articles
+-- ----------------------------
+DROP TABLE IF EXISTS `snake_articles`;
+CREATE TABLE `snake_articles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文章id',
+  `title` varchar(155) NOT NULL COMMENT '文章标题',
+  `description` varchar(255) NOT NULL COMMENT '文章描述',
+  `keywords` varchar(155) NOT NULL COMMENT '文章关键字',
+  `thumbnail` varchar(255) NOT NULL COMMENT '文章缩略图',
+  `content` text NOT NULL COMMENT '文章内容',
+  `add_time` datetime NOT NULL COMMENT '发布时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of snake_articles
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for snake_node
@@ -28,7 +47,7 @@ CREATE TABLE `snake_node` (
   `type_id` int(11) NOT NULL COMMENT '父级节点id',
   `style` varchar(155) DEFAULT '' COMMENT '菜单样式',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of snake_node
@@ -51,6 +70,11 @@ INSERT INTO `snake_node` VALUES ('15', '节点管理', 'node', 'index', '2', '1'
 INSERT INTO `snake_node` VALUES ('16', '添加节点', 'node', 'nodeadd', '1', '15', '');
 INSERT INTO `snake_node` VALUES ('17', '编辑节点', 'node', 'nodeedit', '1', '15', '');
 INSERT INTO `snake_node` VALUES ('18', '删除节点', 'node', 'nodedel', '1', '15', '');
+INSERT INTO `snake_node` VALUES ('19', '文章管理', 'articles', 'index', '2', '0', 'fa fa-book');
+INSERT INTO `snake_node` VALUES ('20', '文章列表', 'articles', 'index', '2', '19', '');
+INSERT INTO `snake_node` VALUES ('21', '添加文章', 'articles', 'articleadd', '1', '19', '');
+INSERT INTO `snake_node` VALUES ('22', '编辑文章', 'articles', 'articleedit', '1', '19', '');
+INSERT INTO `snake_node` VALUES ('23', '删除文章', 'articles', 'articledel', '1', '19', '');
 
 -- ----------------------------
 -- Table structure for snake_role
@@ -89,4 +113,4 @@ CREATE TABLE `snake_user` (
 -- ----------------------------
 -- Records of snake_user
 -- ----------------------------
-INSERT INTO `snake_user` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '35', '127.0.0.1', '1500365358', 'admin', '1', '1');
+INSERT INTO `snake_user` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '40', '127.0.0.1', '1505553523', 'admin', '1', '1');
