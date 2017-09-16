@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-09-16 17:41:07
+Date: 2017-09-16 19:00:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,11 +28,12 @@ CREATE TABLE `snake_articles` (
   `content` text NOT NULL COMMENT '文章内容',
   `add_time` datetime NOT NULL COMMENT '发布时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of snake_articles
 -- ----------------------------
+INSERT INTO `snake_articles` VALUES ('2', '文章标题', '文章描述', '关键字1,关键字2,关键字3', '/upload/20170916/1e915c70dbb9d3e8a07bede7b64e4cff.png', '<p><img src=\"/upload/image/20170916/1505555254.png\" title=\"1505555254.png\" alt=\"QQ截图20170916174651.png\"/></p><p>测试文章内容</p><p>测试内容</p>', '2017-09-16 17:47:44');
 
 -- ----------------------------
 -- Table structure for snake_node
@@ -47,7 +48,7 @@ CREATE TABLE `snake_node` (
   `type_id` int(11) NOT NULL COMMENT '父级节点id',
   `style` varchar(155) DEFAULT '' COMMENT '菜单样式',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of snake_node
@@ -75,6 +76,7 @@ INSERT INTO `snake_node` VALUES ('20', '文章列表', 'articles', 'index', '2',
 INSERT INTO `snake_node` VALUES ('21', '添加文章', 'articles', 'articleadd', '1', '19', '');
 INSERT INTO `snake_node` VALUES ('22', '编辑文章', 'articles', 'articleedit', '1', '19', '');
 INSERT INTO `snake_node` VALUES ('23', '删除文章', 'articles', 'articledel', '1', '19', '');
+INSERT INTO `snake_node` VALUES ('24', '上传图片', 'articles', 'uploadImg', '1', '19', '');
 
 -- ----------------------------
 -- Table structure for snake_role
@@ -113,4 +115,4 @@ CREATE TABLE `snake_user` (
 -- ----------------------------
 -- Records of snake_user
 -- ----------------------------
-INSERT INTO `snake_user` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '40', '127.0.0.1', '1505553523', 'admin', '1', '1');
+INSERT INTO `snake_user` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '41', '127.0.0.1', '1505559479', 'admin', '1', '1');
