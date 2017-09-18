@@ -10,6 +10,9 @@
 // +----------------------------------------------------------------------
 
 // [ 应用入口文件 ]
+if(!file_exists(__DIR__ . '/../data/install.lock')){
+    define('BIND_MODULE', 'install');
+}
 
 // 定义应用目录
 define('APP_PATH', __DIR__ . '/../application/');

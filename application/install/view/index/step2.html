@@ -1,0 +1,80 @@
+{extend name="layout" /}
+{block name="progress"}
+<div class="progress active progress-mini">
+    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"></div>
+</div>
+{/block}
+{block name="content"}
+<div class="box-content step2">
+    <div class="title">
+        <img src="{$static_dir}install/img/title1.png" alt="">
+    </div>
+    <div class="option">运行环境</div>
+    <table class="table table-borderless">
+        <thead>
+        <tr>
+            <th style="width: 30%;">项目</th>
+            <th style="width: 30%;">所需配置</th>
+            <th style="width: 40%;">当前配置</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="env" id="item"}
+        <tr>
+            <td>{$item[0]}</td>
+            <td>{$item[1]}</td>
+            <td>
+                <i class="fa fa-{$item[4]}"></i> {$item[3]}
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <div class="option">目录/文件权限</div>
+    <table class="table table-borderless">
+        <thead>
+        <tr>
+            <th style="width: 30%;">目录/文件</th>
+            <th style="width: 30%;">所需状态</th>
+            <th style="width: 40%;">当前状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="dirfile" id="item"}
+        <tr>
+            <td>{$item[3]}</td>
+            <td>可写</td>
+            <td>
+                <i class="fa fa-{$item[2]}"></i> {$item[1]}
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <div class="option">函数及扩展依赖性</div>
+    <table class="table table-borderless">
+        <thead>
+        <tr>
+            <th style="width: 30%;">名称</th>
+            <th style="width: 30%;">类型</th>
+            <th style="width: 40%;">检查结果</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="func" id="item"}
+        <tr>
+            <td>{$item[0]}</td>
+            <td>{$item[3]}</td>
+            <td>
+                <i class="fa fa-{$item[2]}"></i> {$item[1]}
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <div class="button">
+        <a href="{:url('install/index/index')}" class="btn btn-minw btn-default">上一步</a>
+        <a href="{:url('install/index/step3')}" class="btn btn-minw btn-default ajax-get">下一步</a>
+    </div>
+</div>
+{/block}
