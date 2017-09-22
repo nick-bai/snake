@@ -142,11 +142,11 @@ class RoleModel extends Model
      */
     public function getRoleInfo($id)
     {
-
         $result = $this->where('id', $id)->find()->toArray();
         // 超级管理员权限是 *
         if(empty($result['rule'])){
-            return [];
+            $result['action'] = '';
+            return $result;
         }else if('*' == $result['rule']){
             $where = '';
         }else{
