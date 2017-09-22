@@ -52,8 +52,11 @@ class NodeModel extends Model
      */
     public function getMenu($nodeStr = '')
     {
-        // 超级管理员没有节点数组
-        $where = empty($nodeStr) ? 'is_menu = 2' : 'is_menu = 2 and id in(' . $nodeStr . ')';
+        if(empty($nodeStr)){
+            return [];
+        }
+        // 超级管理员没有节点数组 * 号表示
+        $where = '*' == $nodeStr ? 'is_menu = 2' : 'is_menu = 2 and id in(' . $nodeStr . ')';
 
         $result = $this->field('id,node_name,type_id,control_name,action_name,style')
             ->where($where)->select();

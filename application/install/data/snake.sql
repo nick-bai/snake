@@ -92,7 +92,7 @@ CREATE TABLE `snake_role` (
 -- ----------------------------
 -- Records of snake_role
 -- ----------------------------
-INSERT INTO `snake_role` VALUES ('1', '超级管理员', '');
+INSERT INTO `snake_role` VALUES ('1', '超级管理员', '*');
 INSERT INTO `snake_role` VALUES ('2', '系统维护员', '1,2,3,4,5,6,7,8,9,10');
 
 -- ----------------------------

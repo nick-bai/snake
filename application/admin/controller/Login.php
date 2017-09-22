@@ -61,9 +61,11 @@ class Login extends Controller
 
         session('username', $userName);
         session('id', $hasUser['id']);
-        session('role', $info['role_name']);  // 角色名
-        session('rule', $info['rule']);  // 角色节点
-        session('action', $info['action']);  // 角色权限
+        if(!empty($info)){
+            session('role', $info['role_name']);  // 角色名
+            session('rule', $info['rule']);  // 角色节点
+            session('action', $info['action']);  // 角色权限
+        }
 
         // 更新管理员状态
         $param = [
