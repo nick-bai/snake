@@ -60,7 +60,7 @@ class Role extends Base
     {
         if(request()->isPost()){
 
-            $param = input('param.');
+            $param = input('post.');
 
             $role = new RoleModel();
             $flag = $role->insertRole($param);
