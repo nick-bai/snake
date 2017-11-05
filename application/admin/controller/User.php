@@ -62,7 +62,7 @@ class User extends Base
     {
         if(request()->isPost()){
 
-            $param = input('param.');
+            $param = input('post.');
 
             $param['password'] = md5($param['password']);
             $user = new UserModel();
