@@ -14,6 +14,9 @@ thinkphp5做的通用系统改后台
 # QQ交流群
 ## 159640205
 
+# 打赏作者  
+![支付宝](http://www.baiyf.com/media/AliPay.png)
+
 # 特别感谢  
 网友 *佳鹏 打赏 199.99  
 网友 *路 打赏 50
