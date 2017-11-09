@@ -15,7 +15,7 @@ thinkphp5做的通用系统改后台
 ## 159640205
 
 # 打赏作者  
-支付宝  
+支付宝
 ![支付宝](http://www.baiyf.com/media/AliPay_200.png)  
 微信
 ![微信](http://www.baiyf.com/media/WeixinPay_200.png) 
