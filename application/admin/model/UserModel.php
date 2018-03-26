@@ -15,7 +15,7 @@ use think\Model;
 class UserModel extends Model
 {
     // 确定链接表名
-    protected $table = 'snake_user';
+    protected $name = 'user';
 
     /**
      * 根据搜索条件获取用户列表信息
@@ -25,8 +25,8 @@ class UserModel extends Model
      */
     public function getUsersByWhere($where, $offset, $limit)
     {
-        return $this->field($this->table . '.*,role_name')
-            ->join('snake_role', $this->table . '.role_id = ' . 'snake_role.id')
+        return $this->alias('user')->field( 'user.*,role_name')
+            ->join('role rol', 'user.role_id = ' . 'rol.id')
             ->where($where)->limit($offset, $limit)->order('id desc')->select();
     }
 
