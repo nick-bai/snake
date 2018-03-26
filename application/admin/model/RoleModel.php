@@ -15,7 +15,7 @@ use think\Model;
 class RoleModel extends Model
 {
     // 确定链接表名
-    protected $table = 'snake_role';
+    protected $name = 'role';
 
     /**
      * 根据搜索条件获取角色列表信息
