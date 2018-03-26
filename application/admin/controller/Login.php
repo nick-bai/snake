@@ -12,7 +12,6 @@ namespace app\admin\controller;
 
 use app\admin\model\RoleModel;
 use app\admin\model\UserModel;
-use app\admin\model\UserType;
 use think\Controller;
 use org\Verify;
 
