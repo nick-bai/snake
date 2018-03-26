@@ -35,7 +35,7 @@
                     {if !empty($tables)}
                     {foreach name="tables" item="vo"}
                         <tr>
-                            <td>{$vo.Tables_in_snake}</td>
+                            <td>{$vo[$database_name]}</td>
                             <td>{$vo.alls}</td>
                             <td>{$vo.ctime}</td>
                             <td>{$vo.operate}</td>
