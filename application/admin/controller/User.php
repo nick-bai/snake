@@ -64,7 +64,7 @@ class User extends Base
 
             $param = input('post.');
 
-            $param['password'] = md5($param['password']);
+            $param['password'] = md5($param['password'] . config('salt'));
             $user = new UserModel();
             $flag = $user->insertUser($param);
 
@@ -92,7 +92,7 @@ class User extends Base
             if(empty($param['password'])){
                 unset($param['password']);
             }else{
-                $param['password'] = md5($param['password']);
+                $param['password'] = md5($param['password'] . config('salt'));
             }
             $flag = $user->editUser($param);
 

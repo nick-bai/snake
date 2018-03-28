@@ -15,7 +15,7 @@ use think\Model;
 class ArticleModel extends Model
 {
     // 确定链接表名
-    protected $table = 'snake_articles';
+    protected $name = 'articles';
 
     /**
      * 查询文章

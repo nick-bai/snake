@@ -12,7 +12,6 @@ namespace app\admin\controller;
 
 use app\admin\model\RoleModel;
 use app\admin\model\UserModel;
-use app\admin\model\UserType;
 use think\Controller;
 use org\Verify;
 
@@ -47,7 +46,7 @@ class Login extends Controller
             return json(msg(-3, '', '管理员不存在'));
         }
 
-        if(md5($password) != $hasUser['password']){
+        if(md5($password . config('salt')) != $hasUser['password']){
             return json(msg(-4, '', '密码错误'));
         }
 

@@ -34,6 +34,7 @@ class Data extends Base
         $this->assign([
            'tables' => $tables
         ]);
+        $this->assign('database_name', 'Tables_in_' . config('database')['database']);
 
         return $this->fetch();
     }
