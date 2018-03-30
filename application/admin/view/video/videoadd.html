@@ -1,0 +1,233 @@
+{extend name="base" /}
+
+{block name="title"}
+<title>添加直播/视频</title>
+{/block}
+
+{block name="css"}
+<link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="__JS__/layui/css/layui.css"rel="stylesheet">
+{/block}
+
+{block name="mian"}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>添加直播/视频</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="commentForm" method="post" action="{:url('video/videoAdd')}">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">视频标题：</label>
+                            <div class="input-group col-sm-4">
+                                <input type="text" class="form-control" name="title" required="" aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">封面图：</label>
+                            <input name="cover" id="thumbnail" type="hidden"/>
+                            <div class="form-inline">
+                                <div class="input-group col-sm-2">
+                                    <button type="button" class="layui-btn" id="test1">
+                                        <i class="layui-icon">&#xe67c;</i>上传图片
+                                    </button>
+                                </div>
+                                <div class="input-group col-sm-3">
+                                    <div id="sm"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">视频分类：</label>
+                            <div class="input-group col-sm-4">
+                                <select class="form-control" name="video_class_id" required="" aria-required="true">
+                                    <option value="">请选择</option>
+                                    {if !empty($class_list)}
+                                    {foreach name="class_list" item="vo"}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/foreach}
+                                    {/if}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">视频类型：</label>
+                            <div class="input-group col-sm-6">
+                                <div class="radio i-checks col-sm-4">
+                                    <label>
+                                        <input type="radio" value="live_id"  checked name="type"> <i></i>直播/视频ID</label>
+                                </div>
+                                <div class="radio i-checks col-sm-4">
+                                    <label>
+                                        <input type="radio" value="url"  name="type"> <i></i>其他外链</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">视频地址：</label>
+                            <div class="input-group col-sm-4">
+                                <input type="text" class="form-control" name="path" required="" aria-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div >
+                                <!-- <div class="form-group"> -->
+                                <label class='col-sm-3' style="text-align:right">开始时间：</label>
+                                <!--指定 date标记-->
+                                <div class='input-group date col-sm-4' id='open_time'>
+                                    <input type='text' name="open_time" class="form-control" />
+                                    <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <!-- <div class="form-group"> -->
+                                <label class='col-sm-3' style="text-align:right">结束时间：</label>
+                                <!--指定 date标记-->
+                                <div class='input-group date col-sm-4' id='over_time'>
+                                    <input type='text' name="over_time" class="form-control" />
+                                    <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">是否推荐：</label>
+                            <div class="input-group col-sm-6">
+                                <div class="radio i-checks col-sm-4">
+                                    <label>
+                                        <input type="radio" value="1"  name="recommend"> <i></i>是</label>
+                                </div>
+                                <div class="radio i-checks col-sm-4">
+                                    <label>
+                                        <input type="radio" value="-1" checked name="recommend"> <i></i>否</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-6">
+                                <!--<input type="button" value="提交" class="btn btn-primary" id="postform"/>-->
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="https://cdn.bootcss.com/moment.js/2.18.1/moment-with-locales.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script src="__JS__/layui/layui.js"></script>
+<script type="text/javascript">
+    function initDataTimePicker() {
+        $('#open_time').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+            locale: moment.locale('zh-cn')
+        });
+        $('#over_time').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+            locale: moment.locale('zh-cn')
+        });
+    }
+</script>
+<script type="text/javascript">
+    var index = '';
+
+    function showStart() {
+        index = layer.load(0, {
+            shade: false
+        });
+        return true;
+    }
+
+    function showSuccess(res) {
+
+        layer.ready(function() {
+            layer.close(index);
+            if (200 == res.code) {
+                layer.alert(res.msg, {
+                    title: '友情提示',
+                    icon: 1,
+                    closeBtn: 0
+                }, function() {
+                    window.location.href = res.data;
+                });
+            } else if (111 == res.code) {
+                window.location.reload();
+            } else {
+                layer.msg(res.msg, {
+                    anim: 6
+                });
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        initDataTimePicker();
+        $(".i-checks").iCheck({
+            checkboxClass: "icheckbox_square-green",
+            radioClass: "iradio_square-green",
+        });
+
+        // 添加管理员
+        var options = {
+            beforeSubmit: showStart,
+            success: showSuccess
+        };
+
+        $('#commentForm').submit(function() {
+            $(this).ajaxSubmit(options);
+            return false;
+        });
+
+        // 上传图片
+        layui.use('upload', function(){
+            var upload = layui.upload;
+
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '#test1' //绑定元素
+                ,url: "{:url('video/uploadImg')}" //上传接口
+                ,done: function(res){
+                    //上传完毕回调
+                    $("#thumbnail").val(res.data.path);
+                    $("#sm").html('<img src="' + res.data.path + '" style="width:auto;height:200px;"/>');
+                }
+                ,error: function(){
+                    //请求异常回调
+                }
+            });
+        });
+    });
+
+    // 表单验证
+    $.validator.setDefaults({
+        highlight: function(e) {
+            $(e).closest(".form-group").removeClass("has-success").addClass("has-error")
+        },
+        success: function(e) {
+            e.closest(".form-group").removeClass("has-error").addClass("has-success")
+        },
+        errorElement: "span",
+        errorPlacement: function(e, r) {
+            e.appendTo(r.is(":radio") || r.is(":checkbox") ? r.parent().parent().parent() : r.parent())
+        },
+        errorClass: "help-block m-b-none",
+        validClass: "help-block m-b-none"
+    });
+</script>
+{/block}

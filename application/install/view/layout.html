@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--[if IE 9]>         <html class="ie9 no-focus" lang="zh"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-focus" lang="zh"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>snake - 安装</title>
+    <meta name="description" content="">
+    <meta name="author" content="caiweiming">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+    <!-- Stylesheets -->
+    <!-- Bootstrap and OneUI CSS framework -->
+    <link rel="stylesheet" href="{$static_dir}admin/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{$static_dir}install/css/oneui.css">
+    <link rel="stylesheet" href="{$static_dir}install/css/snake.css">
+    <link rel="stylesheet" href="{$static_dir}install/css/snake2.css">
+    <!-- END Stylesheets -->
+</head>
+<body>
+<div class="bg-image" style="background-image: url('{$static_dir}install/img/bg.jpg');"></div>
+{block name="progress"}{/block}
+<!-- Install Content -->
+<div class="content overflow-hidden install-page">
+    <!-- Install Block -->
+    <div class="block block-themed box">
+        {block name="content"}{/block}
+    </div>
+    <!-- END Install Block -->
+</div>
+<!-- END Install Content -->
+
+<!-- Install Footer -->
+<div class="push-10-t push-10 text-center animated fadeInUp">
+    <small class="text-white-op font-w600">2017-2018 &copy; snake</small>
+</div>
+<!-- END Install Footer -->
+<script src="{$static_dir}install/js/jquery.min.js"></script>
+<script src="{$static_dir}install/js/bootstrap.min.js"></script>
+<script src="{$static_dir}install/js/bootstrap-notify.min.js"></script>
+<script src="{$static_dir}install/js/snake.js"></script>
+<script>
+    $(function () {
+        $('#agreement').change(function () {
+            $('#next').prop('disabled', !$('#agreement').prop('checked'));
+        });
+        $('#next').click(function () {
+            location.href = "{:url('install/index/step2')}";
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+button{
+    font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+h2,h3{
+    font-weight: 300;
+}
+.bg-image{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+.dolphin {
+    padding: 20px 0 10px;
+}
+.install-page .box {
+    width: 600px;
+    margin: 20px auto;
+    min-height: 388px;
+    color: #fff;
+    background-color: #0099ff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.2);
+}
+.install-page .step1{
+    border-radius: 8px;
+}
+.install-page .box-content {
+    padding: 20px 30px;
+}
+.install-page .box-content .text {
+    padding: 80px 0 80px 250px;
+}
+.install-page .box-content .text img{
+    margin-bottom: 15px;
+}
+.install-page .box-content .text a{
+    color: #f5e527;
+    text-decoration: underline;
+}
+.install-page .box-content .text .agreement{
+    margin-left: 10px;
+}
+.install-page .box-content .button{
+    text-align: right;
+    padding-top: 30px;
+}
+.install-page .box-content .btn-default{
+    color: #0099ff;
+}
+.install-page .box-content.step4 {
+    position: relative;
+    padding-top: 90px;
+}
+.install-page .box-content.step5 {
+    padding-top: 90px;
+}
+.install-page .box-content.step4 #loading-area{
+    position: absolute;
+    width: 145px;
+    height: 98px;
+    left: 50%;
+    bottom: 50%;
+    margin-left: -72.5px;
+    margin-bottom: -85px;
+}
+.install-page .box-content.step4 #loading-text{
+    font-size: 55px;
+}
+.install-page .title{
+    margin-bottom: 10px;
+}
+.install-page .option{
+    font-size: 16px;
+    border-bottom: 1px solid #fff;
+    padding: 10px 0;
+    font-weight: 700;
+}
+.table-borderless > thead > tr > th{
+    border: 0;
+    padding: 16px 0 5px 0;
+    font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.table > tbody > tr > td {
+    padding: 5px 0;
+}
+.text-warning{
+    color: #F9EF75;
+}

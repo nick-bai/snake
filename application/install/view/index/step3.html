@@ -1,0 +1,60 @@
+{extend name="layout" /}
+{block name="progress"}
+<div class="progress active progress-mini">
+    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%"></div>
+</div>
+{/block}
+{block name="content"}
+<div class="box-content step3">
+    <div class="title">
+        <img src="{$static_dir}install/img/title2.png" alt="">
+    </div>
+    <div class="push-10-t">
+        <form action="{:url('step4')}" class="form" method="post">
+            <div class="form-group">
+                <div><label>数据库类型</label></div>
+                <label class="css-input css-radio css-radio-warning push-10-r">
+                    <input type="radio" name="db[type]" checked="" value="mysql"><span></span> MySQL
+                </label>
+            </div>
+            <div class="form-group">
+                <label>数据库服务器，数据库服务器IP，一般为127.0.0.1</label>
+                <input class="form-control" type="text" name="db[hostname]" value="127.0.0.1">
+            </div>
+            <div class="form-group">
+                <label>数据库名</label>
+                <input class="form-control" type="text" name="db[database]" value="snake">
+            </div>
+            <div class="form-group">
+                <label>数据库用户名</label>
+                <input class="form-control" type="text" name="db[username]" value="">
+            </div>
+            <div class="form-group">
+                <label>数据库密码</label>
+                <input class="form-control" type="password" name="db[password]" value="">
+            </div>
+            <div class="form-group">
+                <label>数据库端口，数据库服务连接端口，一般为3306</label>
+                <input class="form-control" type="text" name="db[hostport]" value="3306">
+            </div>
+            <div class="form-group">
+                <label>数据表前缀 【thinkphp5.0 暂时不支持修改，请勿修改】</label>
+                <input class="form-control" type="text" name="db[prefix]" value="snake_">
+            </div>
+            <div class="form-group">
+                <div><label>是否覆盖同名数据库</label></div>
+                <label class="css-input css-radio css-radio-warning push-10-r">
+                    <input type="radio" name="cover" value="1"><span></span> 覆盖
+                </label>
+                <label class="css-input css-radio css-radio-warning push-10-r">
+                    <input type="radio" name="cover" value="0" checked=""><span></span> 不覆盖
+                </label>
+            </div>
+            <div class="button">
+                <a href="{:url('install/index/step2')}" class="btn btn-minw btn-default">上一步</a>
+                <button href="{:url('install/index/step4')}" class="btn btn-minw btn-default ajax-post" type="submit" target-form="form">下一步</button>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
