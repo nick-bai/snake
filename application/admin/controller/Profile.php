@@ -18,6 +18,8 @@ use app\admin\model\UserModel;
  */
 class Profile extends Base
 {
+    //public 绝对路径， 用于用户提交相对路径时追加
+    const PUBLIC_PATH = ROOT_PATH.'public';
     //相对路径，用于返回前端
     const HEAD_RETURN_PATH = '/upload/head';
     //绝对路径，用于存储地址
@@ -108,9 +110,26 @@ class Profile extends Base
         }
     }
 
+
     public function cropHeade()
     {
         dump($this->request->param());die;
+        if (!$this->request->isAjax()) {
+            return Response('not supported', 500);
+        }
+
+        $param = $this->request->param();
+        if (empty($param) || empty($param['imgUrl'])) {
+            return json(['status' => 'error', 'message' => 'not found image']);
+        }
+
+        try {
+            $image = Image::open($this::PUBLIC_PATH. $param['imgUrl']);
+        } catch (\Exception $e) {
+            return json(['status' => 'error', 'message' => 'not open image']);
+        }
+
+
     }
 
     public function loginOut()
