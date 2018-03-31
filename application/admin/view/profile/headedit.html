@@ -92,11 +92,7 @@
     //头像上传插件
     function croppicUp() {
         var cropperOptions = {
-			cropUrl:'{:url('admin/profile/uploadHeade')}',
-			cropData:{
-				"dummyData":1,
-				"dummyData2":"text"
-			}
+			customUploadButtonId:'{:url('admin/profile/uploadHeade')}',
 		}
 		//绑定div
 		var cropperHeader = new Croppic('croppic', cropperOptions);
