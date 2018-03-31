@@ -125,7 +125,7 @@ class UserModel extends Model
     {
         try{
 
-            $this->where('id', $uid)->allowField(true)->update($param);
+            $this->where('id', $uid)->update($param);
             return msg(1, '', 'ok');
         }catch (\Exception $e){
 
