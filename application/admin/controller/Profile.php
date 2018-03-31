@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
-
+use app\admin\model\UserModel;
 /**
  *
  */
@@ -18,6 +18,18 @@ class Profile extends Base
 {
     public function index()
     {
+        
+        if ($this->request->isAjax()) {
+
+        }
+
+        $user_model = new UserModel();
+        $user_data = $user_model->getOneUser($user_id);
+        if (is_null($user_data)) {
+            return json(msg(-1, '', 'not found user'));
+        }
+
+        $this->assign('user_data', $user_data);
         return $this->fetch();
     }
 
