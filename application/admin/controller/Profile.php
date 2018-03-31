@@ -25,4 +25,15 @@ class Profile extends Base
     {
         return $this->fetch();
     }
+
+    public function loginOut()
+    {
+        session('username', null);
+        session('id', null);
+        session('role', null);  // 角色名
+        session('rule', null);  // 角色节点
+        session('action', null);  // 角色权限
+
+        $this->redirect(url('index'));
+    }
 }
