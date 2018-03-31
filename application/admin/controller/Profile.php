@@ -72,6 +72,12 @@ class Profile extends Base
         dump($this->request->file());die;
     }
 
+    public function cropHeade()
+    {
+        dump($this->request->param('post.'));
+        dump($this->request->file());die;
+    }
+
     public function loginOut()
     {
         session('username', null);
