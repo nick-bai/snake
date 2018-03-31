@@ -92,6 +92,7 @@ class Profile extends Base
         //获取文件后缀名
         $image_type = pathinfo($file->getInfo('name'), PATHINFO_EXTENSION);
         $save_name = $this->getImageName($image_type);
+        dump($save_name);die;
         $info = $file->move($this::HEAD_SAVE_PATH, $save_name);
 
         if (false === $info) {
