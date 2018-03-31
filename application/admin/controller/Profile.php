@@ -10,12 +10,18 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
+use think\Response;
 use app\admin\model\UserModel;
 /**
  *
  */
 class Profile extends Base
 {
+    //相对路径，用于返回前端
+    const HEAD_RETURN_PATH = '/upload/head';
+    //绝对路径，用于存储地址
+    const HEAD_SAVE_PATH = ROOT_PATH.'public/upload/head';
+
     /**
      * 修改个人信息
      * @return json||View
@@ -66,16 +72,37 @@ class Profile extends Base
         return $this->fetch();
     }
 
+    /**
+     * 上传头像
+     * @return json
+     */
     public function uploadHeade()
     {
-        dump($this->request->param('post.'));
-        dump($this->request->file());die;
+        if (!$this->request->isAjax()) {
+            return Response('not supported', 500);
+        }
+
+        //获取文件并检查，注意这里使用croppic插件的特定json返回。
+        $file = $this->request->file('file');
+        if (empty($file) || !$file->checkImg()) {
+            return json(['status' => 'error', 'message' => 'not found image']);
+        }
+
+        //获取文件后缀名
+        $image_type = pathinfo($file->getInfo('name'), PATHINFO_EXTENSION);
+        $save_name = $this->getImageName($image_type);
+        $info = $file->move($this::HEAD_SAVE_PATH, $save_name);
+
+        if (false === $info) {
+            return json(['status' => 'error', 'message' => $file->error]);
+        }else {
+            return json(['status' => 'success', 'url' => $this::HEAD_RETURN_PATH. $save_name]);
+        }
     }
 
     public function cropHeade()
     {
-        dump($this->request->param('post.'));
-        dump($this->request->file());die;
+        dump($this->request->param());die;
     }
 
     public function loginOut()
@@ -87,5 +114,17 @@ class Profile extends Base
         session('action', null);  // 角色权限
 
         $this->redirect(url('index'));
+    }
+
+    /**
+     * 获取图像名称(固定长度32)
+     * @param  string  $image_type 图像类型
+     * @return string            随机图像名称
+     */
+    private function getImageName($image_type)
+    {
+        $str = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm";
+        $name = substr(str_shuffle($str), mt_rand(0, 30), 32);
+        return $name. $image_type;
     }
 }
