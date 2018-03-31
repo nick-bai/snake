@@ -10,6 +10,8 @@
     <link href="__CSS__/animate.min.css" rel="stylesheet">
     <link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
+
+    <link href="/static/common/croppic/croppic.css" rel="stylesheet">
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -22,21 +24,22 @@
                 <div class="ibox-content">
                     <form class="form-horizontal m-t" id="commentForm" method="post" action="{:url('profile/index')}">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">原始密码：</label>
+                            <label class="col-sm-3 control-label">修改头像：</label>
                             <div class="input-group col-sm-4">
-                                <input type="text" class="form-control" name="old_password"  placeholder="请输入原始密码">
+                                <div id="yourId" style="width: 200px;height: 150px;"></div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">新密码：</label>
+                            <label class="col-sm-3 control-label">名称：</label>
                             <div class="input-group col-sm-4">
-                                <input type="text" class="form-control" name="new_password"  placeholder="请输入新密码">
+                                <input type="text" class="form-control" name="user_name" placeholder="请输入昵称" required="" aria-required="true" value="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">重复新密码：</label>
+                            <label class="col-sm-3 control-label">真实姓名：</label>
                             <div class="input-group col-sm-4">
-                                <input type="text" class="form-control" name="re_new_password"  placeholder="请再次输入新密码">
+                                <input id="real_name" type="text" class="form-control" name="real_name" placeholder="请输入真实姓名" required="" aria-required="true" value="">
+
                             </div>
                         </div>
                         <div class="form-group">
@@ -60,6 +63,8 @@
 <script src="__JS__/plugins/iCheck/icheck.min.js"></script>
 <script src="__JS__/plugins/layer/layer.min.js"></script>
 <script src="__JS__/jquery.form.js"></script>
+
+<link href="/static/common/croppic/croppic.min.js" rel="stylesheet">
 <script type="text/javascript">
 
     var index = '';
