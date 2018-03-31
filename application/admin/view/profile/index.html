@@ -20,30 +20,30 @@
                     <h5>编辑信息</h5>
                 </div>
                 <div class="ibox-content">
-                    <form class="form-horizontal m-t" id="commentForm" method="post" action="{:url('user/userEdit')}">
+                    <form class="form-horizontal m-t" id="commentForm" method="post" action="{:url('profile/index')}">
                         <input type="hidden" name="id" value="">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">名称：</label>
                             <div class="input-group col-sm-4">
-                                <input id="username" type="text" class="form-control" name="user_name" required="" aria-required="true" value="">
+                                <input type="text" class="form-control" name="user_name" required="" aria-required="true" value="">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">原始密码：</label>
                             <div class="input-group col-sm-4">
-                                <input id="password" type="text" class="form-control" name="password"  placeholder="再次输入修改密码">
+                                <input type="text" class="form-control" name="old_password"  placeholder="输入原始密码">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">新密码：</label>
                             <div class="input-group col-sm-4">
-                                <input type="text" class="form-control" name="password"  placeholder="再次输入修改密码">
+                                <input type="text" class="form-control" name="new_password"  placeholder="输入新密码">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">重复新密码：</label>
                             <div class="input-group col-sm-4">
-                                <input type="text" class="form-control" name="password"  placeholder="再次输入修改密码">
+                                <input type="text" class="form-control" name="re_new_password"  placeholder="再次输入新密码">
                             </div>
                         </div>
                         <div class="form-group">
