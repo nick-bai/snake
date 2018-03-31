@@ -22,4 +22,9 @@ class Index extends Base
 
         return $this->fetch();
     }
+
+    public function test()
+    {
+        return $this->fetch();
+    }
 }

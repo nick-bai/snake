@@ -14,6 +14,8 @@ use \EasySwoole\Core\Swoole\EventRegister;
 use \EasySwoole\Core\Http\Request;
 use \EasySwoole\Core\Http\Response;
 
+use App\Parser;
+
 Class EasySwooleEvent implements EventInterface {
 
     public function frameInitialize(): void
@@ -25,6 +27,7 @@ Class EasySwooleEvent implements EventInterface {
     public function mainServerCreate(ServerManager $server,EventRegister $register): void
     {
         // TODO: Implement mainServerCreate() method.
+        EventHelper::registerDefaultOnMessage($register,new Parser());
     }
 
     public function onRequest(Request $request,Response $response): void
