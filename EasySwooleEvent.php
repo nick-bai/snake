@@ -10,11 +10,12 @@ namespace EasySwoole;
 
 use \EasySwoole\Core\AbstractInterface\EventInterface;
 use \EasySwoole\Core\Swoole\ServerManager;
+use \EasySwoole\Core\Swoole\EventHelper;
 use \EasySwoole\Core\Swoole\EventRegister;
 use \EasySwoole\Core\Http\Request;
 use \EasySwoole\Core\Http\Response;
 
-use App\Parser;
+use App\WebSocket\Parser;
 
 Class EasySwooleEvent implements EventInterface {
 

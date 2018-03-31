@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace App\WebSocket;
 
 
 use EasySwoole\Core\Socket\AbstractInterface\ParserInterface;
