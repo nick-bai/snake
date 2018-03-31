@@ -66,6 +66,11 @@ class Profile extends Base
         return $this->fetch();
     }
 
+    public function uploadHeade()
+    {
+
+    }
+    
     public function loginOut()
     {
         session('username', null);

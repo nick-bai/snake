@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">修改头像：</label>
                             <div class="input-group col-sm-4">
-                                <div id="yourId" style="width:200px;height:150px;position:relative;border:1px solid "></div>
+                                <div id="croppic" style="width:200px;height:150px;position:relative;border:1px solid "></div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -89,8 +89,22 @@
         });
     }
 
+    //头像上传插件
+    function croppicUp() {
+        var cropperOptions = {
+			uploadUrl:'{:url(admin/profile/uploadHeade)}',
+			uploadData:{
+				"dummyData":1,
+				"dummyData2":"text"
+			}
+		}
+		//绑定div
+		var cropperHeader = new Croppic('croppic', cropperOptions);
+    }
 
     $(document).ready(function(){
+        croppicUp();
+
         $(".i-checks").iCheck({checkboxClass:"icheckbox_square-green",radioClass:"iradio_square-green",});
 
         // 编辑管理员
