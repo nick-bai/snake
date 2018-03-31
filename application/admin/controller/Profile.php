@@ -41,7 +41,7 @@ class Profile extends Base
                 return json(msg(-1, '', 'not found user'));
             }
 
-            if ($user_data['password'] !== md5($param['old_password']). config('salt')) {
+            if ($user_data['password'] !== md5($param['old_password']. config('salt'))) {
                 return json(msg(-3, '', '原始密码错误'));
             }
 
