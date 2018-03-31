@@ -85,7 +85,8 @@ class Profile extends Base
 
         //获取文件并检查，注意这里使用croppic插件的特定json返回。
         $file = $this->request->file('img');
-        if (empty($file) || !$file->checkImg()) {
+        dump($file);die;
+        if (empty($file) && !$file->checkImg()) {
             return json(['status' => 'error', 'message' => 'not found image']);
         }
 
