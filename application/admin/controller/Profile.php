@@ -35,7 +35,7 @@ class Profile extends Base
             }
 
             $user_model = new UserModel();
-            $user_data = getOneUser(session('id'));
+            $user_data = $user_model->getOneUser(session('id'));
 
             if (is_null($user_data)) {
                 return json(msg(-1, '', 'not found user'));
