@@ -68,7 +68,8 @@ class Profile extends Base
 
     public function uploadHeade()
     {
-
+        dump($this->request->param());
+        dump($this->request->file());die;
     }
 
     public function loginOut()
