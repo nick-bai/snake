@@ -11,6 +11,7 @@
 namespace app\admin\controller;
 
 use think\Response;
+use think\Image;
 use app\admin\model\UserModel;
 /**
  *
@@ -83,8 +84,9 @@ class Profile extends Base
         }
 
         //获取文件并检查，注意这里使用croppic插件的特定json返回。
-        $file = $this->request->file();
-        if (empty($file) || !$file->checkImg()) {
+        $file = $this->request->file('img');
+
+        if (empty($image) || !$file->checkImg()) {
             return json(['status' => 'error', 'message' => 'not found image']);
         }
 
@@ -96,7 +98,14 @@ class Profile extends Base
         if (false === $info) {
             return json(['status' => 'error', 'message' => $file->error]);
         }else {
-            return json(['status' => 'success', 'url' => $this::HEAD_RETURN_PATH. $save_name]);
+            //返回图像信息
+            $image = Image::open($this::HEAD_SAVE_PATH. '/'. $save_name);
+            return json([
+                'status' => 'success',
+                'url' => $this::HEAD_RETURN_PATH. '/'. $save_name,
+                "width" => $image->width(),
+				"height" => $image->height()
+            ]);
         }
     }
 
