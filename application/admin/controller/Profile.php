@@ -51,7 +51,7 @@ class Profile extends Base
 
         //访问
         $user_model = new UserModel();
-        $user_data = $user_model->getOneUser($user_id);
+        $user_data = $user_model->getOneUser(session('id'));
         if (is_null($user_data)) {
             return json(msg(-1, '', 'not found user'));
         }
@@ -60,7 +60,7 @@ class Profile extends Base
         return $this->fetch();
     }
 
-    
+
     public function headEdit()
     {
         return $this->fetch();
