@@ -135,6 +135,6 @@ dump($this::HEAD_SAVE_PATH. '/'. $save_name);die;
     {
         $str = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm";
         $name = substr(str_shuffle($str), mt_rand(0, 30), 32);
-        return $name. $image_type;
+        return $name. '.'. $image_type;
     }
 }
