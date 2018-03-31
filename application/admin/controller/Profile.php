@@ -30,7 +30,7 @@ class Profile extends Base
                 return json(msg(-1, '', 'not found user'));
             }
 
-            if ($param['new_password'] !== $param('re_new_password')) {
+            if ($param['new_password'] !== $param['re_new_password']) {
                 return json(msg(-2, '', '两次输入的密码不相同'));
             }
 
@@ -70,7 +70,7 @@ class Profile extends Base
     {
 
     }
-    
+
     public function loginOut()
     {
         session('username', null);
