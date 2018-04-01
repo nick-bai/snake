@@ -125,7 +125,7 @@ class Profile extends Base
         //抛出符合croppic插件规范的异常，防止前端js错误
         try {
             $image = Image::open($this::PUBLIC_PATH. $param['imgUrl']);
-            $save_name = $this->getImageName($image->type());
+            $save_name = $this->getImageName('jpg');
             //有旋转
             if(!empty($param['rotation'])){
                 $image->rotate((int)$param['rotation']);
