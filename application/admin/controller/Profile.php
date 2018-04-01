@@ -133,12 +133,12 @@ class Profile extends Base
 
             //裁剪
             $image->crop(
-                $param['cropW'],    //裁剪区域宽度
-                $param['cropH'],    //裁剪区域高度
+                $param['imgW'],    //裁剪区域宽度
+                $param['imgH'],    //裁剪区域高度
                 $param['imgX1'],    //裁剪区域x坐标
                 $param['imgY1'],    //裁剪区域y坐标
-                $param['imgW'],     //图像保存宽度
-                $param['imgH']      //图像保存高度
+                $param['cropW'],     //图像保存宽度
+                $param['cropH']     //图像保存高度
                 )
                 ->save($this::HEAD_SAVE_PATH. '/'. $save_name);
 
