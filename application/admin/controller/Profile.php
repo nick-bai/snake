@@ -125,6 +125,7 @@ class Profile extends Base
         //抛出符合croppic插件规范的异常，防止前端js错误
         try {
             $image = Image::open($this::PUBLIC_PATH. $param['imgUrl']);
+            $save_name = $this->getImageName($image->type());
             //有旋转
             if(!empty($param['rotation'])){
                 $image->rotate((int)$param['rotation']);
@@ -139,9 +140,9 @@ class Profile extends Base
                 $param['imgW'],     //图像保存宽度
                 $param['imgH']      //图像保存高度
                 )
-                ->save($this::PUBLIC_PATH. $param['imgUrl']);
+                ->save($this::HEAD_SAVE_PATH. '/'. $save_name);
 
-            return json(['status' => 'success', 'url' => $this::PUBLIC_PATH. $param['imgUrl']]);
+            return json(['status' => 'success', 'url' => $this::HEAD_RETURN_PATH. '/'. $save_name]);
         } catch (\think\image\Exception $e) {
             return json(['status' => 'error', 'message' => $e->getMessage()]);
         }
