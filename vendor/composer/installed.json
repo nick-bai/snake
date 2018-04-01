@@ -76,7 +76,7 @@
         },
         "time": "2017-12-18T03:09:47+00:00",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "think\\": "src"
