@@ -28,6 +28,7 @@
                             <div id="croppic" style="width:400px;height:250px;position:relative;border:1px solid "></div>
                         </div>
                     </div>
+
                     <form class="form-horizontal m-t" id="commentForm" method="post" action="{:url('profile/headEdit')}">
                         <input type="hidden" name="head" id="myOutputId">
                         <div class="form-group">
@@ -113,6 +114,7 @@
         };
 
         $('#commentForm').submit(function(){
+            alert('dadasdasds');
             $(this).ajaxSubmit(options);
             return false;
         });
