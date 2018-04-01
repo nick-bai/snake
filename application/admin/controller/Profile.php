@@ -131,6 +131,8 @@ class Profile extends Base
                 $image->rotate((int)$param['rotation']);
             }
             $image->save($this::HEAD_SAVE_PATH. '/'. $save_name);
+            dump($image->width());
+            dump($image->height());die;
             return json(['status' => 'success', 'url' => $this::HEAD_RETURN_PATH. '/'. $save_name]);
             //裁剪
             $image->crop(
