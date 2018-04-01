@@ -60,6 +60,7 @@ class Login extends Controller
 
         session('username', $userName);
         session('id', $hasUser['id']);
+        session('head', $hasUser['head']);
         session('role', $info['role_name']);  // 角色名
         session('rule', $info['rule']);  // 角色节点
         session('action', $info['action']);  // 角色权限
@@ -96,6 +97,7 @@ class Login extends Controller
     {
         session('username', null);
         session('id', null);
+        session('head', null);
         session('role', null);  // 角色名
         session('rule', null);  // 角色节点
         session('action', null);  // 角色权限
