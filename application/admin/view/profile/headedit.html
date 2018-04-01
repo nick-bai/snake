@@ -34,13 +34,13 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">名称：</label>
                             <div class="input-group col-sm-4">
-                                <input type="text" class="form-control" name="user_name" placeholder="请输入昵称" required="" aria-required="true" value="">
+                                <input type="text" class="form-control" name="user_name" value="{$user_data.user_name}" placeholder="请输入昵称" required="" aria-required="true" value="">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">真实姓名：</label>
                             <div class="input-group col-sm-4">
-                                <input id="real_name" type="text" class="form-control" name="real_name" placeholder="请输入真实姓名" required="" aria-required="true" value="">
+                                <input id="real_name" type="text" class="form-control" name="real_name" value="{$user_data.real_name}" placeholder="请输入真实姓名" required="" aria-required="true" value="">
 
                             </div>
                         </div>
@@ -94,6 +94,7 @@
     //头像上传插件
     function croppicUp() {
         var cropperOptions = {
+            loadPicture:'{$user_data.head}'
 			uploadUrl:'{:url('admin/profile/uploadHeade')}',
             cropUrl:'{:url('admin/profile/cropHeade')}',
             outputUrlId:'myOutputId'
@@ -114,7 +115,6 @@
         };
 
         $('#commentForm').submit(function(){
-            alert('dadasdasds');
             $(this).ajaxSubmit(options);
             return false;
         });
