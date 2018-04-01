@@ -69,14 +69,39 @@ class Profile extends Base
         return $this->fetch();
     }
 
-
+    /**
+     * 头像编辑
+     * @return View
+     */
     public function headEdit()
     {
+
+        if ($this->request->isAJax()) {
+            $param = $this->request->param();
+            dump($param);die;
+            if (empty($param)) {
+                return json(msg(-1, url('index/index'), 'not found user'));
+            }
+
+            $user_model = new UserModel();
+            $flag = $user_model->updateStatus($param, session('id'));
+            return json(msg($flag['code'], $flag['data'], $flag['msg']));
+        }
+
+        //访问
+        $user_model = new UserModel();
+        $user_data = $user_model->getOneUser(session('id'));
+        if (is_null($user_data)) {
+            return json(msg(-1, url('login/index'), 'not found user'));
+        }
+
+        $this->assign('user_data', $user_data);
         return $this->fetch();
     }
 
     /**
      * 上传头像
+     * 这里是croppic插件的处理逻辑
      * @return json
      */
     public function uploadHeade()
@@ -110,7 +135,11 @@ class Profile extends Base
         }
     }
 
-
+    /**
+     * 裁剪头像
+     * 这里是croppic插件的处理逻辑
+     * @return json
+     */
     public function cropHeade()
     {
         if (!$this->request->isAjax()) {
@@ -137,8 +166,9 @@ class Profile extends Base
                 (int)$param['imgW'],        //图像保存宽度
                 (int)$param['imgH']         //图像保存高度
             );
+
+            //如果存在旋转参数
             if(!empty($param['rotation'])){
-                //如果存在旋转参数，则旋转
                 //这里旋转生成的新图像会被GD库自动填充黑边
                 $image->rotate((int)$param['rotation']);
 
