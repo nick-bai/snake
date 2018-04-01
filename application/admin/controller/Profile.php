@@ -54,10 +54,11 @@ class Profile extends Base
                 return json(msg(-3, '', '原始密码错误'));
             }
 
-            if ($user_data['password'] !== md5($param['new_password']. config('salt'))) {
+            if ($user_data['password'] === md5($param['new_password']. config('salt'))) {
                 return json(msg(-4, '', '新密码不能和旧密码相同'));
             }
 
+            $param['password'] = md5($param['new_password']. config('salt'));
             $flag = $user_model->updateStatus($param, session('id'));
             return json(msg($flag['code'], $flag['data'], $flag['msg']));
         }
