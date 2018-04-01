@@ -130,7 +130,8 @@ class Profile extends Base
             if(!empty($param['rotation'])){
                 $image->rotate((int)$param['rotation']);
             }
-
+            $image->save($this::HEAD_SAVE_PATH. '/'. $save_name);
+            return json(['status' => 'success', 'url' => $this::HEAD_RETURN_PATH. '/'. $save_name]);
             //裁剪
             $image->crop(
                 $param['cropW'],    //裁剪区域宽度
