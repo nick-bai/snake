@@ -22,14 +22,14 @@
                     <h5>编辑信息</h5>
                 </div>
                 <div class="ibox-content">
-                    <form class="form-horizontal m-t" id="commentForm" method="post" action="{:url('profile/headEdit')}">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">修改头像：</label>
-                            <div class="input-group col-sm-4">
-                                <div id="croppic" style="width:400px;height:250px;position:relative;border:1px solid "></div>
-                            </div>
-                            <input type="hidden" name="head" id="myOutputId">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">修改头像：</label>
+                        <div class="input-group col-sm-4">
+                            <div id="croppic" style="width:400px;height:250px;position:relative;border:1px solid "></div>
                         </div>
+                    </div>
+                    <form class="form-horizontal m-t" id="commentForm" method="post" action="{:url('profile/headEdit')}">
+                        <input type="hidden" name="head" id="myOutputId">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">名称：</label>
                             <div class="input-group col-sm-4">
