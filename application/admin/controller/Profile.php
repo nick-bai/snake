@@ -58,14 +58,6 @@ class Profile extends Base
             return json(msg($flag['code'], $flag['data'], $flag['msg']));
         }
 
-        //访问
-        $user_model = new UserModel();
-        $user_data = $user_model->getOneUser(session('id'));
-        if (is_null($user_data)) {
-            return json(msg(-1, '', 'not found user'));
-        }
-
-        $this->assign('user_data', $user_data);
         return $this->fetch();
     }
 
@@ -85,7 +77,7 @@ class Profile extends Base
             if (!empty($param['user_name'])) {
                 unset($param['user_name']);
             }
-            
+
             $user_model = new UserModel();
             $flag = $user_model->updateStatus($param, session('id'));
             return json(msg($flag['code'], url('index/index'), $flag['msg']));
