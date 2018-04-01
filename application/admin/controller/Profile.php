@@ -142,7 +142,7 @@ class Profile extends Base
                 ->save($this::PUBLIC_PATH. $param['imgUrl']);
 
             return json(['status' => 'success', 'url' => $this::PUBLIC_PATH. $param['imgUrl']]);
-        } catch (\Exception $e) {
+        } catch (\think\image\Exception $e) {
             return json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
