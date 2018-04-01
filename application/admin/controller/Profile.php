@@ -147,10 +147,10 @@ class Profile extends Base
 
             //裁剪图像
             $image->crop(
-                $param['cropW'],    //裁剪区域宽度
-                $param['cropH'],    //裁剪区域高度
-                $param['imgX1'],    //裁剪区域x坐标
-                $param['imgY1']    //裁剪区域y坐标
+                (int)$param['cropW'],    //裁剪区域宽度
+                (int)$param['cropH'],    //裁剪区域高度
+                (int)$param['imgX1'],    //裁剪区域x坐标
+                (int)$param['imgY1']    //裁剪区域y坐标
             );
 
             //保存图像
