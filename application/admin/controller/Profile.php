@@ -126,26 +126,39 @@ class Profile extends Base
         try {
             $image = Image::open($this::PUBLIC_PATH. $param['imgUrl']);
             $save_name = $this->getImageName('jpg');
-            //有旋转
+
             if(!empty($param['rotation'])){
+                //如果存在旋转参数，则旋转
+                //这里旋转生成的新图像会被GD库自动填充黑边
                 $image->rotate((int)$param['rotation']);
+
+                //获取裁剪坐标差
+                $dx = $image->width() - $param['imgW'];
+                $dy = $image->height() - $param['imgH'];
+
+                //裁剪出预选定区域
+                $image->crop(
+                    $param['imgW'],    //裁剪区域宽度
+                    $param['imgH'],    //裁剪区域高度
+                    $dx / 2,           //裁剪区域x坐标
+                    $dy / 2,           //裁剪区域y坐标
+                    $param['imgW'],    //图像保存宽度
+                    $param['imgH']     //图像保存高度
+                );
             }
 
-            //获取新图差
-            $dx = $image->width() - $param['imgW'];
-            $dy = $image->height() - $param['imgH'];
-
-            //裁剪
+            //裁剪图像
             $image->crop(
-                $param['imgW'],    //裁剪区域宽度
-                $param['imgH'],    //裁剪区域高度
-                $dx / 2,           //裁剪区域x坐标
-                $dy / 2,           //裁剪区域y坐标
-                $param['imgW'],    //图像保存宽度
-                $param['imgH']     //图像保存高度
-                )
-                ->save($this::HEAD_SAVE_PATH. '/'. $save_name);
+                $param['cropW'],    //裁剪区域宽度
+                $param['cropH'],    //裁剪区域高度
+                $param['imgX1'],    //裁剪区域x坐标
+                $param['imgY1'],    //裁剪区域y坐标
+                $param['cropW'],    //图像保存宽度
+                $param['cropH']     //图像保存高度
+            );
 
+            //保存图像
+            $image->save($this::HEAD_SAVE_PATH. '/'. $save_name);
             return json(['status' => 'success', 'url' => $this::HEAD_RETURN_PATH. '/'. $save_name]);
         } catch (\think\image\Exception $e) {
             return json(['status' => 'error', 'message' => $e->getMessage()]);
