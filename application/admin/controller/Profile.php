@@ -113,7 +113,6 @@ class Profile extends Base
 
     public function cropHeade()
     {
-        dump($this->request->param());die;
         if (!$this->request->isAjax()) {
             return Response('not supported', 500);
         }
@@ -123,13 +122,29 @@ class Profile extends Base
             return json(['status' => 'error', 'message' => 'not found image']);
         }
 
+        //抛出符合croppic插件规范的异常，防止前端js错误
         try {
             $image = Image::open($this::PUBLIC_PATH. $param['imgUrl']);
+            //有旋转
+            if(!empty($param['rotation'])){
+                $image->rotate((int)$param['rotation']);
+            }
+
+            //裁剪
+            $image->crop(
+                $param['cropW'],    //裁剪区域宽度
+                $param['cropH'],    //裁剪区域高度
+                $param['imgX1'],    //裁剪区域x坐标
+                $param['imgY1'],    //裁剪区域y坐标
+                $param['imgW'],     //图像保存宽度
+                $param['imgH']      //图像保存高度
+                )
+                ->save($this::PUBLIC_PATH. $param['imgUrl']);
+
+            return json(['status' => 'success', 'url' => $this::PUBLIC_PATH. $param['imgUrl']]);
         } catch (\Exception $e) {
-            return json(['status' => 'error', 'message' => 'not open image']);
+            return json(['status' => 'error', 'message' => $e->getMessage()]);
         }
-
-
     }
 
     public function loginOut()
