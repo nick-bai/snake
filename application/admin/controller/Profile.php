@@ -125,13 +125,13 @@ class Profile extends Base
         //抛出符合croppic插件规范的异常，防止前端js错误
         try {
             $image = Image::open($this::PUBLIC_PATH. $param['imgUrl']);
-            $save_name = $this->getImageName('jpg');
+            $save_name = $this->getImageName($image->type());
 
             // if(!empty($param['rotation'])){
             //     //如果存在旋转参数，则旋转
             //     //这里旋转生成的新图像会被GD库自动填充黑边
             //     $image->rotate((int)$param['rotation']);
-            // 
+            //
             //     //获取裁剪坐标差
             //     $dx = $image->width() - $param['imgW'];
             //     $dy = $image->height() - $param['imgH'];
