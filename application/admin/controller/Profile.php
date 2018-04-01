@@ -130,18 +130,19 @@ class Profile extends Base
             if(!empty($param['rotation'])){
                 $image->rotate((int)$param['rotation']);
             }
-            $image->save($this::HEAD_SAVE_PATH. '/'. $save_name);
-            dump($image->width());
-            dump($image->height());die;
-            return json(['status' => 'success', 'url' => $this::HEAD_RETURN_PATH. '/'. $save_name]);
+
+            //获取新图差
+            $dx = $image->width() - $param['imgW'];
+            $dy = $image->height() - $param['imgH'];
+
             //裁剪
             $image->crop(
-                $param['cropW'],    //裁剪区域宽度
-                $param['cropH'],    //裁剪区域高度
-                $param['imgX1'],    //裁剪区域x坐标
-                $param['imgY1']    //裁剪区域y坐标
-                //$param['cropW'],     //图像保存宽度
-                //$param['cropH']     //图像保存高度
+                $param['imgW'],    //裁剪区域宽度
+                $param['imgH'],    //裁剪区域高度
+                $dx / 2,           //裁剪区域x坐标
+                $dy / 2,           //裁剪区域y坐标
+                $param['imgW'],    //图像保存宽度
+                $param['imgH']     //图像保存高度
                 )
                 ->save($this::HEAD_SAVE_PATH. '/'. $save_name);
 
