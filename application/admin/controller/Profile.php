@@ -127,23 +127,23 @@ class Profile extends Base
             $image = Image::open($this::PUBLIC_PATH. $param['imgUrl']);
             $save_name = $this->getImageName($image->type());
 
-            // if(!empty($param['rotation'])){
-            //     //如果存在旋转参数，则旋转
-            //     //这里旋转生成的新图像会被GD库自动填充黑边
-            //     $image->rotate((int)$param['rotation']);
-            //
-            //     //获取裁剪坐标差
-            //     $dx = $image->width() - $param['imgW'];
-            //     $dy = $image->height() - $param['imgH'];
-            //
-            //     //裁剪出预选定区域
-            //     $image->crop(
-            //         $param['imgW'],    //裁剪区域宽度
-            //         $param['imgH'],    //裁剪区域高度
-            //         $dx / 2,           //裁剪区域x坐标
-            //         $dy / 2           //裁剪区域y坐标
-            //     );
-            // }
+            if(!empty($param['rotation'])){
+                //如果存在旋转参数，则旋转
+                //这里旋转生成的新图像会被GD库自动填充黑边
+                $image->rotate((int)$param['rotation']);
+
+                //获取裁剪坐标差
+                $dx = $image->width() - $param['imgW'];
+                $dy = $image->height() - $param['imgH'];
+
+                //裁剪出预选定区域
+                $image->crop(
+                    (int)$param['imgW'],    //裁剪区域宽度
+                    (int)$param['imgH'],    //裁剪区域高度
+                    (int)$dx / 2,           //裁剪区域x坐标
+                    (int)$dy / 2           //裁剪区域y坐标
+                );
+            }
 
             //裁剪图像
             $image->crop(
