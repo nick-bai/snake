@@ -29,7 +29,7 @@
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-                        <span><img alt="image" class="img-circle" src="__IMG__/profile_small.jpg"/></span>
+                        <span><img alt="image" class="img-circle" src="{$head}" style="width:64px;height:64px;"/></span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear">
                                 <span class="block m-t-xs"><strong class="font-bold">{$username}</strong></span>
@@ -37,6 +37,12 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li>
+                                <a class="J_menuItem" href="{:url('admin/profile/headedit')}">修改信息</a>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="{:url('admin/profile/index')}">修改密码</a>
+                            </li>
                             <li>
                                 <a href="{:url('admin/login/loginOut')}">安全退出</a>
                             </li>

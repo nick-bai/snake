@@ -39,6 +39,7 @@ class Base extends Controller
         }
 
         $this->assign([
+            'head'     => session('head'),
             'username' => session('username'),
             'rolename' => session('role')
         ]);
