@@ -28,6 +28,7 @@
                             <div class="input-group col-sm-4">
                                 <div id="croppic" style="width:400px;height:250px;position:relative;border:1px solid "></div>
                             </div>
+                            <input type="hidden" name="head" id="myOutputId">
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">名称：</label>
@@ -94,7 +95,7 @@
         var cropperOptions = {
 			uploadUrl:'{:url('admin/profile/uploadHeade')}',
             cropUrl:'{:url('admin/profile/cropHeade')}',
-            //customUploadButtonId:
+            outputUrlId:'myOutputId'
 		}
 		//绑定div
 		var cropperHeader = new Croppic('croppic', cropperOptions);
