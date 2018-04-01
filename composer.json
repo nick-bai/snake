@@ -17,8 +17,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "*",
-        "topthink/think-image": "dev-master"
+        "topthink/framework": "*"
     },
     "extra": {
         "think-path": "thinkphp"
