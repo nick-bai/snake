@@ -127,6 +127,15 @@ class Profile extends Base
             $image = Image::open($this::PUBLIC_PATH. $param['imgUrl']);
             $save_name = $this->getImageName($image->type());
 
+            //预处理裁剪
+            $image->crop(
+                (int)$param['imgInitW'],
+                (int)$param['imgInitH'],
+                (int)0,
+                (int)0,
+                (int)$param['imgW'],
+                (int)$param['imgH']
+            );
             if(!empty($param['rotation'])){
                 //如果存在旋转参数，则旋转
                 //这里旋转生成的新图像会被GD库自动填充黑边
