@@ -82,9 +82,13 @@ class Profile extends Base
                 return json(msg(-1, url('index/index'), 'not found user'));
             }
 
+            if (!empty($param['user_name'])) {
+                unset($param['user_name']);
+            }
+            
             $user_model = new UserModel();
             $flag = $user_model->updateStatus($param, session('id'));
-            return json(msg($flag['code'], $flag['data'], $flag['msg']));
+            return json(msg($flag['code'], url('index/index'), $flag['msg']));
         }
 
         //访问
