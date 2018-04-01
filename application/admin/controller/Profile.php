@@ -78,7 +78,6 @@ class Profile extends Base
 
         if ($this->request->isAJax()) {
             $param = $this->request->param();
-            dump($param);die;
             if (empty($param)) {
                 return json(msg(-1, url('index/index'), 'not found user'));
             }
