@@ -94,7 +94,7 @@
     //头像上传插件
     function croppicUp() {
         var cropperOptions = {
-            loadPicture:'{$user_data.head}'
+            loadPicture:'{$user_data.head}',
 			uploadUrl:'{:url('admin/profile/uploadHeade')}',
             cropUrl:'{:url('admin/profile/cropHeade')}',
             outputUrlId:'myOutputId'
