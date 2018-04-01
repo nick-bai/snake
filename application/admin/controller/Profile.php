@@ -128,13 +128,14 @@ class Profile extends Base
             $save_name = $this->getImageName($image->type());
 
             //预处理裁剪
+            //这步相当于将图像缩放
             $image->crop(
-                (int)$param['imgInitW'],
-                (int)$param['imgInitH'],
-                (int)0,
-                (int)0,
-                (int)$param['imgW'],
-                (int)$param['imgH']
+                (int)$param['imgInitW'],    //裁剪区域宽度
+                (int)$param['imgInitH'],    //裁剪区域高度
+                (int)0,                     //裁剪区域x坐标
+                (int)0,                     //裁剪区域y坐标
+                (int)$param['imgW'],        //图像保存宽度
+                (int)$param['imgH']         //图像保存高度
             );
             if(!empty($param['rotation'])){
                 //如果存在旋转参数，则旋转
