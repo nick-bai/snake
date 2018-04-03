@@ -11,6 +11,7 @@
 // $Id$
 
 return [
+    // 是否开启路由
     'url_route_on' => true,
     'trace' => [
         'type' => 'html', // 支持 socket trace file
@@ -21,7 +22,6 @@ return [
     'log' => [
         'type' => 'test',
     ],
-
     'app_debug' => true,
 
     // +----------------------------------------------------------------------
@@ -36,14 +36,10 @@ return [
         'prefix' => '',
         // 缓存有效期 0表示永久缓存
         'expire' => 0,
-        'host' => '192.168.6.55',
-        'port' => 11211,
     ],
 
     //加密串
     'salt' => 'wZPb~yxvA!ir38&Z',
-
     //备份数据地址
     'back_path' => APP_PATH .'../back/'
-
 ];
