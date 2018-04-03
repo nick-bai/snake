@@ -6,12 +6,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/easy-swoole/easyswoole.git",
-            "reference": "5de6c2f99bbd028189c69e0e927bea32c0d18d3d"
+            "reference": "5543130797fbafb40a1bb0c3be7db013d627167d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/easy-swoole/easyswoole/5de6c2f99bbd028189c69e0e927bea32c0d18d3d.zip",
-            "reference": "5de6c2f99bbd028189c69e0e927bea32c0d18d3d",
+            "url": "https://files.phpcomposer.com/files/easy-swoole/easyswoole/5543130797fbafb40a1bb0c3be7db013d627167d.zip",
+            "reference": "5543130797fbafb40a1bb0c3be7db013d627167d",
             "shasum": ""
         },
         "require": {
@@ -24,7 +24,7 @@
             "easyswoole/swoole-ide-helper": "dev-master",
             "phpunit/phpunit": "^5.6"
         },
-        "time": "2018-03-28T15:10:08+00:00",
+        "time": "2018-04-03T06:07:11+00:00",
         "bin": [
             "bin/easyswoole"
         ],
@@ -71,7 +71,7 @@
         },
         "time": "2018-03-26T03:05:30+00:00",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "Swoole\\": "src/"
@@ -360,12 +360,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/framework.git",
-            "reference": "8a52dd232fcac998d393d05b1246e0f54bdc9dcb"
+            "reference": "158aa4302844c18ec8b962c1326cd7412125abd2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/top-think/framework/8a52dd232fcac998d393d05b1246e0f54bdc9dcb.zip",
-            "reference": "8a52dd232fcac998d393d05b1246e0f54bdc9dcb",
+            "url": "https://files.phpcomposer.com/files/top-think/framework/158aa4302844c18ec8b962c1326cd7412125abd2.zip",
+            "reference": "158aa4302844c18ec8b962c1326cd7412125abd2",
             "shasum": ""
         },
         "require": {
@@ -380,7 +380,7 @@
             "phpunit/phpunit": "4.8.*",
             "sebastian/phpcpd": "2.*"
         },
-        "time": "2017-07-18T08:19:42+00:00",
+        "time": "2018-03-30T08:07:15+00:00",
         "type": "think-framework",
         "installation-source": "dist",
         "autoload": {
