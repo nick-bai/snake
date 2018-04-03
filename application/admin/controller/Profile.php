@@ -76,7 +76,7 @@ class Profile extends Base
         if ($this->request->isAJax()) {
             $param = $this->request->param();
             if (empty($param)) {
-                return json(msg(-1, url('index/index'), 'not found user'));
+                return json(msg(-1, url('index/indexpage'), 'not found user'));
             }
 
             if (!empty($param['user_name'])) {
@@ -85,7 +85,7 @@ class Profile extends Base
 
             $user_model = new UserModel();
             $flag = $user_model->updateStatus($param, session('id'));
-            return json(msg($flag['code'], url('index/index'), $flag['msg']));
+            return json(msg($flag['code'], url('index/indexpage'), $flag['msg']));
         }
 
         //访问
@@ -199,17 +199,6 @@ class Profile extends Base
         } catch (\think\image\Exception $e) {
             return json(['status' => 'error', 'message' => $e->getMessage()]);
         }
-    }
-
-    public function loginOut()
-    {
-        session('username', null);
-        session('id', null);
-        session('role', null);  // 角色名
-        session('rule', null);  // 角色节点
-        session('action', null);  // 角色权限
-
-        $this->redirect(url('index'));
     }
 
     /**
