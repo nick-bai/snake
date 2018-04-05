@@ -6,4 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'think\\Image' => $vendorDir . '/topthink/think-image/src/Image.php',
+    'think\\image\\Exception' => $vendorDir . '/topthink/think-image/src/image/Exception.php',
+    'think\\image\\gif\\Decoder' => $vendorDir . '/topthink/think-image/src/image/gif/Decoder.php',
+    'think\\image\\gif\\Encoder' => $vendorDir . '/topthink/think-image/src/image/gif/Encoder.php',
+    'think\\image\\gif\\Gif' => $vendorDir . '/topthink/think-image/src/image/gif/Gif.php',
 );

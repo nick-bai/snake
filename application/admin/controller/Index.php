@@ -18,7 +18,7 @@ class Index extends Base
         // 获取权限菜单
         $node = new NodeModel();
         $this->assign([
-            'menu' => $node->getMenu(session('rule'))
+            'menu' => $node->getMenu(cache(session('rule')))
         ]);
 
         return $this->fetch('/index');

@@ -20,11 +20,20 @@ class ComposerStaticInit3db2e7299f935e999c8654fea168b9d9
         ),
     );
 
+    public static $classMap = array (
+        'think\\Image' => __DIR__ . '/..' . '/topthink/think-image/src/Image.php',
+        'think\\image\\Exception' => __DIR__ . '/..' . '/topthink/think-image/src/image/Exception.php',
+        'think\\image\\gif\\Decoder' => __DIR__ . '/..' . '/topthink/think-image/src/image/gif/Decoder.php',
+        'think\\image\\gif\\Encoder' => __DIR__ . '/..' . '/topthink/think-image/src/image/gif/Encoder.php',
+        'think\\image\\gif\\Gif' => __DIR__ . '/..' . '/topthink/think-image/src/image/gif/Gif.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit3db2e7299f935e999c8654fea168b9d9::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit3db2e7299f935e999c8654fea168b9d9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3db2e7299f935e999c8654fea168b9d9::$classMap;
 
         }, null, ClassLoader::class);
     }
