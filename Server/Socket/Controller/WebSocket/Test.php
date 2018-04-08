@@ -1,5 +1,5 @@
 <?php
-namespace App\WebSocket;
+namespace App\Socket\Controller\WebSocket;
 
 use EasySwoole\Core\Socket\Response;
 use EasySwoole\Core\Socket\AbstractInterface\WebSocketController;

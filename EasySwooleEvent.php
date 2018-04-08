@@ -15,7 +15,7 @@ use \EasySwoole\Core\Swoole\EventRegister;
 use \EasySwoole\Core\Http\Request;
 use \EasySwoole\Core\Http\Response;
 
-use App\WebSocket\Parser;
+use App\Socket\Parser\WebSocket;
 
 Class EasySwooleEvent implements EventInterface {
 
@@ -28,7 +28,7 @@ Class EasySwooleEvent implements EventInterface {
     public function mainServerCreate(ServerManager $server,EventRegister $register): void
     {
         // TODO: Implement mainServerCreate() method.
-        EventHelper::registerDefaultOnMessage($register,new Parser());
+        EventHelper::registerDefaultOnMessage($register,new WebSocket());
     }
 
     public function onRequest(Request $request,Response $response): void
