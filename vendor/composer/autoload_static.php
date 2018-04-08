@@ -4,36 +4,33 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3db2e7299f935e999c8654fea168b9d9
+class ComposerStaticInitf689f3bf5606e438ed5cc520a02fe332
 {
     public static $prefixLengthsPsr4 = array (
         't' => 
         array (
+            'think\\composer\\' => 15,
             'think\\' => 6,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'think\\composer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/topthink/think-installer/src',
+        ),
         'think\\' => 
         array (
-            0 => __DIR__ . '/..' . '/topthink/think-image/src',
+            0 => __DIR__ . '/../..' . '/thinkphp/library/think',
+            1 => __DIR__ . '/..' . '/topthink/think-image/src',
         ),
-    );
-
-    public static $classMap = array (
-        'think\\Image' => __DIR__ . '/..' . '/topthink/think-image/src/Image.php',
-        'think\\image\\Exception' => __DIR__ . '/..' . '/topthink/think-image/src/image/Exception.php',
-        'think\\image\\gif\\Decoder' => __DIR__ . '/..' . '/topthink/think-image/src/image/gif/Decoder.php',
-        'think\\image\\gif\\Encoder' => __DIR__ . '/..' . '/topthink/think-image/src/image/gif/Encoder.php',
-        'think\\image\\gif\\Gif' => __DIR__ . '/..' . '/topthink/think-image/src/image/gif/Gif.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3db2e7299f935e999c8654fea168b9d9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3db2e7299f935e999c8654fea168b9d9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3db2e7299f935e999c8654fea168b9d9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf689f3bf5606e438ed5cc520a02fe332::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf689f3bf5606e438ed5cc520a02fe332::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

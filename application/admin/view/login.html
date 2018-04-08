@@ -39,7 +39,7 @@
                 <input type="text" class="form-control uname" placeholder="用户名" id="user_name" />
                 <input type="password" class="form-control pword m-b" placeholder="密码" id="password" />
                 <div style="margin-bottom:70px">
-                    <input id="verify_input" type="text" class="form-control" placeholder="验证码" style="color:black;width:120px;float:left;margin:0px 0px;" name="code" id="code"/>
+                    <input type="text" class="form-control" placeholder="验证码" style="color:black;width:120px;float:left;margin:0px 0px;" name="code" id="code"/>
                     <img id="verify" src="{:url('checkVerify')}" onclick="javascript:this.src='{:url('checkVerify')}?tm='+Math.random();" style="float:right;cursor: pointer"/>
                 </div>
                 <input class="btn btn-success btn-block" id="login_btn" value="登录"/>
@@ -78,7 +78,7 @@
                 $('#login_btn').val('登录').removeClass('btn-danger').addClass('btn-success');
                 if(data.code!=1){
                     $('#verify').attr('src', '{:url('checkVerify')}?tm='+Math.random());
-                    $('#verify_input').val('');
+                    $('#code').val('');
                     $('#err_msg').show().html("<span style='color:red'>"+data.msg+"</span>");
                     return;
                 }else{
