@@ -25,7 +25,8 @@
         "topthink/framework": "*",
         "topthink/think-image": "dev-master",
         "easyswoole/easyswoole": "2.x-dev",
-        "easyswoole/swoole-ide-helper": "dev-master"
+        "easyswoole/swoole-ide-helper": "dev-master",
+        "joshcam/mysqli-database-class": "dev-master"
     },
     "extra": {
         "think-path": "thinkphp"

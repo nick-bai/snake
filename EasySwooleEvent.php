@@ -14,6 +14,7 @@ use \EasySwoole\Core\Swoole\EventHelper;
 use \EasySwoole\Core\Swoole\EventRegister;
 use \EasySwoole\Core\Http\Request;
 use \EasySwoole\Core\Http\Response;
+use EasySwoole\Core\Component\Di;
 
 use App\Socket\Parser\WebSocket;
 
@@ -29,6 +30,14 @@ Class EasySwooleEvent implements EventInterface {
     {
         // TODO: Implement mainServerCreate() method.
         EventHelper::registerDefaultOnMessage($register,new WebSocket());
+        Di::getInstance()->set('MYSQL',\MysqliDb::class,Array (
+            'host' => '127.0.0.1',
+            'username' => 'root',
+            'password' => 'XX4844362',
+            'db'=> 'easy',
+            'port' => 3306,
+            'charset' => 'utf8')
+        );
     }
 
     public function onRequest(Request $request,Response $response): void
