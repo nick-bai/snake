@@ -10,13 +10,15 @@
 // +----------------------------------------------------------------------
 namespace app\admin\controller;
 
+
 use think\Controller;
+use app\admin\model\RoleModel;
 
 class Base extends Controller
 {
     public function _initialize()
     {
-        if(empty(session('username'))){
+        if(empty(session('username')) || empty(session('id'))){
 
             $loginUrl = url('login/index');
             if(request()->isAjax()){
@@ -25,6 +27,9 @@ class Base extends Controller
 
             $this->redirect($loginUrl);
         }
+
+        //检查缓存
+        $this->cacheCheck();
 
         // 检测权限
         $control = lcfirst(request()->controller());
@@ -44,5 +49,27 @@ class Base extends Controller
             'rolename' => session('role')
         ]);
 
+    }
+
+    private function cacheCheck()
+    {
+        $action = cache(session('role'));
+        if(!$action){
+            // 获取该管理员的角色信息
+            $roleModel = new RoleModel();
+            $info = $roleModel->getRoleInfo(session('role_id'));
+            cache(session('role_id'), $info['action']);
+            cache(session('rule'), $info['rule']);
+        }
+    }
+
+    protected function removRoleCache()
+    {
+        $roleModel = new RoleModel();
+        $roleList = $roleModel->getRole();
+
+        foreach ($roleList as $value) {
+            cache($value['id'], null);
+        }
     }
 }

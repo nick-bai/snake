@@ -36,7 +36,7 @@ class Node extends Base
 
         $node = new NodeModel();
         $flag = $node->insertNode($param);
-
+        $this->removRoleCache();
         return json(msg($flag['code'], $flag['data'], $flag['msg']));
     }
 
@@ -47,7 +47,7 @@ class Node extends Base
 
         $node = new NodeModel();
         $flag = $node->editNode($param);
-
+        $this->removRoleCache();
         return json(msg($flag['code'], $flag['data'], $flag['msg']));
     }
 
@@ -58,6 +58,7 @@ class Node extends Base
 
         $role = new NodeModel();
         $flag = $role->delNode($id);
+        $this->removRoleCache();
         return json(msg($flag['code'], $flag['data'], $flag['msg']));
     }
 }

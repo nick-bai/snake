@@ -156,7 +156,7 @@ function authCheck($rule)
         return true;
     }
 
-    if(in_array($rule, session('action'))){
+    if(in_array($rule, cache(session('role_id')))){
         return true;
     }
 
@@ -201,6 +201,3 @@ function getTree($pInfo, $spread = true)
 
     return $tree;
 }
-
-
-
