@@ -24,7 +24,6 @@ class Sign
         }
 
         $tmp_sign = md5($tmp_sign);
-
         return $sign === $tmp_sign ? true :false;
     }
 }
