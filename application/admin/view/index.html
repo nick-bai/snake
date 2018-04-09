@@ -37,9 +37,11 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            {if authCheck('profile/headedit')}
                             <li>
                                 <a class="J_menuItem" href="{:url('admin/profile/headedit')}">修改信息</a>
                             </li>
+                            {/if}
                             <li>
                                 <a class="J_menuItem" href="{:url('admin/profile/index')}">修改密码</a>
                             </li>
