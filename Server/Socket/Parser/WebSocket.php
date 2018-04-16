@@ -17,7 +17,7 @@ class WebSocket implements ParserInterface
         }
 
         $commandLine = json_decode($raw, true);
-        if ($commandLine) {
+        if (!$commandLine) {
             return 'unknown command';
         }
 

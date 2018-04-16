@@ -4,6 +4,7 @@ namespace App\Socket\Controller\WebSocket;
 use EasySwoole\Core\Socket\Response;
 use EasySwoole\Core\Socket\AbstractInterface\WebSocketController;
 use EasySwoole\Core\Swoole\Task\TaskManager;
+use EasySwoole\Core\Component\Di;
 
 class Room extends WebSocketController
 {
@@ -31,5 +32,11 @@ class Room extends WebSocketController
             sleep(1);
             Response::response($client,'this is async task res'.time());
         });
+    }
+
+    public function test()
+    {
+        $redis = Di::getInstance()->get('REDIS');
+        var_dump($redis);
     }
 }
