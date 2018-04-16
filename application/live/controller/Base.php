@@ -22,13 +22,13 @@ class Base extends Controller
 
     public function _initialize()
     {
-        if (!$this->checkSource()) {
-            throw new \think\Exception($this->error_msg, 100006);
-        }
-
-        if (!$this->auth()) {
-            throw new \think\Exception($this->error_msg, 100006);
-        }
+        // if (!$this->checkSource()) {
+        //     throw new \think\Exception($this->error_msg, 100006);
+        // }
+        //
+        // if (!$this->auth()) {
+        //     throw new \think\Exception($this->error_msg, 100006);
+        // }
 
     }
 

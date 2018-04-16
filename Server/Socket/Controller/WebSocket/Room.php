@@ -5,7 +5,7 @@ use EasySwoole\Core\Socket\Response;
 use EasySwoole\Core\Socket\AbstractInterface\WebSocketController;
 use EasySwoole\Core\Swoole\Task\TaskManager;
 
-class Test extends WebSocketController
+class Room extends WebSocketController
 {
     function actionNotFound(?string $actionName)
     {

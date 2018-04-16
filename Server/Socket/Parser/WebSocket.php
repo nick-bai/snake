@@ -12,9 +12,16 @@ class WebSocket implements ParserInterface
 
     public function decode($raw, $client)
     {
-        // TODO: Implement decode() method.
-        $CommandBean = new CommandBean();
+        if ('PING' === $raw) {
+            return json_encode(['code' => 200, 'message' => 'ok']);
+        }
+
         $commandLine = json_decode($raw, true);
+        if ($commandLine) {
+            return 'unknown command';
+        }
+
+        $CommandBean = new CommandBean();
 
         $control = isset($commandLine['class']) ? 'App\\Socket\\Controller\\WebSocket\\'. ucfirst($commandLine['class']) : '';
         $action = $commandLine['action'] ?? 'none';
