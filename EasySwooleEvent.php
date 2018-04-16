@@ -29,15 +29,8 @@ Class EasySwooleEvent implements EventInterface {
     public function mainServerCreate(ServerManager $server,EventRegister $register): void
     {
         // TODO: Implement mainServerCreate() method.
-        EventHelper::registerDefaultOnMessage($register,new WebSocket());
-        Di::getInstance()->set('MYSQL',\MysqliDb::class,Array (
-            'host' => '127.0.0.1',
-            'username' => 'root',
-            'password' => 'XX4844362',
-            'db'=> 'easy',
-            'port' => 3306,
-            'charset' => 'utf8')
-        );
+        EventHelper::registerDefaultOnMessage($register, new WebSocket());
+        Di::getInstance()->set('MYSQL',\MysqliDb::class, Config::getInstance()->getConf('MYSQL'));
     }
 
     public function onRequest(Request $request,Response $response): void
