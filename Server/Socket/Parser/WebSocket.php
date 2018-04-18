@@ -15,9 +15,8 @@ class WebSocket implements ParserInterface
         if ('PING' === $raw) {
             return json_encode(['code' => 200, 'message' => 'ok']);
         }
-
         $commandLine = json_decode($raw, true);
-        if (!$commandLine) {
+        if (!is_array($commandLine)) {
             return 'unknown command';
         }
 
