@@ -5,6 +5,7 @@ use EasySwoole\Core\Component\Spl\SplStream;
 use EasySwoole\Core\Socket\Client\WebSocket;
 use EasySwoole\Core\Socket\Common\CommandBean;
 use EasySwoole\Core\Socket\AbstractInterface\WebSocketController;
+use EasySwoole\Core\Swoole\ServerManager;
 
 class Base extends WebSocketController
 {
@@ -24,5 +25,16 @@ class Base extends WebSocketController
     public function actionNotFound(?string $actionName)
     {
         $this->response()->write("action call {$actionName} not found");
+    }
+
+    /**
+     * 主动关闭连接
+     * @param  string $fd       连接id
+     * @param  string $message  信息
+     */
+    public function close($fd, $message = 'refuse')
+    {
+        $this->response()->write($message);
+        ServerManager::getInstance()->getServer()->close($fd);
     }
 }

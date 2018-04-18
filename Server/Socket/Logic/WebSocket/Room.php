@@ -113,12 +113,10 @@ class Room
     {
         //异步推送
         TaskManager::async(function ()use($roomId, $message){
-            $list = $this->selectRoom($roomId);
+            $list = Room::getInstance()->selectRoom($roomId);
             foreach ($list as $fd) {
                 ServerManager::getInstance()->getServer()->push($fd, $message);
             }
         });
     }
-
-
 }
