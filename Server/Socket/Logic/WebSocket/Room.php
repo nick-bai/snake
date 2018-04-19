@@ -29,7 +29,7 @@ class Room
      * 获取Redis实例
      * @return object   redis
      */
-    public static function getRedis()
+    protected static function getRedis()
     {
         return Di::getInstance()->get('REDIS');
     }
@@ -42,12 +42,15 @@ class Room
      */
     public function intoRoom($roomId, $userId, $fd)
     {
-        //全局在线 Redis zSet
-        self::getRedis()->handler()->zAdd('online', $fd, $userId);
-        //关系映射 Redis zSet
-        self::getRedis()->handler()->zAdd('room_map', $roomId, $fd);
-        //房间在线 Redis list
-        self::getRedis()->handler()->lPush('room:'. $roomId, $fd);
+        //不在线
+        if (false === $this->getUserFd($userId)) {
+            //全局在线 Redis zSet
+            self::getRedis()->handler()->zAdd('online', $fd, $userId);
+            //关系映射 Redis zSet
+            self::getRedis()->handler()->zAdd('room_map', $roomId, $fd);
+            //房间在线 Redis list
+            self::getRedis()->handler()->lPush('room:'. $roomId, $fd);
+        }
     }
 
     /**
@@ -92,6 +95,10 @@ class Room
         self::getRedis()->handler()->zRem('room_map', $fd);
     }
 
+    public function getRoomFd($roomId)
+    {
+        # code...
+    }
     /**
      * 关闭连接
      * @param  string $fd 链接id

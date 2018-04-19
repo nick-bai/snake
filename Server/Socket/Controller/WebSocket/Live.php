@@ -9,57 +9,31 @@ use App\Socket\Logic\WebSocket\Message;
  */
 class Live extends Base
 {
-    protected $data;
-    protected $userId;
-    protected $roomId;
-
-    protected function _initialize(){
-        if (!$this->checkSetData()) {
-            //关闭连接
-            $this->close($this->client()->getFd());
-        }
-
-        $this->checkOnline($roomId, $userId);
-    }
-
     /**
-     * 检查在线
-     * @param  string $roomId roomId
-     * @param  string $userId $userId
+     * 发送信息到房间
+     * @return  string
      */
-    protected function checkOnline($roomId, $userId)
-    {
-        //如果不在线
-        if (!Room::getInstance()->getUserFd($userId)) {
-            Room::getInstance()->intoRoom($roomId, $userId, $this->client()->getFd());
-        }
-    }
-
-    /**
-     * 检查设置参数
-     * @return bool
-     */
-    protected function checkSetData()
-    {
-        $this->data = $this->request()->getArgs();
-        if (empty($this->data)) {
-            return false;
-        }
-
-        $this->userId = $this->data['userId'];
-        $this->roomId = $this->data['roomId'];
-        if (empty($this->userId) || empty($this->roomId)) {
-            return false;
-        }
-
-        return true;
-    }
-
     public function sendToRoom()
     {
-        $message = $this->data['message'];
+        $Message = new Message($this->request()->getArg('data'));
 
-        
+        //检查必要参数
+        if (!$Message->checkData(['userId', 'roomId'])) {
+            $this->close($this->client()->getFd(), $Message->getMessage());
+            return;
+        }
+
+        Room::getInstance()->intoRoom($Message->getData('roomId'), $Message->getData('userId'), $this->client()->getFd());
+        //检查信息
+        if ($Message->checkMessage('message')) {
+            //提示用户成功
+            $this->response()->write($Message->messageSerialize(200, 'prompt', '发送成功'));
+            //发送到房间
+            Room::getInstance()->sendToRoom($Message->getData('roomId'), $Message->getMessage());
+        }else {
+            //发送错误信息
+            $this->response()->write($Message->getMessage());
+        }
     }
 
 

@@ -13,8 +13,13 @@ class Index extends WebSocketController
     public function controllerNotFound()
     {
         $array = [
-            'class' => 'Test',
-            'action' => 'who'
+            'class' => 'Live',
+            'action' => 'sendToRoom',
+            'data'  => [
+                'userId' => 55,
+                'roomId' => 5513,
+                'message' => '我是谁'
+            ]
         ];
         $this->response()->write(json_encode($array));
         // $this->response()->write("controller not found");
