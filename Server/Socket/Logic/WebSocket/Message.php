@@ -80,6 +80,6 @@ class Message
      */
     public function messageSerialize($code, $type, $message)
     {
-        return json_encode(['code' => $code, 'type' => $type, 'message' => $message]);
+        return json_encode(['code' => $code, 'type' => $type, 'data' => $message]);
     }
 }
