@@ -48,7 +48,7 @@ class Message
         }
 
         // TODO: 这里应当进行信息过滤防止xss攻击
-        $this->message = $this->messageSerialize(200, 'room_chat', $message);
+        $this->message = $this->messageSerialize(200, 'room_message', $message);
         return true;
     }
 
