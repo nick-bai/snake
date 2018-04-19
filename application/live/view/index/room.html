@@ -109,15 +109,14 @@
         //初始化ws
         function websocket_init(wsServerPath, wsEvent){
             var heartbeat_id;
-
             webSocket = new WebSocket(wsServerPath);
             webSocket.onopen = function (evt) {
-                wsEvent.on_connect(evt);
                 this.heartbeat_id = set_heartbeat();
+                wsEvent.on_connect(evt);
             };
             webSocket.onclose = function (evt) {
+                remove_heartbeat(this.heartbeat_id);
                 wsEvent.on_close(evt);
-                // remove_heartbeat(this.heartbeat_id);
             };
             webSocket.onmessage = function (evt) {
                 wsEvent.on_message(evt);
@@ -135,9 +134,13 @@
             //初始化ws
             websocket_init(this.wsServerPath, this.wsEvent);
         }
+        //心跳
+        function heartbeat(){
+            webSocket.send('PING')
+        }
         //设置心跳
         function set_heartbeat(){
-            return setInterval(webSocket.send('PING'), 1000);
+             return setInterval(heartbeat, 10000);
         }
         //移除心跳
         function remove_heartbeat(heartbeat_id){
@@ -166,7 +169,7 @@
         },
         //收到信息时
         on_message:function(evt){
-            console.log(evt);
+            this.message_parsing(evt);
         },
         //收到错误时
         on_error:function(evt, e){
@@ -177,14 +180,53 @@
             Im.send(this.room_data);
         },
         //设置room_data
-        set_room_data:function(controoler, action, data){
-            this.room_data = {controoler:controoler, action:action, data:data};
-        }
+        set_room_data:function(controller, action, data){
+            this.room_data = {controller:controller, action:action, data:data};
+        },
+        //消息解析
+        message_parsing:function(evt){
+            var re_data = JSON.parse(evt.data);
+            switch (re_data.type) {
+                case 'heartbeat':
+                    console.log(re_data.data);
+                    break;
+                case 'error':
+                    this.error_handler(re_data.type, re_data.data);
+                    break;
+                case 'prompt':
+                    this.get_prompt(re_data.data);
+                    break;
+                case 'room_message':
+                    this.get_room_message(re_data.data);
+                    break;
+                case 'private_message':
+                    this.get_private_message(re_data.data);
+                    break;
+                default:
+                console.log(data);
+            }
+        },
+        //错误处理
+        error_handler:function(type, msg){
+
+        },
+        //房间消息
+        get_room_message:function(msg){
+
+        },
+        //私聊消息
+        get_private_message:function(msg){
+
+        },
+        //提示消息
+        get_prompt:function(msg){
+
+        },
     };
 
 
     var wsServer = 'ws://'+document.domain+':9501';
-    wsEven.set_room_data('live', 'joinRoom', null);
+    wsEven.set_room_data('live', 'joinRoom', {userId:55,roomId:5513});
     Im.init_im(wsServer, wsEven);
 </script>
 </html>
