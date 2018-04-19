@@ -13,7 +13,7 @@ class Index extends WebSocketController
     public function controllerNotFound()
     {
         $array = [
-            'class' => 'Live',
+            'controller' => 'Live',
             'action' => 'sendToRoom',
             'data'  => [
                 'userId' => 55,

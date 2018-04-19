@@ -22,7 +22,7 @@ class WebSocket implements ParserInterface
 
         $CommandBean = new CommandBean();
 
-        $control = isset($commandLine['class']) ? 'App\\Socket\\Controller\\WebSocket\\'. ucfirst($commandLine['class']) : '';
+        $control = isset($commandLine['controller']) ? 'App\\Socket\\Controller\\WebSocket\\'. ucfirst($commandLine['class']) : '';
         $action = $commandLine['action'] ?? 'none';
         $data = $commandLine['data'] ?? null;
 
