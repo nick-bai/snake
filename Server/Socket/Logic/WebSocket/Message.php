@@ -39,7 +39,7 @@ class Message
      * @param  string $message 聊天内容
      * @return bool            是否错误
      */
-    public function checkMessage($name)
+    public function checkMessage($name, $type)
     {
         $message = $this->getData($name);
         if (empty($message)) {
@@ -48,7 +48,7 @@ class Message
         }
 
         // TODO: 这里应当进行信息过滤防止xss攻击
-        $this->message = $this->messageSerialize(200, 'room_message', $message);
+        $this->message = $this->messageSerialize(200, $type, $message);
         return true;
     }
 

@@ -10,6 +10,25 @@ use App\Socket\Logic\WebSocket\Message;
 class Live extends Base
 {
     /**
+     * 进入房间
+     * @return string
+     */
+    public function joinRoom()
+    {
+        $Message = new Message($this->request()->getArg('data'));
+
+        //检查必要参数
+        if (!$Message->checkData(['userId', 'roomId'])) {
+            $this->close($this->client()->getFd(), $Message->getMessage());
+            return;
+        }
+
+        Room::getInstance()->intoRoom($Message->getData('roomId'), $Message->getData('userId'), $this->client()->getFd());
+        //提示用户成功
+        $this->response()->write($Message->messageSerialize(200, 'prompt', '加入聊天室成功'));
+    }
+
+    /**
      * 发送信息到房间
      * @return  string
      */
@@ -23,9 +42,8 @@ class Live extends Base
             return;
         }
 
-        Room::getInstance()->intoRoom($Message->getData('roomId'), $Message->getData('userId'), $this->client()->getFd());
         //检查信息
-        if ($Message->checkMessage('message')) {
+        if ($Message->checkMessage('message', 'room_message')) {
             //提示用户成功
             $this->response()->write($Message->messageSerialize(200, 'prompt', '发送成功'));
             //发送到房间
