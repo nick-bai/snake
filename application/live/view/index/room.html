@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>{}</title>
     <link rel="stylesheet" href="/static/live/css/room.css">
     <link rel="stylesheet" href="/static/live/css/public.css">
 </head>
@@ -22,7 +22,7 @@
         </a>
     </div> -->
     <div class="video">
-        <iframe src="http://yunpintech.com/watch/9432068?player" style="width: 640px; height: 360px; overflow:hidden;" scrolling="no" allowFullScreen> </iframe>
+        <!-- <iframe src="http://yunpintech.com/watch/9432068?player" style="width: 640px; height: 360px; overflow:hidden;" scrolling="no" allowFullScreen> </iframe> -->
     </div>
     <div class="tab">
         <p class="ta">
@@ -101,37 +101,90 @@
 <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="/static/live/js/room.js" type="text/javascript"></script>
 <script>
-    var wsServer = 'ws://'+document.domain+':9501';
-    var websocket = new WebSocket(wsServer);
-    window.onload = function () {
-        websocket.onopen = function (evt) {
-            addLine("Connected to WebSocket server.");
-        };
+    //聊天室对象
+    var Im = (function(){
+        var wsServerPath,
+            webSocket,
+            wsEvent;
+        //初始化ws
+        function websocket_init(wsServerPath, wsEvent){
+            var heartbeat_id;
 
-        websocket.onclose = function (evt) {
-            addLine("Disconnected");
-        };
+            webSocket = new WebSocket(wsServerPath);
+            webSocket.onopen = function (evt) {
+                wsEvent.on_connect(evt);
+                this.heartbeat_id = set_heartbeat();
+            };
+            webSocket.onclose = function (evt) {
+                wsEvent.on_close(evt);
+                // remove_heartbeat(this.heartbeat_id);
+            };
+            webSocket.onmessage = function (evt) {
+                wsEvent.on_message(evt);
+            };
+            webSocket.onerror = function (evt, e) {
+                wsEvent.on_error(evt, e);
+            };
+        }
+        //初始化Im
+        function init_im(wsServerPath, wsEvent){
+            //注册ws信息
+            this.wsServerPath = wsServerPath;
+            //注册ws事件
+            this.wsEvent = wsEvent;
+            //初始化ws
+            websocket_init(this.wsServerPath, this.wsEvent);
+        }
+        //设置心跳
+        function set_heartbeat(){
+            return setInterval(webSocket.send('PING'), 1000);
+        }
+        //移除心跳
+        function remove_heartbeat(heartbeat_id){
+            clearInterval(heartbeat_id);
+        }
+        //发送信息
+        function send(message){
+            webSocket.send(JSON.stringify(message));
+        }
+        return {
+            init_im:init_im,
+            send:send
+        }
+    })();
 
-        websocket.onmessage = function (evt) {
-            addLine('Retrieved data from server: ' + evt.data);
-        };
-
-        websocket.onerror = function (evt, e) {
-            addLine('Error occured: ' + evt.data);
-        };
+    //注册事件对象
+    var wsEven = {
+        room_data:null,
+        //连接完成时
+        on_connect:function(evt){
+            this.join_room();
+        },
+        //连接断开时
+        on_close:function(evt){
+            console.log(evt);
+        },
+        //收到信息时
+        on_message:function(evt){
+            console.log(evt);
+        },
+        //收到错误时
+        on_error:function(evt, e){
+            console.log(evt);
+        },
+        //进入房间
+        join_room:function(){
+            Im.send(this.room_data);
+        },
+        //设置room_data
+        set_room_data:function(controoler, action, data){
+            this.room_data = {controoler:controoler, action:action, data:data};
+        }
     };
-    function addLine(data) {
-        console.log(data);
-        $("#line").append("<li>"+data+"</li>");
-    }
-    function say() {
-        var content = $("#says").val();
-        var action = $("#action").val();
-        $("#says").val('');
-        websocket.send(JSON.stringify({
-            action:action,
-            content:content
-        }));
-    }
+
+
+    var wsServer = 'ws://'+document.domain+':9501';
+    wsEven.set_room_data('live', 'joinRoom', null);
+    Im.init_im(wsServer, wsEven);
 </script>
 </html>
