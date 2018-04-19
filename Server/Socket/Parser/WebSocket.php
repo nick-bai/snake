@@ -13,7 +13,7 @@ class WebSocket implements ParserInterface
     public function decode($raw, $client)
     {
         if ('PING' === $raw) {
-            return json_encode(['code' => 200, 'type' => 'heartbeat', 'message' => 'ok']);
+            return json_encode(['code' => 200, 'type' => 'heartbeat', 'data' => 'ok']);
         }
         $commandLine = json_decode($raw, true);
         if (!is_array($commandLine)) {
