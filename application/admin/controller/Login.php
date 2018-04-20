@@ -40,14 +40,8 @@ class Login extends Controller
             return json(msg(-2, '', '验证码错误'));
         }
 
-
         $userModel = new UserModel();
-        $hasUser = $userModel::get(function($query) use ($userName){
-            $query->alias('u')
-                ->join('role r', 'u.role_id = r.id')
-                ->where(['u.user_name' => $userName])
-                ->field('u.*, r.role_name, r.id');
-        });
+        $hasUser = $userModel->checkUser($userName);
 
         if(empty($hasUser)){
             return json(msg(-3, '', '管理员不存在'));
@@ -66,6 +60,7 @@ class Login extends Controller
         session('head', $hasUser['head']);
         session('role', $hasUser['role_name']);  // 角色名
         session('role_id', $hasUser['role_id']);
+        session('rule', $hasUser['rule']);
 
         // 更新管理员状态
         $param = [
@@ -102,6 +97,7 @@ class Login extends Controller
         session('head', null);
         session('role', null);  // 角色名
         session('role_id', null);
+        session('rule', null);
 
         $this->redirect(url('index'));
     }

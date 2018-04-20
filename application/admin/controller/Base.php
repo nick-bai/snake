@@ -28,7 +28,7 @@ class Base extends Controller
             $this->redirect($loginUrl);
         }
 
-        //检查缓存
+        // 检查缓存
         $this->cacheCheck();
 
         // 检测权限
@@ -53,13 +53,14 @@ class Base extends Controller
 
     private function cacheCheck()
     {
-        $action = cache(session('role'));
-        if(!$action){
+        $action = cache(session('role_id'));
+
+        if(is_null($action) || empty($action)){
+
             // 获取该管理员的角色信息
             $roleModel = new RoleModel();
             $info = $roleModel->getRoleInfo(session('role_id'));
             cache(session('role_id'), $info['action']);
-            cache(session('rule'), $info['rule']);
         }
     }
 

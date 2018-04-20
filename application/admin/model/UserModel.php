@@ -132,4 +132,15 @@ class UserModel extends Model
             return msg(-1, '', $e->getMessage());
         }
     }
+
+    /**
+     * 根据用户名检测用户数据
+     * @param $userName
+     */
+    public function checkUser($userName)
+    {
+        return $this->alias('u')->join('role r', 'u.role_id = r.id')
+                ->where('u.user_name', $userName)
+                ->find();
+    }
 }
