@@ -15,10 +15,18 @@
             "email": "liu21st@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "Server/"
+        }
+    },
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "*",
-        "topthink/think-image": "dev-master"
+        "topthink/framework": "5.0.18",
+        "topthink/think-image": "dev-master",
+        "easyswoole/easyswoole": "2.x-dev",
+        "easyswoole/swoole-ide-helper": "dev-master",
+        "joshcam/mysqli-database-class": "dev-master"
     },
     "extra": {
         "think-path": "thinkphp"

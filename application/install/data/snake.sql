@@ -120,4 +120,8 @@ CREATE TABLE `snake_user` (
 -- ----------------------------
 -- Records of snake_user
 -- ----------------------------
+<<<<<<< HEAD
+INSERT INTO `snake_user` VALUES ('1', 'admin', 'a9ddd2e7bdff202e3e9bca32765e9ba0', '41', '127.0.0.1', '1505559479', 'admin', '1', '1');
+=======
 INSERT INTO `snake_user` VALUES ('1', 'admin', 'a9ddd2e7bdff202e3e9bca32765e9ba0', '/static/admin/images/profile_small.jpg', '41', '127.0.0.1', '1505559479', 'admin', '1', '1');
+>>>>>>> db539534c751ca367b23a9073ef13d2ce6cbea59

@@ -19,7 +19,7 @@ use app\admin\model\UserModel;
 class Profile extends Base
 {
     //public 绝对路径， 用于用户提交相对路径时追加
-    const PUBLIC_PATH = ROOT_PATH.'public';
+    const PUBLIC_PATH = ROOT_PATH. 'public';
     //相对路径，用于返回前端
     const HEAD_RETURN_PATH = '/upload/head';
     //绝对路径，用于存储地址

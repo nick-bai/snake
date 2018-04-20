@@ -19,6 +19,21 @@ function showOperate($operate = [])
 
     return $option;
 }
+/**
+ * 随机数生成
+ * @param  integer $num 长度
+ * @return string
+ */
+function getRandom($num = 32)
+{
+    $str="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $key = "";
+    for($i=0;$i<$num;$i++)
+     {
+         $key .= $str{mt_rand(0,32)};    //生成php随机数
+     }
+     return $key;
+ }
 
 /**
  * 将字符解析成数组
@@ -123,17 +138,6 @@ function analysisSql($file)
     fclose ( $f );
 
     return $sqls;
-}
-
-/**
- * 统一返回信息
- * @param $code
- * @param $data
- * @param $msge
- */
-function msg($code, $data, $msg)
-{
-    return compact('code', 'data', 'msg');
 }
 
 /**

@@ -1,0 +1,106 @@
+{extend name="index/base"}
+
+{block name="title"}
+    <title>双溪大健康</title>
+{/block}
+
+{block name="css"}
+    <link rel="stylesheet" href="/static/live/css/index.css">
+    <style media="screen">
+      #name {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 60%;
+      }
+    </style>
+{/block}
+
+{block name="mian"}
+<!--导航栏-->
+<div class="nav">
+  <ul class="list ">
+    {volist name="class_list" id="list"}
+    {eq name="$i" value="0"}
+        <li class="native" data-id="{$list.video_class_id}"><span>{$list.name}</span></li>
+    {/eq}
+        <li data-id="{$list.video_class_id}"><span>{$list.name}</span></li>
+    {/volist}
+  </ul>
+</div>
+<!--列表详情-->
+<div class="container-fluid">
+  <div class="list_info ">
+    <ul>
+      <!-- 挖个坑 -->
+    </ul>
+  </div>
+</div>
+
+{/block}
+
+{block name="js"}
+<script type="text/html" id='temp-section'>
+  {{each data as v i }}
+  <li class="re-play" data-id="{{v.re_id}}">
+    <div class="video">
+      <img src="{{v.cover}}" style="width:100%;height:100%;">
+    </div>
+    <div class="bgc">
+      <div class="img"><img src="/static/live/imgs/cpicLogo.png" alt=""></div>
+      <span class="font" id="name">{{v.name}}</span>
+      <span class="time">{{v.time}}:00</span>
+      <div class="share"><img src="/static/live/imgs/share.png" alt=""></div>
+    </div>
+    <div class="title"><span>{{v.tag}}</span></div>
+    <div class="img"><img src="/static/live/imgs/play.png" alt=""></div>
+  </li>
+  {{/each}}
+</script>
+
+<script type="text/javascript">
+  $(function() {
+    //注册分类点击事件
+    $('.list').on('click', 'li', function() {
+      //去除选择全部选择标签再添加
+      $('.list>li').removeClass('native');
+      $(this).addClass('native');
+
+      //获取分类id并获取数据
+      var id = $(this).attr('data-id');
+      getLiveList(id);
+    });
+
+    //注册播放点击事件
+    $('.list_info>ul').on('click', 'li', function() {
+      var id = $(this).attr('data-id');
+      rePlay(id);
+    });
+
+    //初始播放
+    getLiveList(1);
+  });
+
+  // 获取数据
+  function getLiveList(id) {
+    $.ajax({
+      url: '/live/Live/getLiveList',
+      type: 'get',
+      dataType: 'json',
+      success: function(data) {
+        if (data.data == null) {
+          $('#hint').show();
+        } else {
+          $('.list_info>ul').html(template('temp-section', data));
+        }
+      }
+    })
+  }
+
+  //点击播放
+  function rePlay(id) {
+    // console.log(id);
+    location.href = "http://yunpintech.com/watch/" + id;
+  }
+</script>
+{/block}
