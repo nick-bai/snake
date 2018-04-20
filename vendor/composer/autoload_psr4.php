@@ -15,5 +15,6 @@ return array(
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
     'EasySwoole\\' => array($vendorDir . '/easyswoole/easyswoole/src'),
+    'Cron\\' => array($vendorDir . '/dragonmantank/cron-expression/src/Cron'),
     'App\\' => array($baseDir . '/Server'),
 );

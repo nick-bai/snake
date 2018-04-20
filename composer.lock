@@ -4,23 +4,73 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7aaaef6b5973dad7036e9aa4609e1435",
+    "content-hash": "613d3034f075e29cb905b2e92d0d6c37",
     "packages": [
+        {
+            "name": "dragonmantank/cron-expression",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dragonmantank/cron-expression.git",
+                "reference": "3f00985deec8df53d4cc1e5c33619bda1ee309a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/dragonmantank/cron-expression/3f00985deec8df53d4cc1e5c33619bda1ee309a5.zip",
+                "reference": "3f00985deec8df53d4cc1e5c33619bda1ee309a5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cron\\": "src/Cron/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Chris Tankersley",
+                    "email": "chris@ctankersley.com",
+                    "homepage": "https://github.com/dragonmantank"
+                }
+            ],
+            "description": "CRON for PHP: Calculate the next or previous run date and determine if a CRON expression is due",
+            "keywords": [
+                "cron",
+                "schedule"
+            ],
+            "time": "2018-04-06T15:51:55+00:00"
+        },
         {
             "name": "easyswoole/easyswoole",
             "version": "2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/easy-swoole/easyswoole.git",
-                "reference": "5543130797fbafb40a1bb0c3be7db013d627167d"
+                "reference": "d71a8d4f1b9e410d5c31c1bae319075107680f66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/easy-swoole/easyswoole/5543130797fbafb40a1bb0c3be7db013d627167d.zip",
-                "reference": "5543130797fbafb40a1bb0c3be7db013d627167d",
+                "url": "https://files.phpcomposer.com/files/easy-swoole/easyswoole/d71a8d4f1b9e410d5c31c1bae319075107680f66.zip",
+                "reference": "d71a8d4f1b9e410d5c31c1bae319075107680f66",
                 "shasum": ""
             },
             "require": {
+                "dragonmantank/cron-expression": "^2.1",
                 "jeremeamia/superclosure": "^2.3",
                 "nikic/fast-route": "^1.2",
                 "nikic/php-parser": "^3.1",
@@ -57,7 +107,7 @@
                 "framework",
                 "swoole"
             ],
-            "time": "2018-04-03T06:07:11+00:00"
+            "time": "2018-04-19T09:28:26+00:00"
         },
         {
             "name": "easyswoole/swoole-ide-helper",
@@ -393,16 +443,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "dev-master",
+            "version": "5.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "158aa4302844c18ec8b962c1326cd7412125abd2"
+                "reference": "6ac1ba683aae31dab989783c976aab6e4d5feb2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/top-think/framework/158aa4302844c18ec8b962c1326cd7412125abd2.zip",
-                "reference": "158aa4302844c18ec8b962c1326cd7412125abd2",
+                "url": "https://files.phpcomposer.com/files/top-think/framework/6ac1ba683aae31dab989783c976aab6e4d5feb2d.zip",
+                "reference": "6ac1ba683aae31dab989783c976aab6e4d5feb2d",
                 "shasum": ""
             },
             "require": {
@@ -440,7 +490,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2018-03-30T08:07:15+00:00"
+            "time": "2018-03-07T03:16:20+00:00"
         },
         {
             "name": "topthink/think-image",

@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -118,7 +118,7 @@ class Url
             $type = Route::getBind('type');
             if ($type) {
                 $bind = Route::getBind($type);
-                if ($bind && 0 === strpos($url, $bind)) {
+                if (0 === strpos($url, $bind)) {
                     $url = substr($url, strlen($bind) + 1);
                 }
             }
@@ -135,7 +135,7 @@ class Url
         if (!empty($vars)) {
             // 添加参数
             if (Config::get('url_common_param')) {
-                $vars = http_build_query($vars);
+                $vars = urldecode(http_build_query($vars));
                 $url .= $suffix . '?' . $vars . $anchor;
             } else {
                 $paramType = Config::get('url_param_type');
@@ -210,21 +210,17 @@ class Url
             }
             $module = $module ? $module . '/' : '';
 
-            $controller = $request->controller();
+            $controller = Loader::parseName($request->controller());
             if ('' == $url) {
                 // 空字符串输出当前的 模块/控制器/操作
-                $action = $request->action();
+                $url = $module . $controller . '/' . $request->action();
             } else {
                 $path       = explode('/', $url);
-                $action     = array_pop($path);
-                $controller = empty($path) ? $controller : array_pop($path);
+                $action     = Config::get('url_convert') ? strtolower(array_pop($path)) : array_pop($path);
+                $controller = empty($path) ? $controller : (Config::get('url_convert') ? Loader::parseName(array_pop($path)) : array_pop($path));
                 $module     = empty($path) ? $module : array_pop($path) . '/';
+                $url        = $module . $controller . '/' . $action;
             }
-            if (Config::get('url_convert')) {
-                $action     = strtolower($action);
-                $controller = Loader::parseName($controller);
-            }
-            $url = $module . $controller . '/' . $action;
         }
         return $url;
     }
@@ -239,7 +235,7 @@ class Url
         $rootDomain = Config::get('url_domain_root');
         if (true === $domain) {
             // 自动判断域名
-            $domain = Config::get('app_host') ?: $request->host();
+            $domain = $request->host();
 
             $domains = Route::rules('domain');
             if ($domains) {
@@ -269,19 +265,14 @@ class Url
 
         } else {
             if (empty($rootDomain)) {
-                $host       = Config::get('app_host') ?: $request->host();
+                $host       = $request->host();
                 $rootDomain = substr_count($host, '.') > 1 ? substr(strstr($host, '.'), 1) : $host;
             }
             if (substr_count($domain, '.') < 2 && !strpos($domain, $rootDomain)) {
                 $domain .= '.' . $rootDomain;
             }
         }
-        if (false !== strpos($domain, '://')) {
-            $scheme = '';
-        } else {
-            $scheme = $request->isSsl() || Config::get('is_https') ? 'https://' : 'http://';
-        }
-        return $scheme . $domain;
+        return ($request->isSsl() ? 'https://' : 'http://') . $domain;
     }
 
     // 解析URL后缀
@@ -302,12 +293,11 @@ class Url
         foreach ($rule as $item) {
             list($url, $pattern, $domain, $suffix) = $item;
             if (empty($pattern)) {
-                return [rtrim($url, '$'), $domain, $suffix];
+                return [$url, $domain, $suffix];
             }
-            $type = Config::get('url_common_param');
             foreach ($pattern as $key => $val) {
                 if (isset($vars[$key])) {
-                    $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key . '', '<' . $key . '>'], $type ? $vars[$key] : urlencode($vars[$key]), $url);
+                    $url = str_replace(['[:' . $key . ']', '<' . $key . '?>', ':' . $key . '', '<' . $key . '>'], $vars[$key], $url);
                     unset($vars[$key]);
                     $result = [$url, $domain, $suffix];
                 } elseif (2 == $val) {

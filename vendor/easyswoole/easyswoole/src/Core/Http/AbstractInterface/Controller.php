@@ -30,7 +30,7 @@ abstract class Controller
         $this->request = $request;
         $this->response = $response;
         $this->actionName = $actionName;
-        if($actionName == '__hook'){
+        if($actionName == '__construct'){
             $this->response()->withStatus(Status::CODE_BAD_REQUEST);
         }else{
             $this->__hook( $actionName);
@@ -72,16 +72,21 @@ abstract class Controller
         if($this->onRequest($actionName) !== false){
             $actionName = $this->actionName ;
             //支持在子类控制器中以private，protected来修饰某个方法不可见
-            $ref = new \ReflectionClass(static::class);
-            if($ref->hasMethod($actionName) && $ref->getMethod( $actionName)->isPublic()){
-                try{
+            try{
+                $ref = new \ReflectionClass(static::class);
+                if($ref->hasMethod($actionName) && $ref->getMethod( $actionName)->isPublic()){
                     $this->$actionName();
-                    $this->afterAction($actionName);
-                }catch (\Throwable $exception){
-                    $this->onException($exception,$actionName);
+                }else{
+                    $this->actionNotFound($actionName);
                 }
-            }else{
-                $this->actionNotFound($actionName);
+            }catch (\Throwable $throwable){
+                $this->onException($throwable,$actionName);
+            }
+            //afterAction 始终都会被执行
+            try{
+                $this->afterAction($actionName);
+            }catch (\Throwable $throwable){
+                $this->onException($throwable,$actionName);
             }
         }
     }

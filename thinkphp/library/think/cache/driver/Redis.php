@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -46,12 +46,9 @@ class Redis extends Driver
         if (!empty($options)) {
             $this->options = array_merge($this->options, $options);
         }
+        $func          = $this->options['persistent'] ? 'pconnect' : 'connect';
         $this->handler = new \Redis;
-        if ($this->options['persistent']) {
-            $this->handler->pconnect($this->options['host'], $this->options['port'], $this->options['timeout'], 'persistent_id_' . $this->options['select']);
-        } else {
-            $this->handler->connect($this->options['host'], $this->options['port'], $this->options['timeout']);
-        }
+        $this->handler->$func($this->options['host'], $this->options['port'], $this->options['timeout']);
 
         if ('' != $this->options['password']) {
             $this->handler->auth($this->options['password']);
@@ -83,25 +80,20 @@ class Redis extends Driver
     public function get($name, $default = false)
     {
         $value = $this->handler->get($this->getCacheKey($name));
-        if (is_null($value) || false === $value) {
+        if (is_null($value)) {
             return $default;
         }
-
-        try {
-            $result = 0 === strpos($value, 'think_serialize:') ? unserialize(substr($value, 16)) : $value;
-        } catch (\Exception $e) {
-            $result = $default;
-        }
-
-        return $result;
+        $jsonData = json_decode($value, true);
+        // 检测是否为JSON数据 true 返回JSON解析数组, false返回源数据 byron sampson<xiaobo.sun@qq.com>
+        return (null === $jsonData) ? $value : $jsonData;
     }
 
     /**
      * 写入缓存
      * @access public
-     * @param string            $name 缓存变量名
-     * @param mixed             $value  存储数据
-     * @param integer|\DateTime $expire  有效时间（秒）
+     * @param string    $name 缓存变量名
+     * @param mixed     $value  存储数据
+     * @param integer   $expire  有效时间（秒）
      * @return boolean
      */
     public function set($name, $value, $expire = null)
@@ -109,15 +101,13 @@ class Redis extends Driver
         if (is_null($expire)) {
             $expire = $this->options['expire'];
         }
-        if ($expire instanceof \DateTime) {
-            $expire = $expire->getTimestamp() - time();
-        }
         if ($this->tag && !$this->has($name)) {
             $first = true;
         }
-        $key   = $this->getCacheKey($name);
-        $value = is_scalar($value) ? $value : 'think_serialize:' . serialize($value);
-        if ($expire) {
+        $key = $this->getCacheKey($name);
+        //对数组/对象数据进行缓存处理，保证数据完整性  byron sampson<xiaobo.sun@qq.com>
+        $value = (is_object($value) || is_array($value)) ? json_encode($value) : $value;
+        if (is_int($expire) && $expire) {
             $result = $this->handler->setex($key, $expire, $value);
         } else {
             $result = $this->handler->set($key, $value);
@@ -129,28 +119,26 @@ class Redis extends Driver
     /**
      * 自增缓存（针对数值缓存）
      * @access public
-     * @param  string    $name 缓存变量名
-     * @param  int       $step 步长
+     * @param string    $name 缓存变量名
+     * @param int       $step 步长
      * @return false|int
      */
     public function inc($name, $step = 1)
     {
         $key = $this->getCacheKey($name);
-
         return $this->handler->incrby($key, $step);
     }
 
     /**
      * 自减缓存（针对数值缓存）
      * @access public
-     * @param  string    $name 缓存变量名
-     * @param  int       $step 步长
+     * @param string    $name 缓存变量名
+     * @param int       $step 步长
      * @return false|int
      */
     public function dec($name, $step = 1)
     {
         $key = $this->getCacheKey($name);
-
         return $this->handler->decrby($key, $step);
     }
 

@@ -11,7 +11,6 @@
 namespace think\console\command\optimize;
 
 use think\App;
-use think\Config;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
@@ -33,7 +32,7 @@ class Autoload extends Command
 /**
  * 类库映射
  */
-
+ 
 return [
 
 EOF;
@@ -43,13 +42,8 @@ EOF;
             'think\\'              => LIB_PATH . 'think',
             'behavior\\'           => LIB_PATH . 'behavior',
             'traits\\'             => LIB_PATH . 'traits',
-            ''                     => realpath(rtrim(EXTEND_PATH)),
+            ''                     => realpath(rtrim(EXTEND_PATH))
         ];
-
-        $root_namespace = Config::get('root_namespace');
-        foreach ($root_namespace as $namespace => $dir) {
-            $namespacesToScan[$namespace . '\\'] = realpath($dir);
-        }
 
         krsort($namespacesToScan);
         $classMap = [];
@@ -90,7 +84,7 @@ EOF;
                 $this->output->writeln(
                     '<warning>Warning: Ambiguous class resolution, "' . $class . '"' .
                     ' was found in both "' . str_replace(["',\n"], [
-                        '',
+                        ''
                     ], $classMap[$class]) . '" and "' . $path . '", the first will be used.</warning>'
                 );
             }
@@ -102,24 +96,20 @@ EOF;
     {
 
         $baseDir    = '';
-        $libPath    = $this->normalizePath(realpath(LIB_PATH));
         $appPath    = $this->normalizePath(realpath(APP_PATH));
+        $libPath    = $this->normalizePath(realpath(LIB_PATH));
         $extendPath = $this->normalizePath(realpath(EXTEND_PATH));
-        $rootPath   = $this->normalizePath(realpath(ROOT_PATH));
         $path       = $this->normalizePath($path);
 
-        if ($libPath !== null && strpos($path, $libPath . '/') === 0) {
+        if (strpos($path, $libPath . '/') === 0) {
             $path    = substr($path, strlen(LIB_PATH));
             $baseDir = 'LIB_PATH';
-        } elseif ($appPath !== null && strpos($path, $appPath . '/') === 0) {
+        } elseif (strpos($path, $appPath . '/') === 0) {
             $path    = substr($path, strlen($appPath) + 1);
             $baseDir = 'APP_PATH';
-        } elseif ($extendPath !== null && strpos($path, $extendPath . '/') === 0) {
+        } elseif (strpos($path, $extendPath . '/') === 0) {
             $path    = substr($path, strlen($extendPath) + 1);
             $baseDir = 'EXTEND_PATH';
-        } elseif ($rootPath !== null && strpos($path, $rootPath . '/') === 0) {
-            $path    = substr($path, strlen($rootPath) + 1);
-            $baseDir = 'ROOT_PATH';
         }
 
         if ($path !== false) {
@@ -131,9 +121,6 @@ EOF;
 
     protected function normalizePath($path)
     {
-        if ($path === false) {
-            return;
-        }
         $parts    = [];
         $path     = strtr($path, '\\', '/');
         $prefix   = '';

@@ -37,11 +37,6 @@ class Console
         $this->formatter->setDecorated($decorated);
     }
 
-    public function getFormatter()
-    {
-        return $this->formatter;
-    }
-
     public function setDecorated($decorated)
     {
         $this->formatter->setDecorated($decorated);

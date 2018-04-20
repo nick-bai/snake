@@ -10,6 +10,7 @@ namespace EasySwoole\Core\Swoole;
 use EasySwoole\Config;
 use EasySwoole\Core\Component\Cache\Cache;
 use EasySwoole\Core\Component\Cluster\Cluster;
+use EasySwoole\Core\Component\Crontab\CronTab;
 use EasySwoole\Core\Component\Event;
 use EasySwoole\Core\Component\Invoker;
 use EasySwoole\Core\Component\Trigger;
@@ -61,6 +62,7 @@ class ServerManager
         $this->attachListener();
         Cache::getInstance();
         Cluster::getInstance()->run();
+        CronTab::getInstance()->run();
         $this->isStart = true;
         $this->getServer()->start();
     }
@@ -187,7 +189,9 @@ class ServerManager
     private function finalHook(EventRegister $register)
     {
         //实例化对象池管理
+        PoolManager::getInstance();
         $register->add($register::onWorkerStart,function (\swoole_server $server,int $workerId){
+            PoolManager::getInstance()->workerStartClean($workerId);
             $workerNum = Config::getInstance()->getConf('MAIN_SERVER.SETTING.worker_num');
             $name = \EasySwoole\Core\Component\Cluster\Config::getInstance()->getServerName();
             if(PHP_OS != 'Darwin'){
@@ -198,11 +202,7 @@ class ServerManager
                 }
                 cli_set_process_title($name);
             }
-            if($workerId <= ($workerNum -1)){
-                PoolManager::getInstance()->workerStartClean($workerId);
-            }
         });
-        PoolManager::getInstance();
         EventHelper::registerDefaultOnTask($register);
         EventHelper::registerDefaultOnFinish($register);
         EventHelper::registerDefaultOnPipeMessage($register);

@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -67,11 +67,7 @@ class Redirect extends Response
      */
     public function getTargetUrl()
     {
-        if (strpos($this->data, '://') || (0 === strpos($this->data, '/') && empty($this->params))) {
-            return $this->data;
-        } else {
-            return Url::build($this->data, $this->params);
-        }
+        return (strpos($this->data, '://') || 0 === strpos($this->data, '/')) ? $this->data : Url::build($this->data, $this->params);
     }
 
     public function params($params = [])

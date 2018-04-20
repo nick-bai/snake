@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -44,11 +44,14 @@ class Pgsql extends Connection
      */
     public function getFields($tableName)
     {
-
+        $this->initConnect(true);
         list($tableName) = explode(' ', $tableName);
         $sql             = 'select fields_name as "field",fields_type as "type",fields_not_null as "null",fields_key_name as "key",fields_default as "default",fields_default as "extra" from table_msg(\'' . $tableName . '\');';
-
-        $pdo    = $this->query($sql, [], false, true);
+        // 调试开始
+        $this->debug(true);
+        $pdo = $this->linkID->query($sql);
+        // 调试结束
+        $this->debug(false, $sql);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
         if ($result) {
@@ -75,8 +78,13 @@ class Pgsql extends Connection
      */
     public function getTables($dbName = '')
     {
-        $sql    = "select tablename as Tables_in_test from pg_tables where  schemaname ='public'";
-        $pdo    = $this->query($sql, [], false, true);
+        $this->initConnect(true);
+        $sql = "select tablename as Tables_in_test from pg_tables where  schemaname ='public'";
+        // 调试开始
+        $this->debug(true);
+        $pdo = $this->linkID->query($sql);
+        // 调试结束
+        $this->debug(false, $sql);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
         foreach ($result as $key => $val) {

@@ -19,6 +19,9 @@ class Response extends MessageResponse
     const STATUS_NOT_END = 0;
     const STATUS_LOGICAL_END = 1;
     const STATUS_REAL_END = 2;
+
+    private $sendFile = null;
+
     private $isEndResponse = self::STATUS_NOT_END;//1 逻辑end  2真实end
 
     final public function __construct(\swoole_http_response $response)
@@ -54,9 +57,14 @@ class Response extends MessageResponse
                 $this->response->cookie($cookie->getName(),$cookie->getValue(),$cookie->getExpire(),$cookie->getPath(),$cookie->getDomain(),$cookie->isSecure(),$cookie->isHttpOnly());
             }
             $write = $this->getBody()->__toString();
-            if(!empty($write)){
+            if($write !== ''){
                 $this->response->write($write);
             }
+
+            if($this->sendFile != null){
+                $this->response->sendfile($this->sendFile);
+            }
+
             $this->getBody()->close();
             $this->end();
             return true;
@@ -115,6 +123,12 @@ class Response extends MessageResponse
     function getSwooleResponse()
     {
         return $this->response;
+    }
+
+
+    function sendFile(string $sendFilePath)
+    {
+        $this->sendFile = $sendFilePath;
     }
 
     final public function __toString():string

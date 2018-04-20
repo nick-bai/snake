@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -11,6 +11,7 @@
 
 namespace think\model\relation;
 
+use think\Db;
 use think\db\Query;
 use think\Exception;
 use think\Loader;
@@ -56,7 +57,6 @@ class HasManyThrough extends Relation
         if ($closure) {
             call_user_func_array($closure, [ & $this->query]);
         }
-
         return $this->relation($subRelation)->select();
     }
 
@@ -77,11 +77,10 @@ class HasManyThrough extends Relation
     /**
      * 根据关联条件查询当前模型
      * @access public
-     * @param  mixed  $where 查询条件（数组或者闭包）
-     * @param  mixed  $fields   字段
+     * @param mixed $where 查询条件（数组或者闭包）
      * @return Query
      */
-    public function hasWhere($where = [], $fields = null)
+    public function hasWhere($where = [])
     {
         throw new Exception('relation not support: hasWhere');
     }
@@ -93,10 +92,12 @@ class HasManyThrough extends Relation
      * @param string   $relation    当前关联名
      * @param string   $subRelation 子关联名
      * @param \Closure $closure     闭包
+     * @param string   $class       数据集对象名 为空表示数组
      * @return void
      */
-    public function eagerlyResultSet(&$resultSet, $relation, $subRelation, $closure)
-    {}
+    public function eagerlyResultSet(&$resultSet, $relation, $subRelation, $closure, $class)
+    {
+    }
 
     /**
      * 预载入关联查询 返回模型对象
@@ -105,10 +106,12 @@ class HasManyThrough extends Relation
      * @param string   $relation    当前关联名
      * @param string   $subRelation 子关联名
      * @param \Closure $closure     闭包
+     * @param string   $class       数据集对象名 为空表示数组
      * @return void
      */
-    public function eagerlyResult(&$result, $relation, $subRelation, $closure)
-    {}
+    public function eagerlyResult(&$result, $relation, $subRelation, $closure, $class)
+    {
+    }
 
     /**
      * 关联统计
@@ -118,7 +121,8 @@ class HasManyThrough extends Relation
      * @return integer
      */
     public function relationCount($result, $closure)
-    {}
+    {
+    }
 
     /**
      * 执行基础查询（进执行一次）
@@ -127,11 +131,12 @@ class HasManyThrough extends Relation
      */
     protected function baseQuery()
     {
-        if (empty($this->baseQuery) && $this->parent->getData()) {
+        if (empty($this->baseQuery)) {
             $through      = $this->through;
-            $alias        = Loader::parseName(basename(str_replace('\\', '/', $this->model)));
+            $model        = $this->model;
+            $alias        = Loader::parseName(basename(str_replace('\\', '/', $model)));
             $throughTable = $through::getTable();
-            $pk           = (new $through)->getPk();
+            $pk           = (new $this->model)->getPk();
             $throughKey   = $this->throughKey;
             $modelTable   = $this->parent->getTable();
             $this->query->field($alias . '.*')->alias($alias)

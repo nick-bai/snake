@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -120,29 +120,10 @@ abstract class Driver
     public function remember($name, $value, $expire = null)
     {
         if (!$this->has($name)) {
-            $time = time();
-            while ($time + 5 > time() && $this->has($name . '_lock')) {
-                // 存在锁定则等待
-                usleep(200000);
+            if ($value instanceof \Closure) {
+                $value = call_user_func($value);
             }
-
-            try {
-                // 锁定
-                $this->set($name . '_lock', true);
-                if ($value instanceof \Closure) {
-                    $value = call_user_func($value);
-                }
-                $this->set($name, $value, $expire);
-                // 解锁
-                $this->rm($name . '_lock');
-            } catch (\Exception $e) {
-                // 解锁
-                $this->rm($name . '_lock');
-                throw $e;
-            } catch (\throwable $e) {
-                $this->rm($name . '_lock');
-                throw $e;
-            }
+            $this->set($name, $value, $expire);
         } else {
             $value = $this->get($name);
         }
@@ -159,9 +140,7 @@ abstract class Driver
      */
     public function tag($name, $keys = null, $overlay = false)
     {
-        if (is_null($name)) {
-
-        } elseif (is_null($keys)) {
+        if (is_null($keys)) {
             $this->tag = $name;
         } else {
             $key = 'tag_' . md5($name);
@@ -174,7 +153,7 @@ abstract class Driver
             } else {
                 $value = array_unique(array_merge($this->getTagItem($name), $keys));
             }
-            $this->set($key, implode(',', $value), 0);
+            $this->set($key, implode(',', $value));
         }
         return $this;
     }
@@ -191,13 +170,12 @@ abstract class Driver
             $key       = 'tag_' . md5($this->tag);
             $this->tag = null;
             if ($this->has($key)) {
-                $value   = explode(',', $this->get($key));
-                $value[] = $name;
-                $value   = implode(',', array_unique($value));
+                $value = $this->get($key);
+                $value .= ',' . $name;
             } else {
                 $value = $name;
             }
-            $this->set($key, $value, 0);
+            $this->set($key, $value);
         }
     }
 
@@ -212,7 +190,7 @@ abstract class Driver
         $key   = 'tag_' . md5($tag);
         $value = $this->get($key);
         if ($value) {
-            return array_filter(explode(',', $value));
+            return explode(',', $value);
         } else {
             return [];
         }

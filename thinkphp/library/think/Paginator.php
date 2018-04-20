@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -49,9 +49,6 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
         'fragment' => '',
     ];
 
-    /** @var mixed simple模式下的下个元素 */
-    protected $nextItem;
-
     public function __construct($items, $listRows, $currentPage = null, $total = null, $simple = false, $options = [])
     {
         $this->options = array_merge($this->options, $options);
@@ -68,10 +65,7 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
         if ($simple) {
             $this->currentPage = $this->setCurrentPage($currentPage);
             $this->hasMore     = count($items) > ($this->listRows);
-            if ($this->hasMore) {
-                $this->nextItem = $items->slice($this->listRows, 1);
-            }
-            $items = $items->slice(0, $this->listRows);
+            $items             = $items->slice(0, $this->listRows);
         } else {
             $this->total       = $total;
             $this->lastPage    = (int) ceil($total / $listRows);
@@ -128,7 +122,7 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
         }
         $url = $path;
         if (!empty($parameters)) {
-            $url .= '?' . http_build_query($parameters, null, '&');
+            $url .= '?' . urldecode(http_build_query($parameters, null, '&'));
         }
         return $url . $this->buildFragment();
     }
@@ -141,9 +135,9 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
      */
     public static function getCurrentPage($varPage = 'page', $default = 1)
     {
-        $page = (int) Request::instance()->param($varPage);
+        $page = Request::instance()->request($varPage);
 
-        if (filter_var($page, FILTER_VALIDATE_INT) !== false && $page >= 1) {
+        if (filter_var($page, FILTER_VALIDATE_INT) !== false && (int) $page >= 1) {
             return $page;
         }
 
@@ -280,26 +274,6 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
     }
 
     /**
-     * 给每个元素执行个回调
-     *
-     * @param  callable $callback
-     * @return $this
-     */
-    public function each(callable $callback)
-    {
-        foreach ($this->items as $key => $item) {
-            $result = $callback($item, $key);
-            if (false === $result) {
-                break;
-            } elseif (!is_object($item)) {
-                $this->items[$key] = $result;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Retrieve an external iterator
      * @return Traversable An instance of an object implementing <b>Iterator</b> or
      * <b>Traversable</b>
@@ -365,24 +339,18 @@ abstract class Paginator implements ArrayAccess, Countable, IteratorAggregate, J
 
     public function toArray()
     {
-        if ($this->simple) {
-            return [
-                'per_page'     => $this->listRows,
-                'current_page' => $this->currentPage,
-                'has_more'     => $this->hasMore,
-                'next_item'    => $this->nextItem,
-                'data'         => $this->items->toArray(),
-            ];
-        } else {
-            return [
-                'total'        => $this->total,
-                'per_page'     => $this->listRows,
-                'current_page' => $this->currentPage,
-                'last_page'    => $this->lastPage,
-                'data'         => $this->items->toArray(),
-            ];
+        try {
+            $total = $this->total();
+        } catch (\DomainException $e) {
+            $total = null;
         }
 
+        return [
+            'total'        => $total,
+            'per_page'     => $this->listRows(),
+            'current_page' => $this->currentPage(),
+            'data'         => $this->items->toArray(),
+        ];
     }
 
     /**

@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2018 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -31,15 +31,12 @@ class Mysql extends Connection
      */
     protected function parseDsn($config)
     {
-        if (!empty($config['socket'])) {
-            $dsn = 'mysql:unix_socket=' . $config['socket'];
-        } elseif (!empty($config['hostport'])) {
-            $dsn = 'mysql:host=' . $config['hostname'] . ';port=' . $config['hostport'];
-        } else {
-            $dsn = 'mysql:host=' . $config['hostname'];
+        $dsn = 'mysql:dbname=' . $config['database'] . ';host=' . $config['hostname'];
+        if (!empty($config['hostport'])) {
+            $dsn .= ';port=' . $config['hostport'];
+        } elseif (!empty($config['socket'])) {
+            $dsn .= ';unix_socket=' . $config['socket'];
         }
-        $dsn .= ';dbname=' . $config['database'];
-
         if (!empty($config['charset'])) {
             $dsn .= ';charset=' . $config['charset'];
         }
@@ -54,6 +51,7 @@ class Mysql extends Connection
      */
     public function getFields($tableName)
     {
+        $this->initConnect(true);
         list($tableName) = explode(' ', $tableName);
         if (false === strpos($tableName, '`')) {
             if (strpos($tableName, '.')) {
@@ -61,8 +59,12 @@ class Mysql extends Connection
             }
             $tableName = '`' . $tableName . '`';
         }
-        $sql    = 'SHOW COLUMNS FROM ' . $tableName;
-        $pdo    = $this->query($sql, [], false, true);
+        $sql = 'SHOW COLUMNS FROM ' . $tableName;
+        // 调试开始
+        $this->debug(true);
+        $pdo = $this->linkID->query($sql);
+        // 调试结束
+        $this->debug(false, $sql);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
         if ($result) {
@@ -89,8 +91,13 @@ class Mysql extends Connection
      */
     public function getTables($dbName = '')
     {
-        $sql    = !empty($dbName) ? 'SHOW TABLES FROM ' . $dbName : 'SHOW TABLES ';
-        $pdo    = $this->query($sql, [], false, true);
+        $this->initConnect(true);
+        $sql = !empty($dbName) ? 'SHOW TABLES FROM ' . $dbName : 'SHOW TABLES ';
+        // 调试开始
+        $this->debug(true);
+        $pdo = $this->linkID->query($sql);
+        // 调试结束
+        $this->debug(false, $sql);
         $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         $info   = [];
         foreach ($result as $key => $val) {
@@ -123,4 +130,17 @@ class Mysql extends Connection
         return true;
     }
 
+    /**
+     * 是否断线
+     * @access protected
+     * @param \PDOException  $e 异常对象
+     * @return bool
+     */
+    protected function isBreak($e)
+    {
+        if (false !== stripos($e->getMessage(), 'server has gone away')) {
+            return true;
+        }
+        return false;
+    }
 }
