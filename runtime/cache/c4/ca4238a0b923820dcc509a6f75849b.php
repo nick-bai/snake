@@ -1,4 +1,0 @@
-<?php
-//000000000000
- exit();?>
-a:33:{i:0;s:10:"user/index";i:1;s:12:"user/useradd";i:2;s:13:"user/useredit";i:3;s:12:"user/userdel";i:4;s:10:"role/index";i:5;s:12:"role/roleadd";i:6;s:13:"role/roleedit";i:7;s:12:"role/roledel";i:8;s:15:"role/giveaccess";i:9;s:10:"data/index";i:10;s:15:"data/importdata";i:11;s:13:"data/backdata";i:12;s:10:"node/index";i:13;s:12:"node/nodeadd";i:14;s:13:"node/nodeedit";i:15;s:12:"node/nodedel";i:16;s:14:"articles/index";i:17;s:14:"articles/index";i:18;s:19:"articles/articleadd";i:19;s:20:"articles/articleedit";i:20;s:19:"articles/articledel";i:21;s:18:"articles/uploadImg";i:22;s:15:"video/videolist";i:23;s:14:"video/videoadd";i:24;s:15:"video/classlist";i:25;s:14:"video/classadd";i:26;s:15:"video/classedit";i:27;s:14:"video/classdel";i:28;s:14:"video/videodel";i:29;s:15:"video/videoedit";i:30;s:13:"profile/index";i:31;s:16:"profile/headedit";i:32;s:19:"profile/uploadheade";}
