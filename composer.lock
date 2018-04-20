@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "613d3034f075e29cb905b2e92d0d6c37",
+    "content-hash": "dbafd954936a68b5a6c283c721b11b70",
     "packages": [
         {
             "name": "dragonmantank/cron-expression",
@@ -443,16 +443,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "5.0.x-dev",
+            "version": "v5.0.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "6ac1ba683aae31dab989783c976aab6e4d5feb2d"
+                "reference": "513701788ef223b8342537546b29bceaaf0cf1f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/top-think/framework/6ac1ba683aae31dab989783c976aab6e4d5feb2d.zip",
-                "reference": "6ac1ba683aae31dab989783c976aab6e4d5feb2d",
+                "url": "https://files.phpcomposer.com/files/top-think/framework/513701788ef223b8342537546b29bceaaf0cf1f0.zip",
+                "reference": "513701788ef223b8342537546b29bceaaf0cf1f0",
                 "shasum": ""
             },
             "require": {
@@ -490,7 +490,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2018-03-07T03:16:20+00:00"
+            "time": "2018-04-16T04:46:58+00:00"
         },
         {
             "name": "topthink/think-image",

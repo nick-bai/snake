@@ -22,7 +22,7 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "5.0.*",
+        "topthink/framework": "5.0.18",
         "topthink/think-image": "dev-master",
         "easyswoole/easyswoole": "2.x-dev",
         "easyswoole/swoole-ide-helper": "dev-master",
