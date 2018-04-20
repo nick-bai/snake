@@ -30,7 +30,7 @@
                     </div>
 
                     <form class="form-horizontal m-t" id="commentForm" method="post" action="{:url('profile/headEdit')}">
-                        <input type="hidden" name="head" id="myOutputId">
+                        <input type="hidden" name="head" value="{$user_data.head}" id="myOutputId">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">真实姓名：</label>
                             <div class="input-group col-sm-4">
@@ -88,10 +88,9 @@
     //头像上传插件
     function croppicUp() {
         var cropperOptions = {
-            loadPicture:'{$user_data.head}',
-			uploadUrl:'{:url('admin/profile/uploadHeade')}',
-            cropUrl:'{:url('admin/profile/cropHeade')}',
-            outputUrlId:'myOutputId'
+			uploadUrl:'{:url('admin/profile/uploadHeade')}', //上传处理url
+            cropUrl:'{:url('admin/profile/cropHeade')}',     //裁剪处理url
+            modal:true  //黑窗口特效
 		}
 		//绑定div
 		var cropperHeader = new Croppic('croppic', cropperOptions);

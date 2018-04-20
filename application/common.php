@@ -1,13 +1,4 @@
 <?php
-# @Date:   2018/03/21
-# @Email:  runstp@163.com
-# @Project: 阿正
-# @Filename: common.php
-# @Last modified time: 2018/03/28
-# @License: MIT
-
-
-
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------

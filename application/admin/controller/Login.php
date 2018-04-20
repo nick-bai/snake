@@ -41,7 +41,8 @@ class Login extends Controller
         }
 
         $userModel = new UserModel();
-        $hasUser = $userModel->findUserByName($userName);
+        $hasUser = $userModel->checkUser($userName);
+
         if(empty($hasUser)){
             return json(msg(-3, '', '管理员不存在'));
         }
@@ -54,16 +55,12 @@ class Login extends Controller
             return json(msg(-5, '', '该账号被禁用'));
         }
 
-        // 获取该管理员的角色信息
-        $roleModel = new RoleModel();
-        $info = $roleModel->getRoleInfo($hasUser['role_id']);
-
-        session('username', $userName);
+        session('username', $hasUser['user_name']);
         session('id', $hasUser['id']);
         session('head', $hasUser['head']);
-        session('role', $info['role_name']);  // 角色名
-        session('rule', $info['rule']);  // 角色节点
-        session('action', $info['action']);  // 角色权限
+        session('role', $hasUser['role_name']);  // 角色名
+        session('role_id', $hasUser['role_id']);
+        session('rule', $hasUser['rule']);
 
         // 更新管理员状态
         $param = [
@@ -71,11 +68,11 @@ class Login extends Controller
             'last_login_ip' => request()->ip(),
             'last_login_time' => time()
         ];
+
         $res = $userModel->updateStatus($param, $hasUser['id']);
         if(1 != $res['code']){
             return json(msg(-6, '', $res['msg']));
         }
-
         // ['code' => 1, 'data' => url('index/index'), 'msg' => '登录成功']
         return json(msg(1, url('index/index'), '登录成功'));
     }
@@ -99,8 +96,8 @@ class Login extends Controller
         session('id', null);
         session('head', null);
         session('role', null);  // 角色名
-        session('rule', null);  // 角色节点
-        session('action', null);  // 角色权限
+        session('role_id', null);
+        session('rule', null);
 
         $this->redirect(url('index'));
     }

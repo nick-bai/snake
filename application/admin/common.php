@@ -1,13 +1,4 @@
 <?php
-# @Date:   2018/03/21
-# @Email:  runstp@163.com
-# @Project: 阿正
-# @Filename: common.php
-# @Last modified time: 2018/03/28
-# @License: MIT
-
-
-
 /**
  * 生成操作按钮
  * @param array $operate 操作按钮数组
@@ -169,7 +160,7 @@ function authCheck($rule)
         return true;
     }
 
-    if(in_array($rule, session('action'))){
+    if(in_array($rule, cache(session('role_id')))){
         return true;
     }
 

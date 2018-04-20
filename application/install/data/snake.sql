@@ -77,6 +77,10 @@ INSERT INTO `snake_node` VALUES ('21', '添加文章', 'articles', 'articleadd',
 INSERT INTO `snake_node` VALUES ('22', '编辑文章', 'articles', 'articleedit', '1', '19', '');
 INSERT INTO `snake_node` VALUES ('23', '删除文章', 'articles', 'articledel', '1', '19', '');
 INSERT INTO `snake_node` VALUES ('24', '上传图片', 'articles', 'uploadImg', '1', '19', '');
+INSERT INTO `snake_node` VALUES ('25', '个人中心', '#', '#', '1', '0', '');
+INSERT INTO `snake_node` VALUES ('26', '编辑信息', 'profile', 'index', '1', '25', '');
+INSERT INTO `snake_node` VALUES ('27', '编辑头像', 'profile', 'headedit', '1', '25', '');
+INSERT INTO `snake_node` VALUES ('28', '上传头像', 'profile', 'uploadheade', '1', '25', '');
 
 -- ----------------------------
 -- Table structure for snake_role
@@ -103,6 +107,7 @@ CREATE TABLE `snake_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '用户名',
   `password` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '密码',
+  `head` varchar(255) COLLATE utf8_bin DEFAULT '' COMMENT '头像',
   `login_times` int(11) NOT NULL DEFAULT '0' COMMENT '登陆次数',
   `last_login_ip` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '最后登录IP',
   `last_login_time` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
@@ -115,4 +120,8 @@ CREATE TABLE `snake_user` (
 -- ----------------------------
 -- Records of snake_user
 -- ----------------------------
+<<<<<<< HEAD
 INSERT INTO `snake_user` VALUES ('1', 'admin', 'a9ddd2e7bdff202e3e9bca32765e9ba0', '41', '127.0.0.1', '1505559479', 'admin', '1', '1');
+=======
+INSERT INTO `snake_user` VALUES ('1', 'admin', 'a9ddd2e7bdff202e3e9bca32765e9ba0', '/static/admin/images/profile_small.jpg', '41', '127.0.0.1', '1505559479', 'admin', '1', '1');
+>>>>>>> db539534c751ca367b23a9073ef13d2ce6cbea59

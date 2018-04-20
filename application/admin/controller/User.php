@@ -65,6 +65,8 @@ class User extends Base
             $param = input('post.');
 
             $param['password'] = md5($param['password'] . config('salt'));
+            $param['head'] = '/static/admin/images/profile_small.jpg'; // 默认头像
+
             $user = new UserModel();
             $flag = $user->insertUser($param);
 
