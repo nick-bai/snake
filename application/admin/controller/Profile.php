@@ -19,11 +19,11 @@ use app\admin\model\UserModel;
 class Profile extends Base
 {
     //public 绝对路径， 用于用户提交相对路径时追加
-    const PUBLIC_PATH = ROOT_PATH.'public';
+    private $public_path = ROOT_PATH.'public';
     //相对路径，用于返回前端
-    const HEAD_RETURN_PATH = '/upload/head';
+    private $head_return_path = '/upload/head';
     //绝对路径，用于存储地址
-    const HEAD_SAVE_PATH = ROOT_PATH.'public/upload/head';
+    private $head_save_path = ROOT_PATH.'public/upload/head';
 
     /**
      * 修改个人信息
@@ -119,16 +119,16 @@ class Profile extends Base
         //获取文件后缀名
         $image_type = pathinfo($file->getInfo('name'), PATHINFO_EXTENSION);
         $save_name = $this->getImageName($image_type);
-        $info = $file->move($this::HEAD_SAVE_PATH, $save_name);
+        $info = $file->move($this->head_save_path, $save_name);
 
         if (false === $info) {
             return json(['status' => 'error', 'message' => $file->error]);
         }else {
             //返回图像信息
-            $image = Image::open($this::HEAD_SAVE_PATH. '/'. $save_name);
+            $image = Image::open($this->head_save_path. '/'. $save_name);
             return json([
                 'status' => 'success',
-                'url' => $this::HEAD_RETURN_PATH. '/'. $save_name,
+                'url' => $this->head_return_path. '/'. $save_name,
                 "width" => $image->width(),
 				"height" => $image->height()
             ]);
@@ -153,7 +153,7 @@ class Profile extends Base
 
         //抛出符合croppic插件规范的异常，防止前端js错误
         try {
-            $image = Image::open($this::PUBLIC_PATH. $param['imgUrl']);
+            $image = Image::open($this->public_path. $param['imgUrl']);
             $save_name = $this->getImageName($image->type());
 
             //预处理裁剪
@@ -194,8 +194,8 @@ class Profile extends Base
             );
 
             //保存图像
-            $image->save($this::HEAD_SAVE_PATH. '/'. $save_name);
-            return json(['status' => 'success', 'url' => $this::HEAD_RETURN_PATH. '/'. $save_name]);
+            $image->save($this->head_save_path. '/'. $save_name);
+            return json(['status' => 'success', 'url' => $this->head_return_path. '/'. $save_name]);
         } catch (\think\image\Exception $e) {
             return json(['status' => 'error', 'message' => $e->getMessage()]);
         }
