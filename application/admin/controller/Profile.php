@@ -18,12 +18,21 @@ use app\admin\model\UserModel;
  */
 class Profile extends Base
 {
+
     //public 绝对路径， 用于用户提交相对路径时追加
-    private $public_path = ROOT_PATH.'public';
+    private $public_path;
     //相对路径，用于返回前端
-    private $head_return_path = '/upload/head';
+    private $head_return_path;
     //绝对路径，用于存储地址
-    private $head_save_path = ROOT_PATH.'public/upload/head';
+    private $head_save_path;
+    
+    public function _initialize()
+    {
+        parent::_initialize();
+        $this->$public_path = ROOT_PATH.'public';
+        $this->$head_return_path = '/upload/head';
+        $this->$head_save_path = ROOT_PATH.'public/upload/head';
+    }
 
     /**
      * 修改个人信息
