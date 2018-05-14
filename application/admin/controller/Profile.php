@@ -25,13 +25,13 @@ class Profile extends Base
     private $head_return_path;
     //绝对路径，用于存储地址
     private $head_save_path;
-    
+
     public function _initialize()
     {
         parent::_initialize();
-        $this->$public_path = ROOT_PATH.'public';
-        $this->$head_return_path = '/upload/head';
-        $this->$head_save_path = ROOT_PATH.'public/upload/head';
+        $this->public_path = ROOT_PATH.'public';
+        $this->head_return_path = '/upload/head';
+        $this->head_save_path = ROOT_PATH.'public/upload/head';
     }
 
     /**
@@ -93,8 +93,14 @@ class Profile extends Base
             }
 
             $user_model = new UserModel();
-            $flag = $user_model->updateStatus($param, session('id'));
-            return json(msg($flag['code'], url('index/indexpage'), $flag['msg']));
+            $flag = $user_model->save($param, ['id' => session('id')]);
+            if ($flag) {
+                $this->removRoleCache();
+                return json(msg(1, url('index/indexpage'), 'ok'));
+            }else {
+                return json(msg(-1, '', '修改失败'));
+            }
+
         }
 
         //访问
