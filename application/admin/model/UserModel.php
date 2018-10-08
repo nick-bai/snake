@@ -139,7 +139,9 @@ class UserModel extends Model
      */
     public function checkUser($userName)
     {
-        return $this->alias('u')->join('role r', 'u.role_id = r.id')
+        return $this->alias('u')
+                ->field('u.id,u.user_name,r.role_name,u.role_id,u.head,r.rule,u.password,u.status,u.login_times')
+                ->join('role r', 'u.role_id = r.id')
                 ->where('u.user_name', $userName)
                 ->find();
     }
