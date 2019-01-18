@@ -10,6 +10,8 @@
 // +----------------------------------------------------------------------
 namespace app\admin\model;
 
+use think\Exception;
+use think\exception\PDOException;
 use think\Model;
 
 class UserModel extends Model
@@ -68,8 +70,11 @@ class UserModel extends Model
     public function editUser($param)
     {
         try{
-
-            $result =  $this->validate('UserValidate')->save($param, ['id' => $param['id']]);
+            $existId = $this->where('user_name', $param['user_name'])->value('id');
+            if (!empty($existId) && $existId != $param['id']) {
+                exception('管理员已经存在');
+            }
+            $result  = $this->save($param, ['id' => $param['id']]);
 
             if(false === $result){
                 // 验证失败 输出错误信息
@@ -78,7 +83,7 @@ class UserModel extends Model
 
                 return msg(1, url('user/index'), '编辑用户成功');
             }
-        }catch(PDOException $e){
+        }catch(Exception $e){
             return msg(-2, '', $e->getMessage());
         }
     }
