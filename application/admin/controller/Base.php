@@ -1,76 +1,48 @@
 <?php
-// +----------------------------------------------------------------------
-// | snake
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016~2022 http://baiyf.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: NickBai <1902822973@qq.com>
-// +----------------------------------------------------------------------
+/**
+ * Created by PhpStorm.
+ * User: NickBai
+ * Email: 876337011@qq.com
+ * Date: 2019/2/28
+ * Time: 8:24 PM
+ */
 namespace app\admin\controller;
 
-
 use think\Controller;
-use app\admin\model\RoleModel;
+use tool\Auth;
 
 class Base extends Controller
 {
-    public function _initialize()
+    public function initialize()
     {
-        if(empty(session('username')) || empty(session('id'))){
+        if(empty(session('admin_user_name'))){
 
-            $loginUrl = url('login/index');
-            if(request()->isAjax()){
-                return msg(111, $loginUrl, '登录超时');
-            }
-
-            $this->redirect($loginUrl);
+            $this->redirect(url('login/index'));
         }
 
-        // 检查缓存
-        $this->cacheCheck();
+        $controller = lcfirst(request()->controller());
+        $action = request()->action();
+        $checkInput = $controller . '/' . $action;
 
-        // 检测权限
-        $control = lcfirst(request()->controller());
-        $action = lcfirst(request()->action());
+        $authModel = Auth::instance();
+        $skipMap = $authModel->getSkipAuthMap();
 
-        if(empty(authCheck($control . '/' . $action))){
-            if(request()->isAjax()){
-                return msg(403, '', '您没有权限');
+        if (!isset($skipMap[$checkInput])) {
+
+            $flag = $authModel->authCheck($checkInput, session('admin_role_id'));
+
+            if (!$flag) {
+                if (request()->isAjax()) {
+                    return json(reMsg(-403, '', '无操作权限'));
+                } else {
+                    $this->error('无操作权限');
+                }
             }
-
-            $this->error('403 您没有权限');
         }
 
         $this->assign([
-            'head'     => session('head'),
-            'username' => session('username'),
-            'rolename' => session('role')
+            'admin_name' => session('admin_user_name'),
+            'admin_id' => session('admin_user_id')
         ]);
-
-    }
-
-    private function cacheCheck()
-    {
-        $action = cache(session('role_id'));
-
-        if(is_null($action) || empty($action)){
-
-            // 获取该管理员的角色信息
-            $roleModel = new RoleModel();
-            $info = $roleModel->getRoleInfo(session('role_id'));
-            cache(session('role_id'), $info['action']);
-        }
-    }
-
-    protected function removRoleCache()
-    {
-        $roleModel = new RoleModel();
-        $roleList = $roleModel->getRole();
-
-        foreach ($roleList as $value) {
-            cache($value['id'], null);
-        }
     }
 }

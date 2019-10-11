@@ -2,370 +2,220 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>节点信息</title>
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="__CSS__/animate.min.css" rel="stylesheet">
-    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
-    <link href="__JS__/layui/css/layui.css" rel="stylesheet">
+    <title>节点管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/admin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/admin/style/admin.css" media="all">
 </head>
-<body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeInRight">
-    <!-- Panel Other -->
-    <div class="ibox float-e-margins col-sm-5">
-        <div class="ibox-title">
-            <h5>节点信息</h5>
-        </div>
-        <div class="ibox-content">
-            <div class="form-group">
-                {if authCheck('node/nodeadd')}
-                    <button class="btn btn-outline btn-primary" type="button" id="addNode">添加顶级节点</button>
-                {/if}
-                <button class="btn btn-outline btn-success" type="button" onclick="window.location.reload();">刷新树</button>
-            </div>
+<body>
 
-            <div class="ibox-content">
-                <div class="col-sm-6">
-                    <ul id="tree"></ul>
-                </div>
-                <div class="col-sm-6">
-                    <div id="event_output"></div>
-                </div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
 
-                <div class="clearfix"></div>
+                <div style="padding-bottom: 10px;padding-top: 20px;margin-left: 10px">
+                    {if (buttonAuth('node/add'))}
+                    <button class="layui-btn layuiadmin-btn-admin" data-type="add" id="addNode">
+                        <i class="layui-icon">&#xe654;</i> 添加顶级节点
+                    </button>
+                    {/if}
+                    <blockquote class="layui-elem-quote" style="width: 300px;float: right;border-left: 5px solid #FFB800">
+                        提示： 红色 <i class="layui-icon layui-icon-right" style="color: #FF5722"></i> 表示下面有子节点，可点击打开
+                    </blockquote>
+                </div>
+                <div class="layui-card-body">
+
+                    <table id="demo" lay-filter="test"></table>
+
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>节点名称</th>
+                            <th>节点图标</th>
+                            <th>节点路径</th>
+                            <th>是否菜单</th>
+                            <th>添加时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach name="tree" item="vo"}
+                        <tr>
+                            <td>{$vo['id']}</td>
+                            <td>{$vo['title']}</td>
+                            <td><i class="{$vo['node_icon']}"></i></td>
+                            <td>{$vo['node_path']}</td>
+                            <td>{if $vo['is_menu'] eq 1}否{else/}是{/if}</td>
+                            <td>{$vo['add_time']}</td>
+                            <td>
+                                <div class="layui-btn-group">
+                                    {if (buttonAuth('node/add'))}
+                                    <button type="button" class="layui-btn layui-btn-sm" onclick="addSub(this)" data-pid="{$vo['id']}" data-name="{$vo['title']}">
+                                        <i class="layui-icon">&#xe654;</i> 添加子节点
+                                    </button>
+                                    {/if}
+                                    {if (buttonAuth('node/edit'))}
+                                    <button type="button" class="layui-btn layui-btn-sm layui-bg-blue" onclick="editNode(this)" data-id="{$vo['id']}" data-pid="{$vo['pid']}">
+                                        <i class="layui-icon">&#xe642;</i> 编辑节点
+                                    </button>
+                                    {/if}
+                                    {if (buttonAuth('node/delete'))}
+                                    <button type="button" class="layui-btn layui-btn-sm layui-bg-red" onclick="delNode(this)" data-id="{$vo['id']}">
+                                        <i class="layui-icon">&#xe640;</i> 删除节点
+                                    </button>
+                                    {/if}
+                                </div>
+                            </td>
+                        </tr>
+                        {if !empty($vo['children'])}
+                        {foreach name="$vo['children']" item="v"}
+                        <tr>
+                            <td>{$v['id']}</td>
+                            <td> &nbsp;&nbsp;&nbsp;&nbsp; <i class="layui-icon layui-icon-right" onclick="showSub(this)" data-flag="0" data-id="{$v['id']}" style="cursor: pointer;{if !empty($v['children'])}color:#FF5722{/if}"></i> {$v['title']}</td>
+                            <td>{$v['node_icon']}</td>
+                            <td>{$v['node_path']}</td>
+                            <td>{if $v['is_menu'] eq 1}否{else/}是{/if}</td>
+                            <td>{$v['add_time']}</td>
+                            <td>
+                                <div class="layui-btn-group">
+                                    {if (buttonAuth('node/add'))}
+                                    <button type="button" class="layui-btn layui-btn-sm" onclick="addSub(this)" data-pid="{$v['id']}" data-name="{$v['title']}">
+                                        <i class="layui-icon">&#xe654;</i> 添加子节点
+                                    </button>
+                                    {/if}
+                                    {if (buttonAuth('node/edit'))}
+                                    <button type="button" class="layui-btn layui-btn-sm layui-bg-blue" onclick="editNode(this)" data-id="{$v['id']}" data-pid="{$v['pid']}">
+                                        <i class="layui-icon">&#xe642;</i> 编辑节点
+                                    </button>
+                                    {/if}
+                                    {if (buttonAuth('node/delete'))}
+                                    <button type="button" class="layui-btn layui-btn-sm layui-bg-red" onclick="delNode(this)" data-id="{$v['id']}">
+                                        <i class="layui-icon">&#xe640;</i> 删除节点
+                                    </button>
+                                    {/if}
+                                </div>
+                            </td>
+                        </tr>
+                        {if !empty($v['children'])}
+                        {foreach name="$v['children']" item="vl"}
+                        <tr style="display: none" class="tree-{$vl['pid']}">
+                            <td>{$vl['id']}</td>
+                            <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <i class="layui-icon layui-icon-right"></i> {$vl['title']}</td>
+                            <td>{$vl['node_icon']}</td>
+                            <td>{$vl['node_path']}</td>
+                            <td>{if $vl['is_menu'] eq 1}否{else/}是{/if}</td>
+                            <td>{$vl['add_time']}</td>
+                            <td>
+                                <div class="layui-btn-group">
+                                    {if (buttonAuth('node/edit'))}
+                                    <button type="button" class="layui-btn layui-btn-sm layui-bg-blue" onclick="editNode(this)" data-id="{$vl['id']}" data-pid="{$vl['pid']}">
+                                        <i class="layui-icon">&#xe642;</i> 编辑节点
+                                    </button>
+                                    {/if}
+                                    {if (buttonAuth('node/delete'))}
+                                    <button type="button" class="layui-btn layui-btn-sm layui-bg-red" onclick="delNode(this)" data-id="{$vl['id']}">
+                                        <i class="layui-icon">&#xe640;</i> 删除节点
+                                    </button>
+                                    {/if}
+                                </div>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        {/if}
+                        {/foreach}
+                        {/if}
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script src="/static/layui/layui.js"></script>
+<script src="/static/common/js/layTool.js"></script>
+<script src="/static/common/js/jquery.min.js"></script>
 
+<script>
 
-<!-- 添加节点 -->
-<div class="ibox-content" id="node_box" style="display: none">
-    <form class="form-horizontal m-t" method="post" action="{:url('node/nodeAdd')}" id="addForm">
-        <input type="hidden" class="form-control" value="0" name="type_id" id="pid">
-        <div class="form-group">
-            <label class="col-sm-3 control-label">节点名称：</label>
-            <div class="input-group col-sm-7">
-                <input id="node_name" type="text" class="form-control" name="node_name" required="" aria-required="true">
-            </div>
-        </div>
+    function renderTable() {
+        window.location.reload();
+    }
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label">所属节点：</label>
-            <div class="input-group col-sm-7">
-                <input id="show_pid" type="text" class="form-control" value="顶级节点" disabled>
-            </div>
-        </div>
+    $(function () {
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label">控制器名：</label>
-            <div class="input-group col-sm-7">
-                <input id="control_name" type="text" class="form-control" name="control_name" required="" aria-required="true" placeholder="全小写">
-            </div>
-        </div>
+        $("#addNode").click(function () {
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label">方法名：</label>
-            <div class="input-group col-sm-7">
-                <input id="action_name" type="text" class="form-control" name="action_name" required="" aria-required="true" placeholder="全小写">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">是否是菜单项：</label>
-            <div class="input-group col-sm-7">
-                <select class="form-control" name="is_menu" required="" aria-required="true" id="is_menu">
-                    <option value="1">否</option>
-                    <option value="2">是</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">菜单图标：</label>
-            <div class="input-group col-sm-7">
-                <input id="style" type="text" class="form-control" name="style" placeholder="只有顶级节点需要">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-4 col-sm-offset-8">
-                <button class="btn btn-primary" type="submit">提交</button>
-            </div>
-        </div>
-    </form>
-</div>
-<!-- 添加节点 -->
-
-<!-- 编辑节点 -->
-<div class="ibox-content" id="edit_box" style="display: none">
-    <form class="form-horizontal m-t" method="post" action="{:url('node/nodeEdit')}" id="editForm">
-        <input type="hidden" name="id" id="id"/>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">节点名称：</label>
-            <div class="input-group col-sm-7">
-                <input id="e_node_name" type="text" class="form-control" name="node_name" required="" aria-required="true">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">控制器名：</label>
-            <div class="input-group col-sm-7">
-                <input id="e_control_name" type="text" class="form-control" name="control_name" required="" aria-required="true" placeholder="全小写">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">方法名：</label>
-            <div class="input-group col-sm-7">
-                <input id="e_action_name" type="text" class="form-control" name="action_name" required="" aria-required="true" placeholder="全小写">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">是否是菜单项：</label>
-            <div class="input-group col-sm-7">
-                <select class="form-control" name="is_menu" required="" aria-required="true" id="e_is_menu">
-
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">菜单图标：</label>
-            <div class="input-group col-sm-7">
-                <input id="e_style" type="text" class="form-control" name="style" placeholder="只有顶级节点需要">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-4 col-sm-offset-8">
-                <button class="btn btn-primary" type="submit">提交</button>
-            </div>
-        </div>
-    </form>
-</div>
-<!-- 添加节点 -->
-
-
-<!-- 节点操作询问层 -->
-<div class="ibox-content" id="ask_box" style="display: none">
-    <div class="form-horizontal m-t">
-        <div class="form-group" style="text-align: center">
-            {if authCheck('node/nodeadd')}
-            <button class="btn btn-outline btn-success" type="button" id="addsubNode">
-                <i class="fa fa-plus"></i>
-                添加子节点
-            </button>
-            {/if}
-            {if authCheck('node/nodeedit')}
-            <button class="btn btn-outline btn-primary" type="button" id="editNode">
-                <i class="fa fa-edit"></i>
-                编辑节点
-            </button>
-            {/if}
-            {if authCheck('node/nodedel')}
-            <button class="btn btn-outline btn-danger" type="button" id="delNode">
-                <i class="fa fa-trash-o"></i>
-                删除节点
-            </button>
-            {/if}
-        </div>
-    </div>
-</div>
-<!-- 节点操作询问层 -->
-
-<!-- End Panel Other -->
-<script src="__JS__/jquery.min.js?v=2.1.4"></script>
-<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
-<script src="__JS__/content.min.js?v=1.0.0"></script>
-<script src="__JS__/layui/layui.js"></script>
-<script src="__JS__/jquery.form.js"></script>
-
-<script type="text/javascript">
-var node_del_url = "{:url('node/nodeDel')}";
-var box;
-var nowNode = null;
-
-$(function(){
-
-    getTree();
-
-    $("#addNode").click(function(){
-        $("#control_name").val('#');
-        $("#action_name").val('#');
-        $("#pid").val(0);
-        $("#show_pid").val('顶级节点');
-
-        layui.use('layer', function(){
-            box = layer.open({
-                type: 1,
-                title: '添加顶级节点',
-                anim: 2,
-                skin: 'layui-layer-molv', //加上边框
-                area: ['620px', '440px'], //宽高
-                content: $('#node_box')
-            });
+            layTool.open('{:url("node/add", ["pid" => 0, "pname" => "顶级节点"])}', '添加顶级节点', '40%', '50%');
         });
     });
 
-    $("#addsubNode").click(function(){
-        layer.close(box);
-        $('#show_pid').val(nowNode.name);
-        $('#pid').val(nowNode.id);
-        $("#control_name").val('');
-        $("#action_name").val('');
+    function addSub(obj) {
 
-        layui.use('layer', function(){
-            box = layer.open({
-                type: 1,
-                title: '添加 ' + nowNode.name + ' 的子菜单',
-                anim: 2,
-                skin: 'layui-layer-molv', //加上边框
-                area: ['620px', '440px'], //宽高
-                content: $('#node_box')
-            });
-        });
-    });
+        var pid = $(obj).attr('data-pid');
+        var pname = $(obj).attr('data-name');
 
-    $("#editNode").click(function(){
-        layer.close(box);
-        $("#id").val(nowNode.id);
-        $("#e_node_name").val(nowNode.name);
-        $("#e_control_name").val(nowNode.control_name);
-        $("#e_action_name").val(nowNode.action_name);
-        $("#e_style").val(nowNode.style);
+        layTool.open('/admin/node/add/pid/' + pid + '/pname/' + pname, '添加字节点', '40%', '50%');
+    }
 
-        var _option1 = '<option value="1" selected>否</option><option value="2">是</option>';
-        var _option2 = '<option value="1">否</option><option value="2" selected>是</option>';
-        if(1 == nowNode.is_menu){
-            $("#e_is_menu").html(_option1);
-        }else{
-            $("#e_is_menu").html(_option2);
-        }
+    function editNode(obj) {
 
-        layui.use('layer', function(){
-            box = layer.open({
-                type: 1,
-                title: '编辑  ' + nowNode.name + '  节点',
-                anim: 2,
-                skin: 'layui-layer-molv', //加上边框
-                area: ['620px', '400px'], //宽高
-                content: $('#edit_box')
-            });
-        });
-    });
+        var id = $(obj).attr('data-id');
+        var pid = $(obj).attr('data-pid');
 
-    $("#delNode").click(function(){
-        layer.close(box);
-        if(nowNode.children.length > 0){
-            layer.alert('该节点下有子节点，不可删除', {icon:2, title:'失败提示', closeBtn:0, anim:6});
-            return false;
-        }
+        layTool.open('/admin/node/edit/pid/' + pid + '/id/' + id, '编辑节点', '40%', '50%');
+    }
 
-        //询问框
-        var index = layer.confirm('确定要删除' + nowNode.name + '？', {
-            icon: 3,
-            title: '友情提示',
-            btn: ['确定','取消'] //按钮
-        }, function(){
+    function delNode(obj) {
 
-            $.getJSON(node_del_url, {id : nowNode.id},function(res){
-                layer.close( index );
-                if( 1 == res.code ){
-                    $("#tree").empty();
-                    getTree();
-                }else if(111 == res.code){
-                    window.location.reload();
-                }else{
-                    layer.alert(res.msg, {icon:2});
-                }
-            });
-        }, function(){
+        var id = $(obj).attr('data-id');
 
-        });
-    });
+        layui.use('layer', function () {
 
+            var layer = layui.layer;
 
-    // 添加节点
-    var options = {
-        beforeSubmit:showStart,
-        success:showSuccess
-    };
+            layer.ready(function () {
+                var index = layer.confirm('您确定要删除该节点？', {
+                    title: '友情提示',
+                    icon: 3,
+                    btn: ['确定', '取消']
+                }, function(){
 
-    $('#addForm').submit(function(){
-        $(this).ajaxSubmit(options);
-        return false;
-    });
+                    $.getJSON('{:url("node/delete")}', {id: id}, function (res) {
+                        if (0 == res.code) {
+                            layTool.msg(res.msg);
 
-    // 编辑节点
-    $('#editForm').submit(function(){
-        $(this).ajaxSubmit(options);
-        return false;
-    });
-});
+                            setTimeout(function () {
+                                renderTable();
+                            }, 500);
+                        } else {
 
-function getTree(){
-    layui.use(['tree', 'layer'], function(){
-        var layer = layui.layer;
-
-        $.getJSON("{:url('node/index')}", function(res){
-            if(111 == res.code){
-                window.location.reload();
-            }
-            layui.tree({
-                elem: '#tree'
-                ,nodes: res.data
-                ,click: function(node){
-
-                    layui.use('layer', function(){
-                        box = layer.open({
-                            type: 1,
-                            title: '您要如何操作该节点',
-                            anim: 2,
-                            skin: 'layui-layer-molv', //加上边框
-                            area: ['400px', '150px'], //宽高
-                            content: $('#ask_box')
-                        });
+                            layTool.alert(res.msg, '', 2);
+                        }
                     });
 
-                    nowNode = node;
-                }
+                }, function(){
+
+                });
             });
         });
-    });
-}
+    }
 
-// 添加相关的 js
-var index = '';
-function showStart(){
-    index = layer.load(0, {shade: false});
-    return true;
-}
+    function showSub(obj) {
 
-function showSuccess(res){
-    layui.use('layer', function(){
-        var layer = layui.layer;
-
-        layer.ready(function(){
-            layer.close( index );
-            layer.close( box );
-            if( 1 == res.code ){
-                $("#node_name").val('');
-                $("#route").val('');
-                $("#tree").empty();
-                getTree();
-            }else if(111 == res.code){
-                window.location.reload();
-            }else{
-                layer.alert(res.msg, {icon:2});
-            }
-        });
-    });
-}
-
+        var flag = $(obj).attr('data-flag');
+        if (0 == flag) {
+            $(".tree-" + $(obj).attr('data-id')).show();
+            $(obj).attr('data-flag', 1);
+        } else {
+            $(".tree-" + $(obj).attr('data-id')).hide();
+            $(obj).attr('data-flag', 0);
+        }
+    }
 </script>
 </body>
 </html>

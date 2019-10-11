@@ -7,5 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'think\\composer\\' => array($vendorDir . '/topthink/think-installer/src'),
-    'think\\' => array($baseDir . '/thinkphp/library/think', $vendorDir . '/topthink/think-image/src'),
+    'think\\captcha\\' => array($vendorDir . '/topthink/think-captcha/src'),
+    'app\\' => array($baseDir . '/application'),
+    'Qsnh\\Think\\Log\\' => array($vendorDir . '/qsnh/think-log-viewer/src'),
 );

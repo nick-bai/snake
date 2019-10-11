@@ -1,3 +1,5 @@
-.idea
-composer.lock
+/.idea
+/.vscode
 *.log
+.env
+.DS_Store

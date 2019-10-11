@@ -1,64 +1,112 @@
 <?php
-// +----------------------------------------------------------------------
-// | snake
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016~2022 http://baiyf.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: NickBai <1902822973@qq.com>
-// +----------------------------------------------------------------------
+/**
+ * Created by PhpStorm.
+ * User: NickBai
+ * Email: 876337011@qq.com
+ * Date: 2019/9/3
+ * Time:  14:30
+ */
 namespace app\admin\controller;
 
-use app\admin\model\NodeModel;
+use app\admin\model\Node as NodeModel;
+use app\admin\validate\NodeValidate;
+use think\facade\Log;
 
 class Node extends Base
 {
     // 节点列表
     public function index()
     {
-        if(request()->isAjax()){
+        $node = new NodeModel();
+        $list = $node->getNodesList();
 
-            $node = new NodeModel();
-            $nodes = $node->getNodeList();
-
-            $nodes = getTree(objToArray($nodes), false);
-            return json(msg(1, $nodes, 'ok'));
-        }
+        $this->assign([
+            'tree' => makeTree($list['data'])
+        ]);
 
         return $this->fetch();
     }
 
     // 添加节点
-    public function nodeAdd()
+    public function add()
     {
-        $param = input('post.');
+        if (request()->isAjax()) {
 
-        $node = new NodeModel();
-        $flag = $node->insertNode($param);
-        $this->removRoleCache();
-        return json(msg($flag['code'], $flag['data'], $flag['msg']));
+            $param = input('post.');
+
+            $validate = new NodeValidate();
+            if(!$validate->check($param)) {
+                return ['code' => -1, 'data' => '', 'msg' => $validate->getError()];
+            }
+
+            $nodeModel = new NodeModel();
+            $res = $nodeModel->addNode($param);
+
+            Log::write("添加节点：" . $param['node_name']);
+
+            return json($res);
+        }
+
+        $this->assign([
+            'pname' => input('param.pname'),
+            'pid' => input('param.pid')
+        ]);
+
+        return $this->fetch();
     }
 
     // 编辑节点
-    public function nodeEdit()
+    public function edit()
     {
-        $param = input('post.');
+        if (request()->isAjax()) {
 
-        $node = new NodeModel();
-        $flag = $node->editNode($param);
-        $this->removRoleCache();
-        return json(msg($flag['code'], $flag['data'], $flag['msg']));
+            $param = input('post.');
+
+            $validate = new NodeValidate();
+            if(!$validate->check($param)) {
+                return ['code' => -1, 'data' => '', 'msg' => $validate->getError()];
+            }
+
+            $nodeModel = new NodeModel();
+            $res = $nodeModel->editNode($param);
+
+            Log::write("编辑节点：" . $param['node_name']);
+
+            return json($res);
+        }
+
+        $id = input('param.id');
+        $pid = input('param.pid');
+
+        $nodeModel = new NodeModel();
+
+        if (0 == $pid) {
+            $pNode = '顶级节点';
+        } else {
+            $pNode = $nodeModel->getNodeInfoById($pid)['data']['node_name'];
+        }
+
+        $this->assign([
+            'node_info' => $nodeModel->getNodeInfoById($id)['data'],
+            'p_node' => $pNode
+        ]);
+
+        return $this->fetch();
     }
 
     // 删除节点
-    public function nodeDel()
+    public function delete()
     {
-        $id = input('param.id');
+        if (request()->isAjax()) {
 
-        $role = new NodeModel();
-        $flag = $role->delNode($id);
-        $this->removRoleCache();
-        return json(msg($flag['code'], $flag['data'], $flag['msg']));
+            $id = input('param.id');
+
+            $nodeModel = new NodeModel();
+            $res = $nodeModel->deleteNodeById($id);
+
+            Log::write("删除节点：" . $id);
+
+            return json($res);
+        }
     }
 }

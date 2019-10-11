@@ -1,23 +1,32 @@
 <?php
-// +----------------------------------------------------------------------
-// | snake
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016~2022 http://baiyf.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: NickBai <1902822973@qq.com>
-// +----------------------------------------------------------------------
+/**
+ * Created by PhpStorm.
+ * User: NickBai
+ * Email: 876337011@qq.com
+ * Date: 2019/10/8
+ * Time:  15:54
+ */
 namespace app\admin\validate;
 
 use think\Validate;
 
 class AdminValidate extends Validate
 {
-    protected $rule = [
-        ['userName', 'require', '用户名不能为空'],
-        ['password', 'require', '密码不能为空'],
-        ['code', 'require', '验证码不能为空']
+    protected $rule =   [
+        'admin_name'  => 'require',
+        'admin_password'   => 'require',
+        'role_id' => 'require',
+        'status' => 'require'
     ];
 
+    protected $message  =   [
+        'admin_name.require' => '管理员名称不能为空',
+        'admin_password.require'   => '管理员密码不能为空',
+        'role_id.require'   => '所属角色不能为空',
+        'status.require'   => '状态不能为空'
+    ];
+
+    protected $scene = [
+        'edit'  =>  ['admin_name', 'role_id', 'status']
+    ];
 }

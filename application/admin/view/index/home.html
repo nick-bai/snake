@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>管理端首页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/admin/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    访问量
+                    <span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">9,999,666</p>
+                    <p>
+                        总计访问量
+                        <span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-flag"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    下载
+                    <span class="layui-badge layui-bg-cyan layuiadmin-badge">月</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">33,555</p>
+                    <p>
+                        新下载
+                        <span class="layuiadmin-span-color">10% <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    收入
+                    <span class="layui-badge layui-bg-green layuiadmin-badge">年</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+
+                    <p class="layuiadmin-big-font">999,666</p>
+                    <p>
+                        总收入
+                        <span class="layuiadmin-span-color">*** <i class="layui-inline layui-icon layui-icon-dollar"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md3">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    活跃用户
+                    <span class="layui-badge layui-bg-orange layuiadmin-badge">月</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+
+                    <p class="layuiadmin-big-font">66,666</p>
+                    <p>
+                        最近一个月
+                        <span class="layuiadmin-span-color">15% <i class="layui-inline layui-icon layui-icon-user"></i></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row layui-col-space15">
+        <fieldset class="layui-elem-field">
+            <legend>系统信息</legend>
+            <div class="layui-field-box">
+                <table class="layui-table">
+                    <tbody>
+                    <tr>
+                        <th>服务器IP</th>
+                        <td>{:request()->ip()}</td>
+                    </tr>
+                    <tr>
+                        <th>操作系统</th>
+                        <td>{:PHP_OS}</td>
+                    </tr>
+                    <tr>
+                        <th>运行环境</th>
+                        <td>{:$_SERVER["SERVER_SOFTWARE"]}</td>
+                    </tr>
+                    <tr>
+                        <th>PHP版本</th>
+                        <td>{:PHP_VERSION}</td>
+                    </tr>
+                    <tr>
+                        <th>PHP运行方式</th>
+                        <td>{:php_sapi_name()}</td>
+                    </tr>
+                    <tr>
+                        <th>MYSQL版本</th>
+                        <td>{:getMysqlVersion()}</td>
+                    </tr>
+                    <tr>
+                        <th>ThinkPHP</th>
+                        <td>{$tp_version}</td>
+                    </tr>
+                    <tr>
+                        <th>上传附件限制</th>
+                        <td>{:ini_get("file_uploads")}M</td>
+                    </tr>
+                    <tr>
+                        <th>执行时间限制</th>
+                        <td>{:ini_get("max_execution_time")}s</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</div>
+<script src="/static/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '/static/admin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'sample']);
+</script>
+</body>
+</html>

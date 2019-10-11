@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>LogViewer - PowerBy Qsnh - https://github.com/Qsnh/think-log-viewer</title>
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		a { color: #333 }
+		.list-group-item.active { background-color: orange; border-color: orange; }
+	</style>
+</head>
+<body>
+	
+	<div class="container">
+		<div class="row">
+			<h2 style="line-height: 120px;">系统日志</h2>
+		</div>
+		<div class="row">
+			<div class="col-sm-2">
+				<ul class="list-group">
+					{volist name="files" id="file"}
+					<li class="list-group-item {$file['real'] == $default ? 'active' : ''}">
+						<a href="?file={$file['real']}">{$file['name']}</a>
+					</li>
+					{/volist}
+				</ul>
+			</div>
+			<div class="col-sm-10">
+				<ul class="list-group">
+					{volist name="data['data']" id="log"}
+					<li class="list-group-item">
+						<h5 class="log-item" style="cursor: pointer">{$log[1]}</h5>
+						<code style="display: none;">
+							{:implode("<br>", $log)}
+						</code>
+					</li>
+					{/volist}
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-right">
+				{:htmlspecialchars_decode($paginator)}
+			</div>
+		</div>
+	</div>
+	
+	<script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+	<script>
+		$(function () {
+			$('.log-item').click(function () {
+				$(this).next().toggle();
+			});
+		});
+	</script>
+</body>
+</html>

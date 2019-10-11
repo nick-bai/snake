@@ -1,68 +1,70 @@
 <?php
-// +----------------------------------------------------------------------
-// | snake
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016~2022 http://baiyf.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: NickBai <1902822973@qq.com>
-// +----------------------------------------------------------------------
+/**
+ * Created by PhpStorm.
+ * User: NickBai
+ * Email: 876337011@qq.com
+ * Date: 2019/2/17
+ * Time: 11:33 AM
+ */
 namespace app\admin\controller;
-use app\admin\model\NodeModel;
+
+use app\admin\model\Admin;
+use think\App;
+use tool\Auth;
 
 class Index extends Base
 {
     public function index()
     {
-        // 获取权限菜单
-        $node = new NodeModel();
+        $authModel = new Auth();
+        $menu = $authModel->getAuthMenu(session('admin_role_id'));
 
         $this->assign([
-            'menu' => $node->getMenu(session('rule'))
+            'menu' => $menu
         ]);
 
-        return $this->fetch('/index');
+        return $this->fetch();
     }
 
-    /**
-     * 后台默认首页
-     * @return mixed
-     */
-    public function indexPage()
+    public function home()
     {
-        // 生成从 8点 到 22点的时间数组
-        $dateLine = array_map(function($vo){
-            if($vo < 10){
-                return '0' . $vo;
-            }else{
-                return $vo;
-            }
-        }, range(8, 22));
-
-        // 初始化数据
-        $line = [];
-        foreach($dateLine as $key=>$vo){
-            $line[$vo] = [
-                'is_talking' => intval(rand(20, 120)),
-                'in_queue' => intval(rand(0, 20)),
-                'success_in' => intval(rand(50, 200)),
-                'total_in' => intval(rand(150, 300))
-            ];
-        }
-
-        $showData = [];
-        foreach($line as $key=>$vo){
-            $showData['is_talking'][] = $vo['is_talking'];
-            $showData['in_queue'][] = $vo['in_queue'];
-            $showData['success_in'][] = $vo['success_in'];
-            $showData['total_in'][] = $vo['total_in'];
-        }
-
         $this->assign([
-            'show_data' => json_encode($showData)
+            'tp_version' => App::VERSION
         ]);
 
-        return $this->fetch('index');
+        return $this->fetch();
+    }
+
+    // 修改密码
+    public function editPwd()
+    {
+        if (request()->isPost()) {
+
+            $param = input('post.');
+
+            if ($param['new_password'] != $param['rep_password']) {
+                return json(['code' => -1, 'data' => '', 'msg' => '两次密码输入不一致']);
+            }
+
+            // 检测旧密码
+            $admin = new Admin();
+            $adminInfo = $admin->getAdminInfo(session('admin_user_id'));
+
+            if(0 != $adminInfo['code'] || empty($adminInfo['data'])){
+                return json(['code' => -2, 'data' => '', 'msg' => '管理员不存在']);
+            }
+
+            if(checkPassword($param['password'], $adminInfo['data']['admin_password'])){
+                return json(['code' => -3, 'data' => '', 'msg' => '旧密码错误']);
+            }
+
+            $admin->updateAdminInfoById(session('admin_user_id'), [
+                'admin_password' => makePassword($param['new_password'])
+            ]);
+
+            return json(['code' => 0, 'data' => '', 'msg' => '修改密码成功']);
+        }
+
+        return $this->fetch('pwd');
     }
 }

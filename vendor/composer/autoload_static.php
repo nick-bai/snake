@@ -4,13 +4,26 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf689f3bf5606e438ed5cc520a02fe332
+class ComposerStaticInit8ecdeb254e2b73264c1728becbf54412
 {
+    public static $files = array (
+        'de5a05d860a3458e33da1cc737ac32ea' => __DIR__ . '/..' . '/qsnh/think-log-viewer/autoload.php',
+        '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         't' => 
         array (
             'think\\composer\\' => 15,
-            'think\\' => 6,
+            'think\\captcha\\' => 14,
+        ),
+        'a' => 
+        array (
+            'app\\' => 4,
+        ),
+        'Q' => 
+        array (
+            'Qsnh\\Think\\Log\\' => 15,
         ),
     );
 
@@ -19,167 +32,30 @@ class ComposerStaticInitf689f3bf5606e438ed5cc520a02fe332
         array (
             0 => __DIR__ . '/..' . '/topthink/think-installer/src',
         ),
-        'think\\' => 
+        'think\\captcha\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/thinkphp/library/think',
-            1 => __DIR__ . '/..' . '/topthink/think-image/src',
+            0 => __DIR__ . '/..' . '/topthink/think-captcha/src',
+        ),
+        'app\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/application',
+        ),
+        'Qsnh\\Think\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/qsnh/think-log-viewer/src',
         ),
     );
 
     public static $classMap = array (
-        'think\\App' => __DIR__ . '/../..' . '/thinkphp/library/think/App.php',
-        'think\\Build' => __DIR__ . '/../..' . '/thinkphp/library/think/Build.php',
-        'think\\Cache' => __DIR__ . '/../..' . '/thinkphp/library/think/Cache.php',
-        'think\\Collection' => __DIR__ . '/../..' . '/thinkphp/library/think/Collection.php',
-        'think\\Config' => __DIR__ . '/../..' . '/thinkphp/library/think/Config.php',
-        'think\\Console' => __DIR__ . '/../..' . '/thinkphp/library/think/Console.php',
-        'think\\Controller' => __DIR__ . '/../..' . '/thinkphp/library/think/Controller.php',
-        'think\\Cookie' => __DIR__ . '/../..' . '/thinkphp/library/think/Cookie.php',
-        'think\\Db' => __DIR__ . '/../..' . '/thinkphp/library/think/Db.php',
-        'think\\Debug' => __DIR__ . '/../..' . '/thinkphp/library/think/Debug.php',
-        'think\\Env' => __DIR__ . '/../..' . '/thinkphp/library/think/Env.php',
-        'think\\Error' => __DIR__ . '/../..' . '/thinkphp/library/think/Error.php',
-        'think\\Exception' => __DIR__ . '/../..' . '/thinkphp/library/think/Exception.php',
-        'think\\File' => __DIR__ . '/../..' . '/thinkphp/library/think/File.php',
-        'think\\Hook' => __DIR__ . '/../..' . '/thinkphp/library/think/Hook.php',
-        'think\\Image' => __DIR__ . '/..' . '/topthink/think-image/src/Image.php',
-        'think\\Lang' => __DIR__ . '/../..' . '/thinkphp/library/think/Lang.php',
-        'think\\Loader' => __DIR__ . '/../..' . '/thinkphp/library/think/Loader.php',
-        'think\\Log' => __DIR__ . '/../..' . '/thinkphp/library/think/Log.php',
-        'think\\Model' => __DIR__ . '/../..' . '/thinkphp/library/think/Model.php',
-        'think\\Paginator' => __DIR__ . '/../..' . '/thinkphp/library/think/Paginator.php',
-        'think\\Process' => __DIR__ . '/../..' . '/thinkphp/library/think/Process.php',
-        'think\\Request' => __DIR__ . '/../..' . '/thinkphp/library/think/Request.php',
-        'think\\Response' => __DIR__ . '/../..' . '/thinkphp/library/think/Response.php',
-        'think\\Route' => __DIR__ . '/../..' . '/thinkphp/library/think/Route.php',
-        'think\\Session' => __DIR__ . '/../..' . '/thinkphp/library/think/Session.php',
-        'think\\Template' => __DIR__ . '/../..' . '/thinkphp/library/think/Template.php',
-        'think\\Url' => __DIR__ . '/../..' . '/thinkphp/library/think/Url.php',
-        'think\\Validate' => __DIR__ . '/../..' . '/thinkphp/library/think/Validate.php',
-        'think\\View' => __DIR__ . '/../..' . '/thinkphp/library/think/View.php',
-        'think\\cache\\Driver' => __DIR__ . '/../..' . '/thinkphp/library/think/cache/Driver.php',
-        'think\\cache\\driver\\File' => __DIR__ . '/../..' . '/thinkphp/library/think/cache/driver/File.php',
-        'think\\cache\\driver\\Lite' => __DIR__ . '/../..' . '/thinkphp/library/think/cache/driver/Lite.php',
-        'think\\cache\\driver\\Memcache' => __DIR__ . '/../..' . '/thinkphp/library/think/cache/driver/Memcache.php',
-        'think\\cache\\driver\\Memcached' => __DIR__ . '/../..' . '/thinkphp/library/think/cache/driver/Memcached.php',
-        'think\\cache\\driver\\Redis' => __DIR__ . '/../..' . '/thinkphp/library/think/cache/driver/Redis.php',
-        'think\\cache\\driver\\Sqlite' => __DIR__ . '/../..' . '/thinkphp/library/think/cache/driver/Sqlite.php',
-        'think\\cache\\driver\\Wincache' => __DIR__ . '/../..' . '/thinkphp/library/think/cache/driver/Wincache.php',
-        'think\\cache\\driver\\Xcache' => __DIR__ . '/../..' . '/thinkphp/library/think/cache/driver/Xcache.php',
-        'think\\composer\\Plugin' => __DIR__ . '/..' . '/topthink/think-installer/src/Plugin.php',
-        'think\\composer\\ThinkExtend' => __DIR__ . '/..' . '/topthink/think-installer/src/ThinkExtend.php',
-        'think\\composer\\ThinkFramework' => __DIR__ . '/..' . '/topthink/think-installer/src/ThinkFramework.php',
-        'think\\composer\\ThinkTesting' => __DIR__ . '/..' . '/topthink/think-installer/src/ThinkTesting.php',
-        'think\\config\\driver\\Ini' => __DIR__ . '/../..' . '/thinkphp/library/think/config/driver/Ini.php',
-        'think\\config\\driver\\Json' => __DIR__ . '/../..' . '/thinkphp/library/think/config/driver/Json.php',
-        'think\\config\\driver\\Xml' => __DIR__ . '/../..' . '/thinkphp/library/think/config/driver/Xml.php',
-        'think\\console\\Command' => __DIR__ . '/../..' . '/thinkphp/library/think/console/Command.php',
-        'think\\console\\Input' => __DIR__ . '/../..' . '/thinkphp/library/think/console/Input.php',
-        'think\\console\\Output' => __DIR__ . '/../..' . '/thinkphp/library/think/console/Output.php',
-        'think\\console\\command\\Build' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/Build.php',
-        'think\\console\\command\\Clear' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/Clear.php',
-        'think\\console\\command\\Help' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/Help.php',
-        'think\\console\\command\\Lists' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/Lists.php',
-        'think\\console\\command\\Make' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/Make.php',
-        'think\\console\\command\\make\\Controller' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/make/Controller.php',
-        'think\\console\\command\\make\\Model' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/make/Model.php',
-        'think\\console\\command\\optimize\\Autoload' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/optimize/Autoload.php',
-        'think\\console\\command\\optimize\\Config' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/optimize/Config.php',
-        'think\\console\\command\\optimize\\Route' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/optimize/Route.php',
-        'think\\console\\command\\optimize\\Schema' => __DIR__ . '/../..' . '/thinkphp/library/think/console/command/optimize/Schema.php',
-        'think\\console\\input\\Argument' => __DIR__ . '/../..' . '/thinkphp/library/think/console/input/Argument.php',
-        'think\\console\\input\\Definition' => __DIR__ . '/../..' . '/thinkphp/library/think/console/input/Definition.php',
-        'think\\console\\input\\Option' => __DIR__ . '/../..' . '/thinkphp/library/think/console/input/Option.php',
-        'think\\console\\output\\Ask' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/Ask.php',
-        'think\\console\\output\\Descriptor' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/Descriptor.php',
-        'think\\console\\output\\Formatter' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/Formatter.php',
-        'think\\console\\output\\Question' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/Question.php',
-        'think\\console\\output\\descriptor\\Console' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/descriptor/Console.php',
-        'think\\console\\output\\driver\\Buffer' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/driver/Buffer.php',
-        'think\\console\\output\\driver\\Console' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/driver/Console.php',
-        'think\\console\\output\\driver\\Nothing' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/driver/Nothing.php',
-        'think\\console\\output\\formatter\\Stack' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/formatter/Stack.php',
-        'think\\console\\output\\formatter\\Style' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/formatter/Style.php',
-        'think\\console\\output\\question\\Choice' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/question/Choice.php',
-        'think\\console\\output\\question\\Confirmation' => __DIR__ . '/../..' . '/thinkphp/library/think/console/output/question/Confirmation.php',
-        'think\\controller\\Rest' => __DIR__ . '/../..' . '/thinkphp/library/think/controller/Rest.php',
-        'think\\controller\\Yar' => __DIR__ . '/../..' . '/thinkphp/library/think/controller/Yar.php',
-        'think\\db\\Builder' => __DIR__ . '/../..' . '/thinkphp/library/think/db/Builder.php',
-        'think\\db\\Connection' => __DIR__ . '/../..' . '/thinkphp/library/think/db/Connection.php',
-        'think\\db\\Query' => __DIR__ . '/../..' . '/thinkphp/library/think/db/Query.php',
-        'think\\db\\builder\\Mysql' => __DIR__ . '/../..' . '/thinkphp/library/think/db/builder/Mysql.php',
-        'think\\db\\builder\\Pgsql' => __DIR__ . '/../..' . '/thinkphp/library/think/db/builder/Pgsql.php',
-        'think\\db\\builder\\Sqlite' => __DIR__ . '/../..' . '/thinkphp/library/think/db/builder/Sqlite.php',
-        'think\\db\\builder\\Sqlsrv' => __DIR__ . '/../..' . '/thinkphp/library/think/db/builder/Sqlsrv.php',
-        'think\\db\\connector\\Mysql' => __DIR__ . '/../..' . '/thinkphp/library/think/db/connector/Mysql.php',
-        'think\\db\\connector\\Pgsql' => __DIR__ . '/../..' . '/thinkphp/library/think/db/connector/Pgsql.php',
-        'think\\db\\connector\\Sqlite' => __DIR__ . '/../..' . '/thinkphp/library/think/db/connector/Sqlite.php',
-        'think\\db\\connector\\Sqlsrv' => __DIR__ . '/../..' . '/thinkphp/library/think/db/connector/Sqlsrv.php',
-        'think\\db\\exception\\BindParamException' => __DIR__ . '/../..' . '/thinkphp/library/think/db/exception/BindParamException.php',
-        'think\\db\\exception\\DataNotFoundException' => __DIR__ . '/../..' . '/thinkphp/library/think/db/exception/DataNotFoundException.php',
-        'think\\db\\exception\\ModelNotFoundException' => __DIR__ . '/../..' . '/thinkphp/library/think/db/exception/ModelNotFoundException.php',
-        'think\\debug\\Console' => __DIR__ . '/../..' . '/thinkphp/library/think/debug/Console.php',
-        'think\\debug\\Html' => __DIR__ . '/../..' . '/thinkphp/library/think/debug/Html.php',
-        'think\\exception\\ClassNotFoundException' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/ClassNotFoundException.php',
-        'think\\exception\\DbException' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/DbException.php',
-        'think\\exception\\ErrorException' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/ErrorException.php',
-        'think\\exception\\Handle' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/Handle.php',
-        'think\\exception\\HttpException' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/HttpException.php',
-        'think\\exception\\HttpResponseException' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/HttpResponseException.php',
-        'think\\exception\\PDOException' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/PDOException.php',
-        'think\\exception\\RouteNotFoundException' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/RouteNotFoundException.php',
-        'think\\exception\\TemplateNotFoundException' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/TemplateNotFoundException.php',
-        'think\\exception\\ThrowableError' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/ThrowableError.php',
-        'think\\exception\\ValidateException' => __DIR__ . '/../..' . '/thinkphp/library/think/exception/ValidateException.php',
-        'think\\image\\Exception' => __DIR__ . '/..' . '/topthink/think-image/src/image/Exception.php',
-        'think\\image\\gif\\Decoder' => __DIR__ . '/..' . '/topthink/think-image/src/image/gif/Decoder.php',
-        'think\\image\\gif\\Encoder' => __DIR__ . '/..' . '/topthink/think-image/src/image/gif/Encoder.php',
-        'think\\image\\gif\\Gif' => __DIR__ . '/..' . '/topthink/think-image/src/image/gif/Gif.php',
-        'think\\log\\driver\\File' => __DIR__ . '/../..' . '/thinkphp/library/think/log/driver/File.php',
-        'think\\log\\driver\\Socket' => __DIR__ . '/../..' . '/thinkphp/library/think/log/driver/Socket.php',
-        'think\\log\\driver\\Test' => __DIR__ . '/../..' . '/thinkphp/library/think/log/driver/Test.php',
-        'think\\model\\Collection' => __DIR__ . '/../..' . '/thinkphp/library/think/model/Collection.php',
-        'think\\model\\Merge' => __DIR__ . '/../..' . '/thinkphp/library/think/model/Merge.php',
-        'think\\model\\Pivot' => __DIR__ . '/../..' . '/thinkphp/library/think/model/Pivot.php',
-        'think\\model\\Relation' => __DIR__ . '/../..' . '/thinkphp/library/think/model/Relation.php',
-        'think\\model\\relation\\BelongsTo' => __DIR__ . '/../..' . '/thinkphp/library/think/model/relation/BelongsTo.php',
-        'think\\model\\relation\\BelongsToMany' => __DIR__ . '/../..' . '/thinkphp/library/think/model/relation/BelongsToMany.php',
-        'think\\model\\relation\\HasMany' => __DIR__ . '/../..' . '/thinkphp/library/think/model/relation/HasMany.php',
-        'think\\model\\relation\\HasManyThrough' => __DIR__ . '/../..' . '/thinkphp/library/think/model/relation/HasManyThrough.php',
-        'think\\model\\relation\\HasOne' => __DIR__ . '/../..' . '/thinkphp/library/think/model/relation/HasOne.php',
-        'think\\model\\relation\\MorphMany' => __DIR__ . '/../..' . '/thinkphp/library/think/model/relation/MorphMany.php',
-        'think\\model\\relation\\MorphOne' => __DIR__ . '/../..' . '/thinkphp/library/think/model/relation/MorphOne.php',
-        'think\\model\\relation\\MorphTo' => __DIR__ . '/../..' . '/thinkphp/library/think/model/relation/MorphTo.php',
-        'think\\model\\relation\\OneToOne' => __DIR__ . '/../..' . '/thinkphp/library/think/model/relation/OneToOne.php',
-        'think\\paginator\\driver\\Bootstrap' => __DIR__ . '/../..' . '/thinkphp/library/think/paginator/driver/Bootstrap.php',
-        'think\\process\\Builder' => __DIR__ . '/../..' . '/thinkphp/library/think/process/Builder.php',
-        'think\\process\\Utils' => __DIR__ . '/../..' . '/thinkphp/library/think/process/Utils.php',
-        'think\\process\\exception\\Failed' => __DIR__ . '/../..' . '/thinkphp/library/think/process/exception/Failed.php',
-        'think\\process\\exception\\Timeout' => __DIR__ . '/../..' . '/thinkphp/library/think/process/exception/Timeout.php',
-        'think\\process\\pipes\\Pipes' => __DIR__ . '/../..' . '/thinkphp/library/think/process/pipes/Pipes.php',
-        'think\\process\\pipes\\Unix' => __DIR__ . '/../..' . '/thinkphp/library/think/process/pipes/Unix.php',
-        'think\\process\\pipes\\Windows' => __DIR__ . '/../..' . '/thinkphp/library/think/process/pipes/Windows.php',
-        'think\\response\\Json' => __DIR__ . '/../..' . '/thinkphp/library/think/response/Json.php',
-        'think\\response\\Jsonp' => __DIR__ . '/../..' . '/thinkphp/library/think/response/Jsonp.php',
-        'think\\response\\Redirect' => __DIR__ . '/../..' . '/thinkphp/library/think/response/Redirect.php',
-        'think\\response\\View' => __DIR__ . '/../..' . '/thinkphp/library/think/response/View.php',
-        'think\\response\\Xml' => __DIR__ . '/../..' . '/thinkphp/library/think/response/Xml.php',
-        'think\\session\\driver\\Memcache' => __DIR__ . '/../..' . '/thinkphp/library/think/session/driver/Memcache.php',
-        'think\\session\\driver\\Memcached' => __DIR__ . '/../..' . '/thinkphp/library/think/session/driver/Memcached.php',
-        'think\\session\\driver\\Redis' => __DIR__ . '/../..' . '/thinkphp/library/think/session/driver/Redis.php',
-        'think\\template\\TagLib' => __DIR__ . '/../..' . '/thinkphp/library/think/template/TagLib.php',
-        'think\\template\\driver\\File' => __DIR__ . '/../..' . '/thinkphp/library/think/template/driver/File.php',
-        'think\\template\\taglib\\Cx' => __DIR__ . '/../..' . '/thinkphp/library/think/template/taglib/Cx.php',
-        'think\\view\\driver\\Php' => __DIR__ . '/../..' . '/thinkphp/library/think/view/driver/Php.php',
-        'think\\view\\driver\\Think' => __DIR__ . '/../..' . '/thinkphp/library/think/view/driver/Think.php',
+        'Ip2Region' => __DIR__ . '/..' . '/zoujingli/ip2region/Ip2Region.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf689f3bf5606e438ed5cc520a02fe332::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf689f3bf5606e438ed5cc520a02fe332::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf689f3bf5606e438ed5cc520a02fe332::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8ecdeb254e2b73264c1728becbf54412::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8ecdeb254e2b73264c1728becbf54412::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8ecdeb254e2b73264c1728becbf54412::$classMap;
 
         }, null, ClassLoader::class);
     }

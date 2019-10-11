@@ -16,14 +16,20 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "topthink/framework": "*",
-        "topthink/think-image": "dev-master"
+        "php": ">=5.6.0",
+        "topthink/framework": "5.1.*",
+        "topthink/think-captcha": "2.0.*",
+        "qsnh/think-log-viewer": "^1.0",
+        "zoujingli/ip2region": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "application"
+        }
     },
     "extra": {
         "think-path": "thinkphp"
     },
-    "minimum-stability": "dev",
     "config": {
         "preferred-install": "dist"
     }

@@ -2,181 +2,150 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>后台首页</title>
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.staticfile.org/font-awesome/4.4.0/css/font-awesome.css?v=4.4.0" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
+    <title>snake后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/admin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/admin/style/admin.css" media="all">
+    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
 </head>
-<body class="gray-bg">
-<div class="wrapper wrapper-content">
-    <div class="row">
-        <div class="col-sm-2">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-primary pull-right">今天</span>
-                    <h5>正在咨询的人数</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">20</h1>
-                    <div class="stat-percent font-bold text-navy"></div>
-                    <small></small>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-primary pull-right">今天</span>
-                    <h5>正在排队的用户</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">10</h1>
-                    <div class="stat-percent font-bold text-danger"></div>
-                    <small></small>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-primary pull-right">今天</span>
-                    <h5>当前在线客服数</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">5</h1>
-                    <div class="stat-percent font-bold text-danger"></div>
-                    <small></small>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-primary pull-right">今天</span>
-                    <h5>接入会话量</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">150</h1>
-                    <div class="stat-percent font-bold text-danger"></div>
-                    <small></small>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <span class="label label-primary pull-right">今天</span>
-                    <h5>总会话量</h5>
-                </div>
-                <div class="ibox-content">
-                    <h1 class="no-margins">300</h1>
-                    <div class="stat-percent font-bold text-danger"></div>
-                    <small></small>
-                </div>
-            </div>
-        </div>
-    </div>
+<body class="layui-layout-body">
 
-    <div class="row">
-        <div class="col-sm-8">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>今日数据分析</h5>
-                </div>
-                <div class="ibox-content no-padding">
-                    <div class="ibox-content" style="height: 350px" id="main">
+<div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <!-- 头部区域 -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item layadmin-flexible" lay-unselect>
+                    <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+                        <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="/" target="_blank" title="前台">
+                        <i class="layui-icon layui-icon-website"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;" layadmin-event="refresh" title="刷新">
+                        <i class="layui-icon layui-icon-refresh-3"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="theme">
+                        <i class="layui-icon layui-icon-theme"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="fullscreen">
+                        <i class="layui-icon layui-icon-screen-full"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;">
+                        <cite>{$admin_name}</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" onclick="editPwd();">修改密码</a></dd>
+                        <hr>
+                        <dd lay-href="/admin/login/loginOut" style="text-align: center;"><a>退出</a></dd>
+                    </dl>
+                </li>
 
-                    </div>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+                <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+                    <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 侧边菜单 -->
+        <div class="layui-side layui-side-menu">
+            <div class="layui-side-scroll">
+                <div class="layui-logo" lay-href="http://whisper.baiyf.com" style="background-size: 20px 20px">
+                    <span>snake</span>
                 </div>
+
+                <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+                    {if !empty($menu)}
+                    {foreach name="menu" item="vo"}
+                    <li data-name="{$vo['title']}" class="layui-nav-item {if $vo['title'] eq '主页'}layui-nav-itemed{/if}">
+                        <a href="javascript:;" lay-tips="{$vo['title']}">
+                            <i class="layui-icon {$vo['node_icon']}"></i>
+                            <cite>{$vo['title']}</cite>
+                        </a>
+                        {if !empty($vo['children'])}
+                        {foreach name="$vo['children']" item="v"}
+                        <dl class="layui-nav-child">
+                            <dd {if $v['node_path'] eq 'index/index'}class="layui-this"{/if}><a lay-href="/admin/{$v['node_path']}">{$v['title']}</a></dd>
+                        </dl>
+                        {/foreach}
+                        {/if}
+                    </li>
+                    {/foreach}
+                    {/if}
+                </ul>
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>系统说明</h5>
-                </div>
-                <div class="ibox-content">
-                    <p>snake 一个采用thinkphp5开发，
-                        旨在为大家提供一个可用的便捷的后台系统。
-                    </p>
-                    <div class="alert alert-info">
-                        交流群： 159640205
-                    </div>
-                </div>
+
+        <!-- 页面标签 -->
+        <div class="layadmin-pagetabs" id="LAY_app_tabs">
+            <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-down">
+                <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;"></a>
+                        <dl class="layui-nav-child layui-anim-fadein">
+                            <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                            <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                            <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+            <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+                <ul class="layui-tab-title" id="LAY_app_tabsheader">
+                    <li lay-id="{:url('index/home')}" lay-attr="{:url('index/home')}" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+                </ul>
             </div>
         </div>
+
+        <!-- 主体内容 -->
+        <div class="layui-body" id="LAY_app_body">
+            <div class="layadmin-tabsbody-item layui-show">
+                <iframe src="{:url('index/home')}" frameborder="0" class="layadmin-iframe"></iframe>
+            </div>
+        </div>
+
+        <!-- 辅助元素，一般用于移动设备下遮罩 -->
+        <div class="layadmin-body-shade" layadmin-event="shade"></div>
     </div>
 </div>
 
-<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="__JS__/plugins/echarts/echarts-all.js"></script>
-<script type="text/javascript">
-    var data = {$show_data};
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'));
+<script src="/static/admin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '/static/admin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use('index');
 
-    // 指定图表的配置项和数据
-    var option = {
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data:['正在咨询的会员','排队的会员','接入会话量','总会话量']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00',
-                '18:00','19:00','20:00','21:00','22:00']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                name:'正在咨询的会员',
-                type:'line',
-                stack: '总量',
-                data: data.is_talking
-            },
-            {
-                name:'排队的会员',
-                type:'line',
-                stack: '总量',
-                data: data.in_queue
-            },
-            {
-                name:'接入会话量',
-                type:'line',
-                stack: '总量',
-                data: data.success_in
-            },
-            {
-                name:'总会话量',
-                type:'line',
-                stack: '总量',
-                data: data.total_in
-            }
-        ]
-    };
-
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+    function editPwd() {
+        layer.open({
+            type: 2,
+            title: '修改密码',
+            shade: 0.6,
+            area: ['40%', '50%'],
+            content: '{:url("index/editPwd")}'
+        });
+    }
 </script>
+
 </body>
 </html>
