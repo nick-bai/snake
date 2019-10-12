@@ -32,7 +32,8 @@ https://www.kancloud.cn/nickbai/whisper-v2/988777
 
 > 百度 thinkphp5.1 搭建，你会获得很多的有效信息。或者加群讨论。
     
-3、访问 你配置的域名/admin 即可进入后台
+3、访问 你配置的域名/admin 即可进入后台    
+默认用户名 密码  admin admin
 
 # 打赏作者  
 支付宝
