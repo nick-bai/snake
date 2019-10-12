@@ -31,6 +31,7 @@ thinkphp5.1 + layui 实现的带rbac的基础管理后台，方便快速开发�
 https://www.kancloud.cn/nickbai/whisper-v2/988777
 
 > 百度 thinkphp5.1 搭建，你会获得很多的有效信息。或者加群讨论。
+3、访问 你配置的域名/admin 即可进入后台
 
 # 打赏作者  
 支付宝
