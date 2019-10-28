@@ -1,11 +1,13 @@
 <?php
 namespace app\index\controller;
 
-class Index
+use think\Controller;
+
+class Index extends Controller
 {
     public function index()
     {
-        echo makePassword('admin');
+        return $this->fetch();
     }
 
     public function hello($name = 'ThinkPHP5')

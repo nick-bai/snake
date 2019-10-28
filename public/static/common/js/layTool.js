@@ -126,7 +126,7 @@ LayTool.prototype.table = function (dom, url, cols, limit) {
         table.render({
             elem: dom
             ,limit: limit
-            ,height: 600
+            ,height: 'full-200'
             ,url: url
             ,page: true
             ,cols: cols

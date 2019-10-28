@@ -3,6 +3,10 @@ thinkphp5.1 + layui 实现的带rbac的基础管理后台，方便快速开发�
 
 基于 thinkphp5.0 的snake 可以到 https://github.com/nick-bai/snake/releases/tag/v1.0 下载
 
+## 特别鸣谢
+开源php框架 thinkphp5.1  
+开源后台  layuimini https://gitee.com/zhongshaofa/layuimini
+
 # 一睹为快
 ![](./screenshoot/1.png) 
 
@@ -37,6 +41,6 @@ https://www.kancloud.cn/nickbai/whisper-v2/988777
 
 # 打赏作者  
 支付宝
-![支付宝](http://www.baiyf.com/media/AliPay_200.png)  
+![支付宝](https://images.gitee.com/uploads/images/2019/1012/215507_3f9aebe2_552304.png)  
 微信
-![微信](http://www.baiyf.com/media/WeixinPay_200.png) 
+![微信](https://images.gitee.com/uploads/images/2019/1012/215507_3e868b0e_552304.png) 
