@@ -9,8 +9,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\Role as RoleModel;
-use app\admin\validate\NodeValidate;
-use think\facade\Log;
+use tool\Log;
 
 class Role extends Base
 {

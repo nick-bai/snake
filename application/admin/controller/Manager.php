@@ -10,7 +10,7 @@ namespace app\admin\controller;
 
 use app\admin\model\Admin;
 use app\admin\validate\AdminValidate;
-use think\facade\Log;
+use tool\Log;
 
 class Manager extends Base
 {

@@ -10,7 +10,7 @@ namespace app\admin\controller;
 
 use app\admin\model\Node as NodeModel;
 use app\admin\validate\NodeValidate;
-use think\facade\Log;
+use tool\Log;
 
 class Node extends Base
 {

@@ -22,9 +22,7 @@ return [
     // 视图内容过滤
     'view_filter'  => [],
     // 日志写入
-    'log_write'    => [
-        'app\\admin\\behavior\\OperateLog'
-    ],
+    'log_write'    => [],
     // 应用结束
     'app_end'      => [],
 ];

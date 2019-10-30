@@ -3,28 +3,27 @@
  * Created by PhpStorm.
  * User: NickBai
  * Email: 876337011@qq.com
- * Date: 2019/10/11
- * Time:  13:54
+ * Date: 2019/10/30
+ * Time: 8:19 PM
  */
-namespace app\admin\behavior;
+namespace tool;
 
 use app\admin\model\Operate;
-use think\Request;
 
-class OperateLog
+class Log
 {
-    public function run(Request $request, $params)
+    public static function write($content)
     {
-        $controller = lcfirst($request->controller());
-        $action = $request->action();
+        $controller = lcfirst(request()->controller());
+        $action = request()->action();
         $checkInput = $controller . '/' . $action;
 
         $logModel = new Operate();
         $logModel->writeLog([
             'operator' => session('admin_user_name'),
-            'operator_ip' => $request->ip(),
+            'operator_ip' => request()->ip(),
             'operate_method' => $checkInput,
-            'operate_desc' => $params['info']['0'],
+            'operate_desc' => $content,
             'operate_time' => date('Y-m-d H:i:s')
         ]);
     }
