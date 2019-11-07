@@ -54,7 +54,7 @@ class Index extends Base
                 return json(['code' => -2, 'data' => '', 'msg' => '管理员不存在']);
             }
 
-            if(checkPassword($param['password'], $adminInfo['data']['admin_password'])){
+            if(!checkPassword($param['password'], $adminInfo['data']['admin_password'])){
                 return json(['code' => -3, 'data' => '', 'msg' => '旧密码错误']);
             }
 
