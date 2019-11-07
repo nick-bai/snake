@@ -28,8 +28,8 @@ function makePassword($password) {
  * @param $inPassword
  * @return bool
  */
-function checkPassword($dbPassword, $inPassword) {
-
+function checkPassword($inPassword, $dbPassword) {
+	
     return (makePassword($inPassword) == $dbPassword);
 }
 
@@ -152,4 +152,3 @@ function buttonAuth($input)
     $authModel = Auth::instance();
     return  $authModel->authCheck($input, session('admin_role_id'));
 }
-
