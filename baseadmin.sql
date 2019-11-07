@@ -76,7 +76,7 @@ CREATE TABLE `bsa_node` (
 -- Records of bsa_node
 -- ----------------------------
 INSERT INTO `bsa_node` VALUES ('1', '主页', '#', '0', 'layui-icon layui-icon-home', '2', '2019-09-03 14:17:38');
-INSERT INTO `bsa_node` VALUES ('2', '后台首页', 'index/index', '1', '', '2', '2019-09-03 14:18:24');
+INSERT INTO `bsa_node` VALUES ('2', '后台首页', 'index/index', '1', '', '1', '2019-09-03 14:18:24');
 INSERT INTO `bsa_node` VALUES ('3', '修改密码', 'index/editpwd', '1', '', '1', '2019-09-03 14:19:03');
 INSERT INTO `bsa_node` VALUES ('4', '权限管理', '#', '0', 'layui-icon layui-icon-template', '2', '2019-09-03 14:19:34');
 INSERT INTO `bsa_node` VALUES ('5', '管理员管理', 'manager/index', '4', '', '2', '2019-09-03 14:27:42');
