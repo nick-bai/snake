@@ -40,7 +40,7 @@ class Login extends Controller
                 return reMsg(-2, '', '用户名密码错误');
             }
 
-            if(checkPassword($param['password'], $adminInfo['data']['admin_password'])){
+            if(!checkPassword($param['password'], $adminInfo['data']['admin_password'])){
                 $log->writeLoginLog($param['username'], 2);
                 return reMsg(-3, '', '用户名密码错误');
             }
