@@ -1,6 +1,6 @@
 # 最新免费可商用CMS系统
 基于 thinkphp6 + vue 的多站点多语言，SEO友好的开源CMS系统，可免费商用。
-https://gitee.com/digital-flag/huo-cms
+https://gitee.com/digital-flag/huocms
 
 # snake
 thinkphp5.1 + layui 实现的带rbac的基础管理后台，方便快速开发法使用
